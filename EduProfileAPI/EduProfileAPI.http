@@ -1,0 +1,6 @@
+@EduProfileAPI_HostAddress = http://localhost:5173
+
+GET {{EduProfileAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
