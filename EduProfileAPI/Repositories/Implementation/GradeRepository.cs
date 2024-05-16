@@ -16,7 +16,7 @@ namespace EduProfileAPI.Repositories.Implementation
 
         public async Task<Grade[]> GetAllGradesAsync()
         {
-            IQueryable<Grade> query = _context.Grades;
+            IQueryable<Grade> query = _context.Grade;
             return await query.ToArrayAsync();
         }
     }
