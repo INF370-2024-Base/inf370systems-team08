@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using EduProfileAPI.DataAccessLayer;
+using EduProfileAPI.Repositories.Implementation;
+using EduProfileAPI.Repositories.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +14,10 @@ builder.Services.AddSwaggerGen();
 // Database connection
 builder.Services.AddDbContext<EduProfileDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Register the repositories
+builder.Services.AddScoped<IGradeRepository, GradeRepository>(); // add this for all the repositories created.
+builder.Services.AddScoped<IClass, ClassRepository>();
 
 var app = builder.Build();
 

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using EduProfileAPI.Models.User;
 using EduProfileAPI.Models.Class;
+using EduProfileAPI.Models;
 
 namespace EduProfileAPI.DataAccessLayer
 {
@@ -12,6 +13,6 @@ namespace EduProfileAPI.DataAccessLayer
 
         public DbSet<User> Users { get; set; }
         public  DbSet<Class> Classes { get; set; }
-        
+        public DbSet<Grade> Grades{ get; set; }
     }
 }
