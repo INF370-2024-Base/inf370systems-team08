@@ -1,4 +1,6 @@
-﻿namespace EduProfileAPI.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace EduProfileAPI.Models
 {
     public class Merit
     {

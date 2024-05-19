@@ -10,7 +10,7 @@ namespace EduProfileAPI.Repositories.Interfaces
         void Delete<T>(T entity) where T : class;
 
         // Course
-        Task<Merit> GetMeritAsync(int meritId);
+        Task<Merit> GetMeritAsync(Guid meritId);
 
     }
 }

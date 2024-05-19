@@ -1,4 +1,5 @@
 ﻿using EduProfileAPI.Models;
+using EduProfileAPI.Repositories.Interfaces;
 using EduProfileAPI.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -22,7 +23,7 @@ namespace EduProfileAPI.Controllers
         {
             try
             {
-                var results = await _meritRepository.GetAllMeritAsync();
+                var results = await _meritRepository.GetAllMeritsAsync();
                 return Ok(results);
             }
             catch (Exception)
@@ -32,8 +33,8 @@ namespace EduProfileAPI.Controllers
         }
 
         [HttpGet]
-        [Route("GetMerit/{meritId}")] //returns a specific course 
-        public async Task<IActionResult> GetMeritAsync(int meritId)
+        [Route("GetMerit/{meritId}")] // returns a specific merit
+        public async Task<IActionResult> GetMeritAsync(Guid meritId)
         {
             try
             {
@@ -68,9 +69,9 @@ namespace EduProfileAPI.Controllers
             return Ok(merit);
         }
 
-        [HttpPut]
+      [HttpPut]
         [Route("EditMerit/{meritId}")]
-        public async Task<ActionResult<CreateMeritVM>> EditMerit(int meritId, CreateMeritVM meritModel)
+        public async Task<ActionResult<CreateMeritVM>> EditMerit(Guid meritId, CreateMeritVM meritModel)
         {
             try
             {
@@ -97,9 +98,9 @@ namespace EduProfileAPI.Controllers
 
         }
 
-        [HttpDelete]
+      [HttpDelete]
         [Route("DeleteMerit/{meritId}")]
-        public async Task<IActionResult> MeritCourse(int meritId)
+        public async Task<IActionResult> MeritCourse(Guid meritId)
         {
             try
             {

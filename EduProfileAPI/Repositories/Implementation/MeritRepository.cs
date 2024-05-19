@@ -1,10 +1,11 @@
 ﻿using EduProfileAPI.DataAccessLayer;
 using EduProfileAPI.Models;
 using EduProfileAPI.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace EduProfileAPI.Repositories.Implementation
 {
-    public class MeritRepository:IMeritRepository
+    public class MeritRepository : IMeritRepository
     {
         private readonly EduProfileDbContext _context;
         public MeritRepository(EduProfileDbContext context)
@@ -18,7 +19,7 @@ namespace EduProfileAPI.Repositories.Implementation
             return await query.ToArrayAsync();
         }
 
-        public async Task<Merit> GetMeritAsync(int meritId)
+        public async Task<Merit> GetMeritAsync(Guid meritId)
         {
             IQueryable<Merit> query = _context.Merit.Where(c => c.MeritId == meritId);
             return await query.FirstOrDefaultAsync();
