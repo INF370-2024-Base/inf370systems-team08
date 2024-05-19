@@ -43,12 +43,12 @@ namespace EduProfileAPI.Repositories.Implementation
             throw new NotImplementedException();
         }
 
-        Task<Merit[]> IEmployeeRepository.GetAllEmployeesAsync()
+        Task<Employee[]> IEmployeeRepository.GetAllEmployeesAsync()
         {
             throw new NotImplementedException();
         }
 
-        Task<Merit> IEmployeeRepository.GetEmployeeAsync(int employeeId)
+        Task<Employee> IEmployeeRepository.GetEmployeeAsync(int employeeId)
         {
             throw new NotImplementedException();
         }

@@ -90,15 +90,15 @@ namespace EduProfileAPI.Controllers
                     return NotFound($"The employee does not exist");
 
                 existingEmployee.EmployeeId = employeeModel.EmployeeId;
-                //existingEmployee.EmployeeStatus = employeeModel.EmployeeId;
-                //existingEmployee.FirstName = employeeModel.FirstName;
-                //existingEmployee.LastName = employeeModel.LastName;
-                //existingEmployee.DateOfBirth = employeeModel.DateOfBirth;
-                //existingEmployee.Gender = employeeModel.Gender;
-                //existingEmployee.PhoneNumber = employeeModel.PhoneNumber;
-                //existingEmployee.Address = employeeModel.Address;
-                //existingEmployee.Salary = employeeModel.Salary;
-                //existingEmployee.IdentityNumber = employeeModel.IdentityNumber;
+                existingEmployee.EmployeeStatusId = employeeModel.EmployeeStatusId;
+                existingEmployee.FirstName = employeeModel.FirstName;
+                existingEmployee.LastName = employeeModel.LastName;
+                existingEmployee.DateOfBirth = employeeModel.DateOfBirth;
+                existingEmployee.Gender = employeeModel.Gender;
+                existingEmployee.PhoneNumber = employeeModel.PhoneNumber;
+                existingEmployee.Address = employeeModel.Address;
+                existingEmployee.Salary = employeeModel.Salary;
+                existingEmployee.IdentityNumber = employeeModel.IdentityNumber;
 
                 if (await _employeeRepository.SaveChangesAsync())
                 {
