@@ -11,6 +11,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
 // Database connection
 builder.Services.AddDbContext<EduProfileDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -18,6 +19,10 @@ builder.Services.AddDbContext<EduProfileDbContext>(options =>
 // Register the repositories
 builder.Services.AddScoped<IGradeRepository, GradeRepository>(); // add this for all the repositories created.
 builder.Services.AddScoped<IClass, ClassRepository>();
+
+// Register the IMeritRepository service
+builder.Services.AddScoped<IMeritRepository, MeritRepository>();
+
 
 var app = builder.Build();
 
