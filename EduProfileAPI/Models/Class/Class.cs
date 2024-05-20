@@ -6,6 +6,7 @@ namespace EduProfileAPI.Models.Class
     {
         [Key]
         public Guid ClassId { get; set; }
+<<<<<<< Updated upstream
         [Required]
         public string ClassName { get; set; }
         [Required]
@@ -13,5 +14,11 @@ namespace EduProfileAPI.Models.Class
 
         public Guid GradeId { get; set; }
         public Guid EmployeeId{ get; set; }
+=======
+        public Guid GradeId { get; set; }
+        public Guid EmployeeId { get; set; }
+        public string ClassName { get; set; }
+        public string ClassDescription { get; set; }
+>>>>>>> Stashed changes
     }
 }
