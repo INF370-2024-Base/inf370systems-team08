@@ -1,11 +1,14 @@
-﻿using EduProfileAPI.DataAccessLayer;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using EduProfileAPI.DataAccessLayer;
 using EduProfileAPI.Models.Class;
 using EduProfileAPI.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace EduProfileAPI.Repositories.Implementation
 {
-    public class ClassRepository: IClass
+    public class ClassRepository : IClass
     {
         private readonly EduProfileDbContext _context;
 
@@ -20,9 +23,6 @@ namespace EduProfileAPI.Repositories.Implementation
             return await query.ToArrayAsync();
         }
 
-<<<<<<< Updated upstream
-           
-=======
         public async Task<Class> GetClassAsync(Guid classId)
         {
             return await _context.Classes
@@ -45,6 +45,5 @@ namespace EduProfileAPI.Repositories.Implementation
             return await _context.SaveChangesAsync() > 0;
         }
 
->>>>>>> Stashed changes
     }
 }

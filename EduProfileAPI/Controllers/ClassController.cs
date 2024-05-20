@@ -1,14 +1,6 @@
-<<<<<<< Updated upstream
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using EduProfileAPI.DataAccessLayer;
-using Microsoft.EntityFrameworkCore.Migrations;
-using EduProfileAPI.Repositories.Interfaces;
-=======
-﻿using EduProfileAPI.Models.Class;
+using EduProfileAPI.Models.Class;
 using EduProfileAPI.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
->>>>>>> Stashed changes
 
 [Route("api/[controller]")]
 [ApiController]
@@ -18,30 +10,6 @@ public class ClassController : ControllerBase
 
     public ClassController(IClass classRepo)
     {
-<<<<<<< Updated upstream
-        private readonly EduProfileDbContext _context;
-        private readonly IClass _classRepo;
-
-        public ClassController(EduProfileDbContext context, IClass repository)
-        {
-            _context = context;
-            _classRepo = repository;
-        }
-
-        [HttpGet]
-        [Route("GetAllClasses")]
-        public async Task<IActionResult> GetAllClassesAsync()
-        {
-            try
-            {
-                var results = await _classRepo.GetAllClassesAsync();
-                return Ok(results);
-            }
-            catch (Exception)
-            {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
-            }
-=======
         _classRepo = classRepo;
     }
 
@@ -53,7 +21,7 @@ public class ClassController : ControllerBase
             var classes = await _classRepo.GetAllClassesAsync();
             return Ok(classes);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             // Log the exception
             return StatusCode(500, "Internal Server Error. Please contact support.");
@@ -70,11 +38,10 @@ public class ClassController : ControllerBase
 
             return Ok(classItem);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             // Log the exception
             return StatusCode(500, "Internal Server Error. Please contact support.");
->>>>>>> Stashed changes
         }
     }
 
@@ -98,7 +65,7 @@ public class ClassController : ControllerBase
                 return CreatedAtAction(nameof(GetClassAsync), new { classId = newClass.ClassId }, newClass);
             }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             // Log the exception
             return BadRequest("Invalid transaction");
@@ -128,7 +95,7 @@ public class ClassController : ControllerBase
                 return Ok(classToUpdate);
             }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             // Log the exception
             return StatusCode(500, "Internal Server Error. Please contact support.");
@@ -152,7 +119,7 @@ public class ClassController : ControllerBase
                 return NoContent();
             }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             // Log the exception
             return StatusCode(500, "Internal Server Error. Please contact support.");
