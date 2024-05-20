@@ -23,6 +23,10 @@ builder.Services.AddScoped<IGradeRepository, GradeRepository>(); // add this for
 builder.Services.AddScoped<IEducationPhaseRepository, EducationPhaseRepository>(); 
 
 
+// Register the IMeritRepository service
+builder.Services.AddScoped<IMeritRepository, MeritRepository>();
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
