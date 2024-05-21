@@ -15,7 +15,7 @@ namespace EduProfileAPI.DataAccessLayer
         public  DbSet<Class> Classes { get; set; }
         public DbSet<Grade> Grade { get; set; }
         public DbSet<Merit> Merit { get; set; }
-        public DbSet<StudentDoc> StudentDocs { get; set; }
+        public DbSet<StudentDoc> StudentDocument { get; set; }
 
 
     }

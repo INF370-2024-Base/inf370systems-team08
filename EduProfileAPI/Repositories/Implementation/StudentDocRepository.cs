@@ -15,13 +15,13 @@ namespace EduProfileAPI.Repositories.Implementation
 
         public async Task<StudentDoc[]> GetAllStudentDocsAsync()
         {
-            IQueryable<StudentDoc> query = _context.StudentDocs;
+            IQueryable<StudentDoc> query = _context.StudentDocument;
             return await query.ToArrayAsync();
         }
 
         public async Task<StudentDoc> GetStudentDocAsync(Guid studentDocId)
         {
-            IQueryable<StudentDoc> query = _context.StudentDocs.Where(c => c.StuDocumentId == studentDocId);
+            IQueryable<StudentDoc> query = _context.StudentDocument.Where(c => c.StuDocumentId == studentDocId);
             return await query.FirstOrDefaultAsync();
         }
 
