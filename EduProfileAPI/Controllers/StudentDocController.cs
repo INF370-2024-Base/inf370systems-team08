@@ -52,51 +52,88 @@ namespace EduProfileAPI.Controllers
 
         [HttpPost]
         [Route("AddStudentDoc")]
-        public async Task<IActionResult> AddStudentDoc(StudentDocVM cvm)
+        public async Task<IActionResult> AddStudentDoc([FromForm] StudentDocVM cvm)
         {
-            var studoc = new StudentDoc { StudentId = cvm.StudentId, DocumentTypeId = cvm.DocumentTypeId, DocumentName = cvm.DocumentName, StudentDocumentAttachment = cvm.StudentDocumentAttachment };
+            if (cvm.StudentDocumentAttachment == null || cvm.StudentDocumentAttachment.Length == 0)
+                return BadRequest("No file uploaded");
+
+            byte[] fileContent;
+            using (var memoryStream = new MemoryStream())
+            {
+                await cvm.StudentDocumentAttachment.CopyToAsync(memoryStream);
+                fileContent = memoryStream.ToArray();
+            }
+
+            var studoc = new StudentDoc
+            {
+                StudentId = cvm.StudentId,
+                DocumentTypeId = cvm.DocumentTypeId,
+                DocumentName = cvm.DocumentName ?? cvm.StudentDocumentAttachment.FileName,  // Use uploaded file name if no name provided
+                StudentDocumentAttachment = fileContent
+            };
 
             try
             {
                 _studentDocRepository.Add(studoc);
                 await _studentDocRepository.SaveChangesAsync();
+                return Ok(studoc);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                // Log the exception or handle it accordingly
                 return BadRequest("Invalid transaction");
             }
+            //var studoc = new StudentDoc { StudentId = cvm.StudentId, DocumentTypeId = cvm.DocumentTypeId, DocumentName = cvm.DocumentName, StudentDocumentAttachment = cvm.StudentDocumentAttachment };
 
-            return Ok(studoc);
+            //try
+            //{
+            //    _studentDocRepository.Add(studoc);
+            //    await _studentDocRepository.SaveChangesAsync();
+            //}
+            //catch (Exception)
+            //{
+            //    return BadRequest("Invalid transaction");
+            //}
+
+            //return Ok(studoc);
         }
 
         [HttpPut]
         [Route("EditStudentDoc/{studentDocId}")]
-        public async Task<ActionResult<StudentDocVM>> EditStudentDoc(Guid studentDocId, StudentDocVM studentDocModel)
+        public async Task<ActionResult<StudentDocVM>> EditStudentDoc(Guid studentDocId, [FromForm] StudentDocVM studentDocModel)
         {
             try
             {
                 var existingstudoc = await _studentDocRepository.GetStudentDocAsync(studentDocId);
                 if (existingstudoc == null) return NotFound($"The student document does not exist");
+
                 existingstudoc.StudentId = studentDocModel.StudentId;
                 existingstudoc.DocumentTypeId = studentDocModel.DocumentTypeId;
-                existingstudoc.DocumentName = studentDocModel.DocumentName;
-                existingstudoc.StudentDocumentAttachment = studentDocModel.StudentDocumentAttachment;
+                existingstudoc.DocumentName = studentDocModel.DocumentName ?? studentDocModel.StudentDocumentAttachment?.FileName;
+
+                if (studentDocModel.StudentDocumentAttachment != null && studentDocModel.StudentDocumentAttachment.Length > 0)
+                {
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        await studentDocModel.StudentDocumentAttachment.CopyToAsync(memoryStream);
+                        existingstudoc.StudentDocumentAttachment = memoryStream.ToArray();
+                    }
+                }
 
                 if (await _studentDocRepository.SaveChangesAsync())
                 {
                     return Ok(existingstudoc);
                 }
-
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return StatusCode(500, "Internal Server Error. Please contact support.");
-
             }
             return BadRequest("Your request is invalid.");
+        
 
 
-        }
+    }
 
         [HttpDelete]
         [Route("DeleteStudentDoc/{studentDocId}")]
