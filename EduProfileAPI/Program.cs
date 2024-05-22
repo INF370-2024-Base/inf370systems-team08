@@ -20,11 +20,11 @@ builder.Services.AddDbContext<EduProfileDbContext>(options =>
 
 // Register the repositories
 builder.Services.AddScoped<IGradeRepository, GradeRepository>(); // add this for all the repositories created.
+builder.Services.AddScoped<IClass, ClassRepository>();
 builder.Services.AddScoped<IEducationPhaseRepository, EducationPhaseRepository>(); 
-
-
-// Register the IMeritRepository service
 builder.Services.AddScoped<IMeritRepository, MeritRepository>();
+builder.Services.AddScoped<IStudentDocRepository, StudentDocRepository>();
+
 
 
 var app = builder.Build();
