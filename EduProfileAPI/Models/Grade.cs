@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EduProfileAPI.Models
 {
@@ -10,6 +11,8 @@ namespace EduProfileAPI.Models
         //[Required]
         public string GradeLevel { get; set; }
 
+        [ForeignKey(nameof(StudentEducationPhaseId))]
+        public StudentEducationPhase StudentEducationPhase { get; set; }
        
         
     }
