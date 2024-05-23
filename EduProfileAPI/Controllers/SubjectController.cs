@@ -17,7 +17,7 @@ namespace EduProfileAPI.Controllers
         }
         //Get all subjects
         [HttpGet]
-        [Route("GetAll")]
+        [Route("GetAllSubject")]
         public async Task<IActionResult> GetAllSubjectsAsync()
         {
             try
