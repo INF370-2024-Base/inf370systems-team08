@@ -1,6 +1,4 @@
-﻿using EduProfileAPI.Models.Class;
-using System;
-using System.Threading.Tasks;
+﻿using EduProfileAPI.Models;
 
 namespace EduProfileAPI.Repositories.Interfaces
 {
@@ -8,9 +6,8 @@ namespace EduProfileAPI.Repositories.Interfaces
     {
         Task<Class[]> GetAllClassesAsync();
         Task<bool> SaveChangesAsync();
-        void Add<T>(T entity) where T : class;
-        void Delete<T>(T entity) where T : class;
-        Task<Class> GetClassAsync(Guid classId);
-
+        void Add<T>(T entity) where T: class;
+        void Delete<T>(T entity) where T: class;
+        Task<Class> GetClassAsync(Guid id);
     }
 }

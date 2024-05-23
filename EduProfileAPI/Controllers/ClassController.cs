@@ -1,130 +1,118 @@
-using EduProfileAPI.Models.Class;
+using EduProfileAPI.Models;
 using EduProfileAPI.Repositories.Interfaces;
+using EduProfileAPI.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 
 [Route("api/[controller]")]
 [ApiController]
 public class ClassController : ControllerBase
 {
-    private readonly IClass _classRepo;
+    private readonly IClass _ClassRepo;
 
-    public ClassController(IClass classRepo)
+    public ClassController(IClass ClassRepo)
     {
-        _classRepo = classRepo;
+        _ClassRepo = ClassRepo;
     }
 
-    [HttpGet("GetAllClasses")]
-    public async Task<IActionResult> GetAllClassesAsync()
+    [HttpGet]
+    [Route("GetAllClasses")]
+    public async Task<IActionResult> GetAllClasses()
     {
         try
         {
-            var classes = await _classRepo.GetAllClassesAsync();
-            return Ok(classes);
+            var result = await _ClassRepo.GetAllClassesAsync();
+            return Ok(result);
         }
         catch (Exception)
         {
-            // Log the exception
             return StatusCode(500, "Internal Server Error. Please contact support.");
         }
     }
 
-    [HttpGet("GetClass/{classId}")]
+    [HttpGet]
+    [Route("GetClasses/{classId}")]
     public async Task<IActionResult> GetClassAsync(Guid classId)
     {
         try
         {
-            var classItem = await _classRepo.GetClassAsync(classId);
-            if (classItem == null) return NotFound("Class does not exist");
+            var results = await _ClassRepo.GetClassAsync(classId);
 
-            return Ok(classItem);
+            if (results == null) return NotFound("Class does not exist");
+
+            return Ok(results);
         }
         catch (Exception)
         {
-            // Log the exception
-            return StatusCode(500, "Internal Server Error. Please contact support.");
+            return StatusCode(500, "Internal Server Error. Please contact support");
         }
     }
 
-    [HttpPost("AddClass")]
-    public async Task<IActionResult> AddClass(ClassVM classVM)
+    [HttpPost]
+    [Route("AddClass")]
+    public async Task<IActionResult> AddClass(ClassVM cvm)
     {
-        var newClass = new Class
-        {
-            ClassId = classVM.ClassId,
-            GradeId = classVM.GradeId,
-            EmployeeId = classVM.EmployeeId,
-            ClassName = classVM.ClassName,
-            ClassDescription = classVM.ClassDescription
-        };
+        var classes = new Class { ClassId = cvm.ClassId, GradeId = cvm.GradeId, EmployeeId = cvm.EmployeeId, ClassName = cvm.ClassName, ClassDescription = cvm.ClassDescription };
 
         try
         {
-            _classRepo.Add(newClass);
-            if (await _classRepo.SaveChangesAsync())
-            {
-                return CreatedAtAction(nameof(GetClassAsync), new { classId = newClass.ClassId }, newClass);
-            }
+            _ClassRepo.Add(classes);
+            await _ClassRepo.SaveChangesAsync();
         }
         catch (Exception)
         {
-            // Log the exception
             return BadRequest("Invalid transaction");
         }
 
-        return BadRequest("Failed to save new class");
+        return Ok(classes);
     }
 
-    [HttpPut("EditClass/{classId}")]
-    public async Task<IActionResult> UpdateClass(Guid classId, ClassVM classVM)
+    [HttpPut]
+    [Route("EditClass/{classId}")]
+    public async Task<ActionResult<ClassVM>> EditClass(Guid classId, ClassVM classVM)
     {
+
         try
         {
-            var classToUpdate = await _classRepo.GetClassAsync(classId);
-            if (classToUpdate == null)
-            {
-                return NotFound($"The class with ID {classId} does not exist.");
-            }
+            var existingClass = await _ClassRepo.GetClassAsync(classId);
 
-            classToUpdate.GradeId = classVM.GradeId;
-            classToUpdate.EmployeeId = classVM.EmployeeId;
-            classToUpdate.ClassName = classVM.ClassName;
-            classToUpdate.ClassDescription = classVM.ClassDescription;
+            if (existingClass == null) return NotFound($"The class does not exist");
+            existingClass.GradeId = classVM.GradeId;
+            existingClass.EmployeeId = classVM.EmployeeId;
+            existingClass.ClassName = classVM.ClassName;
+            existingClass.ClassDescription = classVM.ClassDescription;
 
-            if (await _classRepo.SaveChangesAsync())
+            if(await _ClassRepo.SaveChangesAsync())
             {
-                return Ok(classToUpdate);
+                return Ok(existingClass);
             }
         }
         catch (Exception)
         {
-            // Log the exception
             return StatusCode(500, "Internal Server Error. Please contact support.");
         }
 
-        return BadRequest("Update failed. No changes were made.");
+        return BadRequest("Your request is invalid.");
+
     }
 
-    [HttpDelete("DeleteClass/{classId}")]
+    [HttpDelete]
+    [Route("DeleteClass/{classId}")]
     public async Task<IActionResult> DeleteClass(Guid classId)
     {
+
         try
         {
-            var classToDelete = await _classRepo.GetClassAsync(classId);
-            if (classToDelete == null) return NotFound($"The class does not exist");
+            var existingClass = await _ClassRepo.GetClassAsync(classId);
+            if (existingClass == null) return NotFound($"The class does not exist");
+            _ClassRepo.Delete(existingClass);
 
-            _classRepo.Delete(classToDelete);
-
-            if (await _classRepo.SaveChangesAsync())
-            {
-                return NoContent();
-            }
+            if (await _ClassRepo.SaveChangesAsync()) return Ok(existingClass); 
         }
         catch (Exception)
         {
-            // Log the exception
             return StatusCode(500, "Internal Server Error. Please contact support.");
         }
-
-        return BadRequest("Delete request is invalid");
+        return BadRequest("Your request is invalid");
     }
 }
