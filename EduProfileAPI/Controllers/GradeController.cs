@@ -22,7 +22,6 @@ namespace EduProfileAPI.Controllers
         public GradeController(IGradeRepository gradeRepo)
         {
             _gradeRepo = gradeRepo;
-
         }
 
         [HttpGet]
@@ -36,7 +35,7 @@ namespace EduProfileAPI.Controllers
             }
             catch (Exception ex)
             {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Database Failure: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Database Failure: {ex.Message}");
             }
         }
 

@@ -1,16 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc;
 
-namespace EduProfileAPI.Models
+namespace EduProfileAPI.ViewModels
 {
-    public class Subject
+    public class UpdateSubjectViewModel
     {
-        [Key]
         public Guid SubjectId { get; set; }
         public Guid ClassId { get; set; }
         public Guid EmployeeId { get; set; }
         public string SubjectName { get; set; }
         public string SubjectDescription { get; set; }
         public string SubjectYear { get; set; }
-        
     }
 }
