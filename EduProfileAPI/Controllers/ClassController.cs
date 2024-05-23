@@ -52,7 +52,7 @@ public class ClassController : ControllerBase
     [Route("AddClass")]
     public async Task<IActionResult> AddClass(ClassVM cvm)
     {
-        var classes = new Class { ClassId = cvm.ClassId, GradeId = cvm.GradeId, EmployeeId = cvm.EmployeeId, ClassName = cvm.ClassName, ClassDescription = cvm.ClassDescription };
+        var classes = new Class {  GradeId = cvm.GradeId, EmployeeId = cvm.EmployeeId, ClassName = cvm.ClassName, ClassDescription = cvm.ClassDescription };
 
         try
         {
