@@ -33,7 +33,7 @@ namespace EduProfileAPI.Controllers
 
         [HttpGet]
         [Route("GetEmployee/{employeeId}")] //returns a specific course 
-        public async Task<IActionResult> GetEmployeeAsync(int employeeId)
+        public async Task<IActionResult> GetEmployeeAsync(Guid employeeId)
         {
             try
             {
@@ -81,7 +81,7 @@ namespace EduProfileAPI.Controllers
 
         [HttpPut]
         [Route("EditEmployee/{employeeId}")]
-        public async Task<ActionResult<Employee>> EditEmployee(int employeeId, CreateEmployeeVM employeeModel)
+        public async Task<ActionResult<Employee>> EditEmployee(Guid employeeId, CreateEmployeeVM employeeModel)
         {
             try
             {
@@ -117,7 +117,7 @@ namespace EduProfileAPI.Controllers
 
         [HttpDelete]
         [Route("DeleteEmployee/{employeeId}")]
-        public async Task<IActionResult> DeleteEmployee(int employeeId)
+        public async Task<IActionResult> DeleteEmployee(Guid employeeId)
         {
             try
             {
