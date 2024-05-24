@@ -83,19 +83,7 @@ namespace EduProfileAPI.Controllers
                 // Log the exception or handle it accordingly
                 return BadRequest("Invalid transaction");
             }
-            //var studoc = new StudentDoc { StudentId = cvm.StudentId, DocumentTypeId = cvm.DocumentTypeId, DocumentName = cvm.DocumentName, StudentDocumentAttachment = cvm.StudentDocumentAttachment };
-
-            //try
-            //{
-            //    _studentDocRepository.Add(studoc);
-            //    await _studentDocRepository.SaveChangesAsync();
-            //}
-            //catch (Exception)
-            //{
-            //    return BadRequest("Invalid transaction");
-            //}
-
-            //return Ok(studoc);
+           
         }
 
         [HttpPut]

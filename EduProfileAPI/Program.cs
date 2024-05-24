@@ -33,8 +33,15 @@ builder.Services.AddScoped<IEducationPhaseRepository, EducationPhaseRepository>(
 builder.Services.AddScoped<IMeritRepository, MeritRepository>();
 builder.Services.AddScoped<ISubjectRepository, SubjectRepository>();
 builder.Services.AddScoped<IStudentDocRepository, StudentDocRepository>();
+
+builder.Services.AddScoped<IStudentRepository, StudentRepository>();
+builder.Services.AddScoped<IStudentAnnouncementRepo, StudentAnnouncementRepo>();
+
+
+
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IAssignTeacherToClassRepository, AssignTeacherToClassRepository>();
+
 
 
 
