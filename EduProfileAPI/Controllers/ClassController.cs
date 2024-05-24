@@ -24,9 +24,9 @@ public class ClassController : ControllerBase
             var result = await _ClassRepo.GetAllClassesAsync();
             return Ok(result);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            return StatusCode(500, "Internal Server Error. Please contact support.");
+            return StatusCode(500, $"Internal Server Error. Please contact support. {ex.Message}");
         }
     }
 
@@ -76,7 +76,10 @@ public class ClassController : ControllerBase
         {
             var existingClass = await _ClassRepo.GetClassAsync(classId);
 
-            if (existingClass == null) return NotFound($"The class does not exist");
+            if (existingClass == null) 
+                return NotFound($"The class does not exist");
+            
+            
             existingClass.GradeId = classVM.GradeId;
             existingClass.EmployeeId = classVM.EmployeeId;
             existingClass.ClassName = classVM.ClassName;
