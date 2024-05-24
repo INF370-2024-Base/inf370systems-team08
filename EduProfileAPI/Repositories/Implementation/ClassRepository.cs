@@ -6,6 +6,7 @@ using EduProfileAPI.Models;
 using EduProfileAPI.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace EduProfileAPI.Repositories.Implementation
 {
     public class ClassRepository: IClass
@@ -19,13 +20,17 @@ namespace EduProfileAPI.Repositories.Implementation
 
         public async Task<Class[]> GetAllClassesAsync()
         {
-            IQueryable<Class> query = _context.Class;
+
+            // IQueryable<Class> query = _context.Class;
+            var query = _context.Class;
+                                  
             return await query.ToArrayAsync();
         }
 
         public async Task<Class> GetClassAsync(Guid classId)
         {
             IQueryable<Class> query = _context.Class.Where(c => c.ClassId == classId);
+                                                    
             return await query.FirstOrDefaultAsync();
         }
 
