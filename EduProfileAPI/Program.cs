@@ -5,6 +5,14 @@ using EduProfileAPI.Repositories.Interfaces;
 using AutoMapper;
 
 var builder = WebApplication.CreateBuilder(args);
+// Add services to the container.
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin",
+        policyBuilder => policyBuilder.WithOrigins("http://localhost:4200")
+                                      .AllowAnyHeader()
+                                      .AllowAnyMethod());
+});
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -40,6 +48,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowSpecificOrigin"); // Make sure this matches the name you gave your policy in ConfigureServices
+
 
 app.UseAuthorization();
 
