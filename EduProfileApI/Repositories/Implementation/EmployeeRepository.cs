@@ -1,36 +1,32 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using EduProfileAPI.DataAccessLayer;
+﻿using EduProfileAPI.DataAccessLayer;
 using EduProfileAPI.Models;
 using EduProfileAPI.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
-
+using System.Threading.Tasks;
+using EduProfileAPI.ViewModels;
 
 namespace EduProfileAPI.Repositories.Implementation
 {
-    public class ClassRepository: IClass
+    public class EmployeeRepository : IEmployeeRepository
     {
         private readonly EduProfileDbContext _context;
-        
-        public ClassRepository(EduProfileDbContext context)
+
+        public EmployeeRepository (EduProfileDbContext context)
         {
             _context = context;
+
         }
 
-        public async Task<Class[]> GetAllClassesAsync()
+        public async Task<Employee[]> GetAllEmployeesAsync()
         {
-
-            // IQueryable<Class> query = _context.Class;
-            var query = _context.Class;
-                                  
+            IQueryable<Employee> query = _context.Employee;
             return await query.ToArrayAsync();
         }
 
-        public async Task<Class> GetClassAsync(Guid classId)
+        
+        public async Task<Employee> GetEmployeeAsync(Guid employeeId)
         {
-            IQueryable<Class> query = _context.Class.Where(c => c.ClassId == classId);
-                                                    
+            IQueryable<Employee> query = _context.Employee.Where(e => e.EmployeeId == employeeId);
             return await query.FirstOrDefaultAsync();
         }
 
@@ -48,6 +44,5 @@ namespace EduProfileAPI.Repositories.Implementation
         {
             return await _context.SaveChangesAsync() > 0;
         }
-
     }
 }

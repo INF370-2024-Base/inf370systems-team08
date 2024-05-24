@@ -1,17 +1,18 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
-namespace EduProfileAPI.Models.Class
+namespace EduProfileAPI.Models
 {
     public class Class
     {
         [Key]
         public Guid ClassId { get; set; }
-        [Required]
-        public string ClassName { get; set; }
-        [Required]
-        public string ClassDescription { get; set; }
-
         public Guid GradeId { get; set; }
-        public Guid EmployeeId{ get; set; }
+        [AllowNull]
+        public Guid? EmployeeId { get; set; }
+
+
+        public string ClassName { get; set; }
+        public string ClassDescription { get; set; }
     }
 }
