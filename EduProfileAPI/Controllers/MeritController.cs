@@ -54,7 +54,7 @@ namespace EduProfileAPI.Controllers
         [Route("AddMerit")]
         public async Task<IActionResult> AddMerit(CreateMeritVM cvm)
         {
-            var merit = new Merit { MeritTypeId = cvm.MeritTypeId,EmployeeId = cvm.EmployeeId  ,MeritName = cvm.MeritName, MeritDescription = cvm.MeritDescription };
+            var merit = new Merit { MeritTypeId = cvm.MeritTypeId,EmployeeId = cvm.EmployeeId, StudentId = cvm.StudentId, MeritName = cvm.MeritName, MeritDescription = cvm.MeritDescription };
 
             try
             {
@@ -79,6 +79,7 @@ namespace EduProfileAPI.Controllers
                 if (existingMerit == null) return NotFound($"The merit does not exist");
                 existingMerit.EmployeeId = meritModel.EmployeeId;
                 existingMerit.MeritTypeId = meritModel.MeritTypeId;
+                existingMerit.StudentId = meritModel.StudentId;
                 existingMerit.MeritName = meritModel.MeritName;
                 existingMerit.MeritDescription = meritModel.MeritDescription;
 

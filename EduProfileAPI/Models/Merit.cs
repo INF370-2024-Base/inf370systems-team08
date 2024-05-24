@@ -8,6 +8,8 @@ namespace EduProfileAPI.Models
         public Guid MeritId { get; set; }
         public Guid MeritTypeId { get; set; }
         public Guid EmployeeId { get; set; }
+        public Guid StudentId { get; set; }
+
 
         //[Required]
         public string MeritName { get; set; }
