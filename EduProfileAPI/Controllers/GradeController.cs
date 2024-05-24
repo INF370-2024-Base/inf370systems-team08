@@ -116,6 +116,27 @@ namespace EduProfileAPI.Controllers
                 return this.StatusCode(StatusCodes.Status500InternalServerError, $"Database Failure: {ex.Message}");
             }
         }
+
+        // Get Grade by ID
+        [HttpGet]
+        [Route("GetGrade/{id}")]
+        public async Task<IActionResult> GetGradeByIdAsync(Guid id)
+        {
+            try
+            {
+                var result = await _gradeRepo.GetGradeByIdAsync(id);
+                if (result == null)
+                {
+                    return NotFound("Grade not found.");
+                }
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Database Failure: {ex.Message}");
+            }
+        }
     }
 }
 

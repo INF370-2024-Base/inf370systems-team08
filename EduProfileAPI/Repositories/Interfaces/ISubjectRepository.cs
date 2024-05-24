@@ -6,9 +6,9 @@ namespace EduProfileAPI.Repositories.Interfaces
     public interface ISubjectRepository
     {
         Task<Subject[]> GetAllSubjectAsync();
-        Task<SubjectViewModel> CreateSubjectAsync(SubjectViewModel model); // change to CreateSubjectViewModel later
+        Task<SubjectViewModel> CreateSubjectAsync(CreateSubjectViewModel model); 
         Task<SubjectViewModel> GetSubjectByIdAsync(Guid id);
-        Task<SubjectViewModel> UpdateSubjectAsync(SubjectViewModel model);// change to UpdateSubjectViewModel later
+        Task<SubjectViewModel> UpdateSubjectAsync(UpdateSubjectViewModel model);
         Task<bool> DeleteSubjectAsync(Guid id);
     }
 }

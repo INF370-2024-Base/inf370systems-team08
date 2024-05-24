@@ -53,7 +53,7 @@ namespace EduProfileAPI.Controllers
         //Create new subject
         [HttpPost]
         [Route("CreateSubject")]
-        public async Task<IActionResult> CreateSubjectAsync([FromBody] SubjectViewModel subjectModel)
+        public async Task<IActionResult> CreateSubjectAsync([FromBody] CreateSubjectViewModel subjectModel)
         {
             try
             {
@@ -64,6 +64,10 @@ namespace EduProfileAPI.Controllers
 
                 //add the finding of employee and class later
                 var createdSubject = await _subjectRepository.CreateSubjectAsync(subjectModel);
+                if (createdSubject == null)
+                {
+                    return NotFound("Employee or Class not found.");
+                }
                 
                 return Ok(subjectModel);
             }
@@ -77,7 +81,7 @@ namespace EduProfileAPI.Controllers
         //Update subject
         [HttpPut]
         [Route("UpdateSubject")]
-        public async Task<IActionResult> UpdateSubjectAsync([FromBody] SubjectViewModel subjectModel)
+        public async Task<IActionResult> UpdateSubjectAsync([FromBody] UpdateSubjectViewModel subjectModel)
         {
             try
             {
