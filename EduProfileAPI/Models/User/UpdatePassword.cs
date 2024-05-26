@@ -2,8 +2,8 @@
 {
     public class UpdatePassword
     {
-        public string UserEmail { get; set; }
-        public string OldPassword { get; set; }
-        public string NewPassword { get; set; }
+        public string userEmail { get; set; }
+        public string oldPassword { get; set; }
+        public string newPassword { get; set; }
     }
 }

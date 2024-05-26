@@ -10,6 +10,8 @@ using EduProfileAPI.EmailService;
 using Microsoft.Extensions.Configuration;
 using EduProfileAPI.PasswordValidator;
 using Org.BouncyCastle.Bcpg;
+using Newtonsoft.Json.Linq;
+using System.Web;
 
 namespace EduProfileAPI.Controllers
 {
@@ -36,30 +38,31 @@ namespace EduProfileAPI.Controllers
                 return Unauthorized();
             }
 
-            //check if two factor is enabled
+            // Check if two-factor is enabled
             if (await _userManager.GetTwoFactorEnabledAsync(user))
             {
                 var token = await _userManager.GenerateTwoFactorTokenAsync(user, "Email");
-            
+
                 await _emailService.SendEmailAsync("no-reply@yourdomain.com", user.Email,
-                                           "Your verification code",
-                                           $"Your code is: {token}");
-                
-                return Ok(new { Message = "Two factor authentication required."});
+                                                   "Your verification code",
+                                                   $"Your code is: {token}");
+
+                return Ok(new { Message = "Two factor authentication required.", userId = user.Id });
             }
 
-            // goes normal when 2FA is not enabled
+            // Normal login when 2FA is not enabled
             var tokenString = GenerateJwtToken(user);
             return Ok(new { Token = tokenString });
         }
 
+
         [HttpPost("update-password")]
         public async Task<IActionResult> UpdatePassword([FromBody] UpdatePassword model)
         {
-            var user = await _userManager.FindByEmailAsync(model.UserEmail);
-            if (user != null && await _userManager.CheckPasswordAsync(user, model.OldPassword))
+            var user = await _userManager.FindByEmailAsync(model.userEmail);
+            if (user != null && await _userManager.CheckPasswordAsync(user, model.oldPassword))
             {
-                var result = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+                var result = await _userManager.ChangePasswordAsync(user, model.oldPassword, model.newPassword);
                 if (result.Succeeded)
                 {
                     return Ok("Password updated successfully.");
@@ -74,37 +77,39 @@ namespace EduProfileAPI.Controllers
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
             if (user == null)
-                return BadRequest("No user associated with email");
+                return BadRequest(new { message = "No user associated with email" });
 
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-            var callbackUrl = Url.Action(nameof(ResetPassword), "Account",
-                                new { token, email = user.Email },
-                                Request.Scheme);
+
+            var frontendUrl = "http://localhost:4200/reset-password"; // Update this with your actual frontend URL
+            var encodedToken = HttpUtility.UrlEncode(token);
+            var callbackUrl = $"{frontendUrl}?token={encodedToken}&email={HttpUtility.UrlEncode(user.Email)}";
 
             // Send email with the reset password link
-
             await _emailService.SendEmailAsync("no-reply@yourdomain.com", user.Email,
-                                       "Reset Your Password",
-                                       $"Please reset your password by clicking <a href='{callbackUrl}'>here</a>.");
+                                    "Reset Your Password",
+                                    $"Please reset your password by clicking <a href='{callbackUrl}'>here</a>.");
 
-            return Ok("Reset password link sent to email.");
+            return Ok(new { message = "Reset password link sent to email" });
         }
+
+
 
         [HttpPost("reset-password")]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPassword model)
         {
-            var user = await _userManager.FindByEmailAsync(model.Email);
+            var user = await _userManager.FindByEmailAsync(model.email);
             if (user == null)
                 return BadRequest("Invalid request");
 
-            var result = await _userManager.ResetPasswordAsync(user, model.Token, model.NewPassword);
+            var result = await _userManager.ResetPasswordAsync(user, model.token, model.newPassword);
             if (result.Succeeded)
             {
                 return Ok("Password has been reset successfully");
             }
             return BadRequest(result.Errors);
         }
-
+         
         private string GenerateJwtToken(IdentityUser user)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));

@@ -21,9 +21,9 @@ namespace EduProfileAPI.Controllers
         public async Task<IActionResult> AddStudentAnnouncement(StudentAnnouncmentVM cvm)
         {
             var stuAnn = new StudentAnnouncement { ParentId = cvm.ParentId, AnnouncementDate = cvm.AnnouncementDate, Description = cvm.Description };
-
+           
             try
-            {
+            { 
                 _studentAnnRepository.Add(stuAnn);
                 await _studentAnnRepository.SaveChangesAsync();
             }
