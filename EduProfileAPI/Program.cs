@@ -3,6 +3,12 @@ using EduProfileAPI.DataAccessLayer;
 using EduProfileAPI.Repositories.Implementation;
 using EduProfileAPI.Repositories.Interfaces;
 using AutoMapper;
+using Microsoft.AspNetCore.Identity;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using EduProfileAPI.PasswordValidator;
+using EduProfileAPI.EmailService;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
@@ -13,6 +19,55 @@ builder.Services.AddCors(options =>
                                       .AllowAnyHeader()
                                       .AllowAnyMethod());
 });
+
+//email config
+builder.Services.Configure<EmailConfiguration>(builder.Configuration.GetSection("EmailConfiguration"));
+builder.Services.AddSingleton<IEmailService, MailKitEmailService>();
+//Security
+//configure the identity 
+builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+    .AddEntityFrameworkStores<EduProfileDbContext>()
+    .AddDefaultTokenProviders();
+
+//Configure the JWT Authentication
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+
+    };
+
+
+
+});
+
+// The custom password validation
+builder.Services.AddTransient<IPasswordValidator<IdentityUser>, CustomPasswordValidator>();
+
+//Custom password policy
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.Password.RequireDigit = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequiredLength = 8;
+    options.Password.RequiredUniqueChars = 1;
+});
+
+
+
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -33,12 +88,8 @@ builder.Services.AddScoped<IEducationPhaseRepository, EducationPhaseRepository>(
 builder.Services.AddScoped<IMeritRepository, MeritRepository>();
 builder.Services.AddScoped<ISubjectRepository, SubjectRepository>();
 builder.Services.AddScoped<IStudentDocRepository, StudentDocRepository>();
-
 builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 builder.Services.AddScoped<IStudentAnnouncementRepo, StudentAnnouncementRepo>();
-
-
-
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IAssignTeacherToClassRepository, AssignTeacherToClassRepository>();
 
