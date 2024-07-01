@@ -3,6 +3,7 @@ using EduProfileAPI.Models.User;
 using EduProfileAPI.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using EduProfileAPI.Models.Maintenance;
 
 namespace EduProfileAPI.DataAccessLayer
 {
@@ -22,6 +23,13 @@ namespace EduProfileAPI.DataAccessLayer
         public DbSet<Student> Student { get; set; }
         public DbSet<StudentAnnouncement> StudentAnnouncement { get; set; }
         public DbSet<Employee> Employee { get; set; }
+        public DbSet<MaintenancePriority> MaintenancePriority { get; set; }
+        public DbSet<MaintenanceStatus> MaintenanceStatus { get; set; }
+        public DbSet<MaintenanceType> MaintenanceType { get; set; }
+
+        public DbSet<MaintenanceRequest> MaintenanceRequest { get; set; }
+
+
 
 
 

@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using EduProfileAPI.PasswordValidator;
 using EduProfileAPI.EmailService;
+using EduProfileAPI.Repositories.Interfaces.Maintenance;
+using EduProfileAPI.Repositories.Implementation.Maintenance;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
@@ -92,6 +94,11 @@ builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 builder.Services.AddScoped<IStudentAnnouncementRepo, StudentAnnouncementRepo>();
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IAssignTeacherToClassRepository, AssignTeacherToClassRepository>();
+builder.Services.AddScoped<IMaintenanceRequest, MaintenanceRequestRepo>();
+builder.Services.AddScoped<IMaintenanceStatus, MaintenanceStatusRepo>();
+builder.Services.AddScoped<IMaintenancePriority, MaintenancePriorityRepo>();
+builder.Services.AddScoped<IMaintenanceType, MaintenanceTypeRepo>();
+
 
 
 
