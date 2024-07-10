@@ -7,7 +7,6 @@ namespace EduProfileAPI.Controllers
     [ApiController]
     public class HelpDocController : ControllerBase
     {
-        [HttpGet]
-        [Route("GetHelpDoc")]
+        
     }
 }
