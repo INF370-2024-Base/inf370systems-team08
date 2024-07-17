@@ -1,13 +1,11 @@
-﻿namespace EduProfileAPI.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace EduProfileAPI.Models
 {
     public class AttendanceStatus
     {
-        public Guid StudentAttendenceId { get; set; }
-        public Guid  StudentId { get; set; }
-        public Guid ClassId { get; set; }
-        public Guid EmployeeId { get; set; }
-        public DateTime AttendanceDate { get; set; }
+        [Key]
         public Guid AttendanceStatusId { get; set; }
-        public string Remarks { get; set; }
+        public string StatusDescription { get; set; }
     }
 }

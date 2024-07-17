@@ -1,11 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace EduProfileAPI.Models
+﻿namespace EduProfileAPI.ViewModels
 {
-    public class StudentAttendance
+    public class StudentAttendanceViewModel
     {
-        [Key]
-        public Guid StudentAttendanceId { get; set; }
         public Guid StudentId { get; set; }
         public Guid ClassId { get; set; }
         public Guid EmployeeId { get; set; }
@@ -15,4 +11,3 @@ namespace EduProfileAPI.Models
 
     }
 }
-
