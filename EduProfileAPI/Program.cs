@@ -93,6 +93,7 @@ builder.Services.AddScoped<IStudentAnnouncementRepo, StudentAnnouncementRepo>();
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IAssignTeacherToClassRepository, AssignTeacherToClassRepository>();
 builder.Services.AddScoped<IRemedialFileRepository, RemedialFileRepository>();
+builder.Services.AddScoped<IRemedialActivityRepository, RemedialActivityRepository>();
 
 
 
