@@ -1,21 +1,20 @@
 ﻿using EduProfileAPI.Models;
 using EduProfileAPI.Repositories.Interfaces;
 using EduProfileAPI.ViewModels;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using System;
 
 namespace EduProfileAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RemdialFileController : ControllerBase
+    public class RemedialFileController : ControllerBase
     {
-        private readonly IRemedialFileRepository _RemFileRepo;
+        private readonly IRemedialFileRepository _remFileRepo;
 
-        public RemdialFileController(IRemedialFileRepository RemFileRepo)
+        public RemedialFileController(IRemedialFileRepository remFileRepo)
         {
-            _RemFileRepo = RemFileRepo;
+            _remFileRepo = remFileRepo;
         }
 
         [HttpGet]
@@ -24,7 +23,7 @@ namespace EduProfileAPI.Controllers
         {
             try
             {
-                var result = await _RemFileRepo.GetAllRemedialFileAsync();
+                var result = await _remFileRepo.GetAllRemedialFileAsync();
                 return Ok(result);
             }
             catch (Exception ex)
@@ -35,14 +34,12 @@ namespace EduProfileAPI.Controllers
 
         [HttpGet]
         [Route("GetRemedialFiles/{remedialFileId}")]
-        public async Task<IActionResult> GetRemedialFilesAsync(Guid remFileId)
+        public async Task<IActionResult> GetRemedialFilesAsync(Guid remedialFileId)
         {
             try
             {
-                var results = await _RemFileRepo.GetRemedialFileAsync(remFileId);
-
-                if (results == null) return NotFound("Class does not exist");
-
+                var results = await _remFileRepo.GetRemedialFileAsync(remedialFileId);
+                if (results == null) return NotFound("Remedial file does not exist");
                 return Ok(results);
             }
             catch (Exception)
@@ -55,14 +52,15 @@ namespace EduProfileAPI.Controllers
         [Route("AddRemedialFiles")]
         public async Task<IActionResult> AddRemedialFiles(RemedialFileVM rvm)
         {
-            if (rvm == null)
+            if (rvm == null || rvm.RemFileId == Guid.Empty)
             {
-                return BadRequest("RemedialFileVM cannot be null");
+                return BadRequest("RemedialFileVM cannot be null and RemFileId must be a valid GUID");
             }
 
             // Create a RemedialFile object from the ViewModel
             var remedialFile = new RemedialFile
             {
+                RemFileId = rvm.RemFileId,
                 EmployeeId = rvm.EmployeeId,
                 SubjectId = rvm.SubjectId,
                 Title = rvm.Title,
@@ -72,33 +70,27 @@ namespace EduProfileAPI.Controllers
 
             try
             {
-                // Add the RemedialFile object to the repository
-                _RemFileRepo.Add(remedialFile);
-                await _RemFileRepo.SaveChangesAsync();
+                _remFileRepo.Add(remedialFile);
+                await _remFileRepo.SaveChangesAsync();
             }
             catch (Exception ex)
             {
-
-                return BadRequest("Invalid transaction");
+                return BadRequest($"Invalid transaction: {ex.Message}");
             }
 
             return Ok(remedialFile);
         }
 
-
-
         [HttpPut]
-        [Route("EditRemedialFiles/{RemedialFileId}")]
-        public async Task<ActionResult<RemedialFileVM>> EditRemedialFiles(Guid remFileId, RemedialFileVM remFileVM)
+        [Route("EditRemedialFiles/{remedialFileId}")]
+        public async Task<ActionResult<RemedialFileVM>> EditRemedialFiles(Guid remedialFileId, RemedialFileVM remFileVM)
         {
-
             try
             {
-                var existingRemedialFile = await _RemFileRepo.GetRemedialFileAsync(remFileId);
+                var existingRemedialFile = await _remFileRepo.GetRemedialFileAsync(remedialFileId);
 
                 if (existingRemedialFile == null)
                     return NotFound($"The remedial file does not exist");
-
 
                 existingRemedialFile.EmployeeId = remFileVM.EmployeeId;
                 existingRemedialFile.SubjectId = remFileVM.SubjectId;
@@ -106,7 +98,7 @@ namespace EduProfileAPI.Controllers
                 existingRemedialFile.Description = remFileVM.Description;
                 existingRemedialFile.Date = remFileVM.Date;
 
-                if (await _RemFileRepo.SaveChangesAsync())
+                if (await _remFileRepo.SaveChangesAsync())
                 {
                     return Ok(existingRemedialFile);
                 }
@@ -117,21 +109,19 @@ namespace EduProfileAPI.Controllers
             }
 
             return BadRequest("Your request is invalid.");
-
         }
 
         [HttpDelete]
-        [Route("DeleteRemedialFiles/{RemedialFileId}")]
-        public async Task<IActionResult> DeleteRemedialFiles(Guid remFileId)
+        [Route("DeleteRemedialFiles/{remedialFileId}")]
+        public async Task<IActionResult> DeleteRemedialFiles(Guid remedialFileId)
         {
-
             try
             {
-                var existingRemedialFile = await _RemFileRepo.GetRemedialFileAsync(remFileId);
+                var existingRemedialFile = await _remFileRepo.GetRemedialFileAsync(remedialFileId);
                 if (existingRemedialFile == null) return NotFound($"The remedial file does not exist");
-                _RemFileRepo.Delete(existingRemedialFile);
+                _remFileRepo.Delete(existingRemedialFile);
 
-                if (await _RemFileRepo.SaveChangesAsync()) return Ok(existingRemedialFile);
+                if (await _remFileRepo.SaveChangesAsync()) return Ok(existingRemedialFile);
             }
             catch (Exception)
             {
@@ -141,4 +131,3 @@ namespace EduProfileAPI.Controllers
         }
     }
 }
-
