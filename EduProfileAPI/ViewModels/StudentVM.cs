@@ -1,4 +1,5 @@
 ﻿namespace EduProfileAPI.ViewModels
+
 {
     public class StudentVM
     {
