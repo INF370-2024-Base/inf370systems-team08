@@ -102,6 +102,7 @@ builder.Services.AddScoped<IStudentReportRepository, StudentReportRepository>();
 builder.Services.AddScoped<IEarlyReleasesRepo, EarlyReleasesRepo>();
 builder.Services.AddScoped<ISchoolEventRepo, SchoolEventRepo>();
 builder.Services.AddScoped<ITeacherClassListRepo,  TeacherClassListRepo>();
+builder.Services.AddScoped<IAssessmentRepository, AssessmentRepository>();
 
 //WhatsApp
 var whatsAppAccessToken = builder.Configuration["WhatsApp:AccessToken"];

@@ -53,11 +53,20 @@ namespace EduProfileAPI.Repositories.Implementation
                 var assessmentMark = assessments.FirstOrDefault(a => a.Assessment.AssesmentId == assessment.AssesmentId);
                 if (assessmentMark != null)
                 {
-                    assessment.AssesmentGrades = assessmentMark.MarkAchieved;
+                    assessment.AssesmentGrades = ParseMarkAchieved(assessmentMark.MarkAchieved) ?? 0;
                 }
             }
 
             return report;
+        }
+
+        private int? ParseMarkAchieved(string markAchieved)
+        {
+            if (int.TryParse(markAchieved, out int mark))
+            {
+                return mark;
+            }
+            return null;
         }
     }
 }
