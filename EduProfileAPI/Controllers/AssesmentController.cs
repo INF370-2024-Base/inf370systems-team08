@@ -26,9 +26,9 @@ namespace EduProfileAPI.Controllers
                 var results = await _assesmentRepository.GetAllAssesmentsAsync();
                 return Ok(results);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(500, "Internal Server Error. Please contact support.");
+                return StatusCode(500, $"Internal Server Error: {ex.Message}");
             }
         }
 
@@ -54,7 +54,7 @@ namespace EduProfileAPI.Controllers
         [Route("AddAssesment")]
         public async Task<IActionResult> AddAssesment(AssesmentVM cvm)
         {
-            var assesment = new Assesment { SubjectId = cvm.SubjectId, EmployeeId = cvm.EmployeeId, AssessmentName = cvm.AssessmentName, AchievableMark = cvm.AchievableMark, AssesmentDate = cvm.AssesmentDate, AssesmentType = cvm.AssesmentType, AssesmentWeighting = cvm.AssesmentWeighting };
+            var assesment = new Assesment { SubjectId = cvm.SubjectId, EmployeeId = cvm.EmployeeId, AssesmentName = cvm.AssessmentName, AchievableMark = cvm.AchievableMark, AssesmentDate = cvm.AssesmentDate, AssesmentType = cvm.AssesmentType, AssesmentWeighting = cvm.AssesmentWeighting };
 
             try
             {
@@ -79,7 +79,7 @@ namespace EduProfileAPI.Controllers
                 if (existingAssesment == null) return NotFound($"The assesment does not exist");
                 existingAssesment.EmployeeId = model.EmployeeId;
                 existingAssesment.SubjectId = model.SubjectId;
-                existingAssesment.AssessmentName = model.AssessmentName;
+                existingAssesment.AssesmentName = model.AssessmentName;
                 existingAssesment.AssesmentDate = model.AssesmentDate;
                 existingAssesment.AssesmentType = model.AssesmentType;
                 existingAssesment.AssesmentWeighting = model.AssesmentWeighting;

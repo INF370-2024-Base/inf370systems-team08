@@ -21,7 +21,7 @@ namespace EduProfileAPI.Repositories.Implementation
 
         public async Task<AssesmentMark> GetAssesmentMarkAsync(Guid studentId, Guid assesmentId)
         {
-            IQueryable<AssesmentMark> query = _context.AssesmentMark.Where(c => c.StudentId  == studentId && c.AssementId == assesmentId);
+            IQueryable<AssesmentMark> query = _context.AssesmentMark.Where(c => c.StudentId  == studentId && c.AssesmentId == assesmentId);
             return await query.FirstOrDefaultAsync();
         }
 

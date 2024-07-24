@@ -5,9 +5,9 @@
         public Guid SubjectId { get; set; }
         public Guid EmployeeId { get; set; }
         public string AssessmentName { get; set; }
-        public string AssesmentDate { get; set; }
+        public DateTime AssesmentDate { get; set; }
         public string AssesmentType { get; set; }
-        public string AchievableMark { get; set; }
-        public string AssesmentWeighting { get; set; }
+        public int AchievableMark { get; set; }
+        public int AssesmentWeighting { get; set; }
     }
 }

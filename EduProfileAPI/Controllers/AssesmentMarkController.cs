@@ -26,9 +26,9 @@ namespace EduProfileAPI.Controllers
                 var results = await _assesmentMarkRepository.GetAllAssesmentMarksAsync();
                 return Ok(results);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(500, "Internal Server Error. Please contact support.");
+                return StatusCode(500, $"Internal Server Error: {ex.Message}");
             }
         }
 
@@ -54,7 +54,7 @@ namespace EduProfileAPI.Controllers
         [Route("AddAssesmentMark")]
         public async Task<IActionResult> AddAssesmentMark(AssesmentMarkVM cvm)
         {
-            var assesmentMark = new AssesmentMark { StudentId = cvm.StudentId, AssementId = cvm.AssementId, MarkAchieved = cvm.MarkAchieved };
+            var assesmentMark = new AssesmentMark { StudentId = cvm.StudentId, AssesmentId = cvm.AssementId, MarkAchieved = cvm.MarkAchieved };
 
             try
             {
@@ -78,7 +78,7 @@ namespace EduProfileAPI.Controllers
                 var existingAssesmentMark = await _assesmentMarkRepository.GetAssesmentMarkAsync(studentId,assesmentId);
                 if (existingAssesmentMark == null) return NotFound($"The assesment mark does not exist");
                 existingAssesmentMark.StudentId = model.StudentId;
-                existingAssesmentMark.AssementId = model.AssementId;
+                existingAssesmentMark.AssesmentId = model.AssementId;
                 existingAssesmentMark.MarkAchieved = model.MarkAchieved;
 
 
