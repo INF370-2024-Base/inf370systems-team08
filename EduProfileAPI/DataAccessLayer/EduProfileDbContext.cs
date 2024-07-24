@@ -26,8 +26,9 @@ namespace EduProfileAPI.DataAccessLayer
         public DbSet<MaintenancePriority> MaintenancePriority { get; set; }
         public DbSet<MaintenanceStatus> MaintenanceStatus { get; set; }
         public DbSet<MaintenanceType> MaintenanceType { get; set; }
-
         public DbSet<MaintenanceRequest> MaintenanceRequest { get; set; }
+        public DbSet<MaintenanceProcedure> MaintenanceProcedure { get; set; }
+
 
 
 

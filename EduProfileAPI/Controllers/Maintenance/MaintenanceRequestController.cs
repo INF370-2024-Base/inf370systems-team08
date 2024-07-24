@@ -29,9 +29,9 @@ namespace EduProfileAPI.Controllers.Maintenance
                 var results = await _reqRepository.GetAllRequestsAsync();
                 return Ok(results);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(500, "Internal Server Error. Please contact support.");
+                return StatusCode(500, $"Internal Server Error: {ex.Message}");
             }
         }
 
@@ -64,9 +64,9 @@ namespace EduProfileAPI.Controllers.Maintenance
                 _reqRepository.Add(request);
                 await _reqRepository.SaveChangesAsync();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return BadRequest("Invalid transaction");
+                return BadRequest($"Internal Server Error: {ex.Message}");
             }
 
             return Ok(request);
