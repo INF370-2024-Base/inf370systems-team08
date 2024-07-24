@@ -30,7 +30,25 @@ namespace EduProfileAPI.DataAccessLayer
         public DbSet<MaintenanceProcedure> MaintenanceProcedure { get; set; }
         public DbSet<Assesment> Assesment { get; set; }
         public DbSet<AssesmentMark> AssesmentMark { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
 
+            // Configure composite primary key
+            modelBuilder.Entity<AssesmentMark>()
+                .HasKey(am => new { am.StudentId, am.AssesmentId });
+
+            // Configure relationships (optional, if you have navigation properties)
+            modelBuilder.Entity<AssesmentMark>()
+                .HasOne<Student>()
+                .WithMany()
+                .HasForeignKey(am => am.StudentId);
+
+            modelBuilder.Entity<AssesmentMark>()
+                .HasOne<Assesment>()
+                .WithMany()
+                .HasForeignKey(am => am.AssesmentId);
+        }
 
 
 
