@@ -3,6 +3,8 @@ using EduProfileAPI.Repositories.Interfaces;
 using EduProfileAPI.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Threading.Tasks;
 
 namespace EduProfileAPI.Controllers
 {
@@ -18,7 +20,7 @@ namespace EduProfileAPI.Controllers
         }
 
         [HttpGet]
-        [Route("GetAllDisciplinaries")] //returns a list of disciplinaries
+        [Route("GetAllDisciplinaries")]
         public async Task<IActionResult> GetAllDisciplinaries()
         {
             try
@@ -33,16 +35,16 @@ namespace EduProfileAPI.Controllers
         }
 
         [HttpGet]
-        [Route("GetDisciplinary/{disciplinaryId}")] // returns a specific disciplinary
+        [Route("GetDisciplinary/{disciplinaryId}")]
         public async Task<IActionResult> GetDisciplinaryAsync(Guid disciplinaryId)
         {
             try
             {
-                var results = await _disciplinaryRepository.GetDisciplinaryAsync(disciplinaryId);
+                var result = await _disciplinaryRepository.GetDisciplinaryAsync(disciplinaryId);
+                if (result == null)
+                    return NotFound("Disciplinary does not exist");
 
-                if (results == null) return NotFound("Disciplinary does not exist");
-
-                return Ok(results);
+                return Ok(result);
             }
             catch (Exception)
             {
@@ -54,45 +56,55 @@ namespace EduProfileAPI.Controllers
         [Route("AddDisciplinary")]
         public async Task<IActionResult> AddDisciplinary(CreateDisciplinaryVM cvm)
         {
-            var disciplinary = new Disciplinary { DisciplinaryTypeId = cvm.DisciplinaryTypeId, EmployeeId = cvm.EmployeeId, StudentId = cvm.StudentId, DisciplinaryName = cvm.DisciplinaryName, DisciplinaryDescription = cvm.DisciplinaryDescription };
+            var disciplinary = new Disciplinary
+            {
+                DisciplinaryTypeId = cvm.DisciplinaryTypeId,
+                EmployeeId = cvm.EmployeeId,
+                StudentId = cvm.StudentId,
+                Reason = cvm.Reason,
+                ParentContacted = cvm.ParentContacted,
+                DisciplinaryDuration = cvm.DisciplinaryDuration,
+                IssueDate = cvm.IssueDate
+            };
 
             try
             {
                 _disciplinaryRepository.Add(disciplinary);
                 await _disciplinaryRepository.SaveChangesAsync();
+                return Ok(disciplinary);
             }
             catch (Exception)
             {
                 return BadRequest("Invalid transaction");
             }
-
-            return Ok(disciplinary);
         }
 
         [HttpPut]
         [Route("EditDisciplinary/{disciplinaryId}")]
-        public async Task<ActionResult<CreateDisciplinaryVM>> EditDisciplinary(Guid disciplinaryId, CreateDisciplinaryVM disciplinaryModel)
+        public async Task<IActionResult> EditDisciplinary(Guid disciplinaryId, CreateDisciplinaryVM disciplinaryModel)
         {
             try
             {
                 var existingDisciplinary = await _disciplinaryRepository.GetDisciplinaryAsync(disciplinaryId);
-                if (existingDisciplinary == null) return NotFound("The disciplinary does not exist");
+                if (existingDisciplinary == null)
+                    return NotFound("The disciplinary does not exist");
+
                 existingDisciplinary.EmployeeId = disciplinaryModel.EmployeeId;
                 existingDisciplinary.DisciplinaryTypeId = disciplinaryModel.DisciplinaryTypeId;
                 existingDisciplinary.StudentId = disciplinaryModel.StudentId;
-                existingDisciplinary.DisciplinaryName = disciplinaryModel.DisciplinaryName;
-                existingDisciplinary.DisciplinaryDescription = disciplinaryModel.DisciplinaryDescription;
+                existingDisciplinary.Reason = disciplinaryModel.Reason;
+                existingDisciplinary.ParentContacted = disciplinaryModel.ParentContacted;
+                existingDisciplinary.DisciplinaryDuration = disciplinaryModel.DisciplinaryDuration;
+                existingDisciplinary.IssueDate = disciplinaryModel.IssueDate;
 
                 if (await _disciplinaryRepository.SaveChangesAsync())
-                {
                     return Ok(existingDisciplinary);
-                }
-
             }
             catch (Exception)
             {
                 return StatusCode(500, "Internal Server Error. Please contact support.");
             }
+
             return BadRequest("Your request is invalid.");
         }
 
@@ -103,17 +115,20 @@ namespace EduProfileAPI.Controllers
             try
             {
                 var existingDisciplinary = await _disciplinaryRepository.GetDisciplinaryAsync(disciplinaryId);
-                if (existingDisciplinary == null) return NotFound("The disciplinary does not exist");
+                if (existingDisciplinary == null)
+                    return NotFound("The disciplinary does not exist");
+
                 _disciplinaryRepository.Delete(existingDisciplinary);
 
-                if (await _disciplinaryRepository.SaveChangesAsync()) return Ok(existingDisciplinary);
+                if (await _disciplinaryRepository.SaveChangesAsync())
+                    return Ok(existingDisciplinary);
             }
             catch (Exception)
             {
                 return StatusCode(500, "Internal Server Error. Please contact support.");
             }
 
-            return BadRequest("Your request is invalid");
+            return BadRequest("Your request is invalid.");
         }
     }
 }
