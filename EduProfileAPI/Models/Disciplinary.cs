@@ -12,7 +12,14 @@ namespace EduProfileAPI.Models
 
 
         //[Required]
-        public string DisciplinaryName { get; set; }
-        public string DisciplinaryDescription { get; set; }
+        [StringLength(50)]
+        public string Reason { get; set; }
+
+        public bool? ParentContacted { get; set; }
+
+        [StringLength(10)]
+        public string DisciplinaryDuration { get; set; }
+
+        public DateTime? IssueDate { get; set; }
     }
 }
