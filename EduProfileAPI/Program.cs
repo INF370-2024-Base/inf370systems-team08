@@ -10,6 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using EduProfileAPI.PasswordValidator;
 using EduProfileAPI.EmailService;
 using EduProfileAPI.WhatsApp;
+using Microsoft.Data.SqlClient;
 
 
 
@@ -98,6 +99,7 @@ builder.Services.AddScoped<IAssignTeacherToClassRepository, AssignTeacherToClass
 builder.Services.AddScoped<IStudentAttendanceRepo, StudentAttendanceRepo>();
 builder.Services.AddScoped<IContactStudentParent, ContactStudentParent>();
 builder.Services.AddScoped<IStudentReportRepository, StudentReportRepository>();
+builder.Services.AddScoped<IEarlyReleasesRepo, EarlyReleasesRepo>();
 
 //WhatsApp
 var whatsAppAccessToken = builder.Configuration["WhatsApp:AccessToken"];
