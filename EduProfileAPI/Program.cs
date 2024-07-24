@@ -99,9 +99,8 @@ builder.Services.AddScoped<IMaintenanceStatus, MaintenanceStatusRepo>();
 builder.Services.AddScoped<IMaintenancePriority, MaintenancePriorityRepo>();
 builder.Services.AddScoped<IMaintenanceType, MaintenanceTypeRepo>();
 builder.Services.AddScoped<IMaintenanceProcedure, MaintenanceProcedureRepo>();
-
-
-
+builder.Services.AddScoped<IAssesment, AssesmentRepo>();
+builder.Services.AddScoped<IAssesmentMark, AssesmentMarkRepo>();
 
 
 

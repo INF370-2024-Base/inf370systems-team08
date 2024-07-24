@@ -28,6 +28,10 @@ namespace EduProfileAPI.DataAccessLayer
         public DbSet<MaintenanceType> MaintenanceType { get; set; }
         public DbSet<MaintenanceRequest> MaintenanceRequest { get; set; }
         public DbSet<MaintenanceProcedure> MaintenanceProcedure { get; set; }
+        public DbSet<Assesment> Assesment { get; set; }
+        public DbSet<AssesmentMark> AssesmentMark { get; set; }
+
+
 
 
 
