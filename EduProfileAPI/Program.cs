@@ -9,6 +9,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using EduProfileAPI.PasswordValidator;
 using EduProfileAPI.EmailService;
+using EduProfileAPI.WhatsApp;
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
@@ -93,8 +96,11 @@ builder.Services.AddScoped<IStudentAnnouncementRepo, StudentAnnouncementRepo>();
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IAssignTeacherToClassRepository, AssignTeacherToClassRepository>();
 builder.Services.AddScoped<IStudentAttendanceRepo, StudentAttendanceRepo>();
+builder.Services.AddScoped<IContactStudentParent, ContactStudentParent>();
 
-
+//WhatsApp
+var whatsAppAccessToken = builder.Configuration["WhatsApp:AccessToken"];
+builder.Services.AddSingleton(new WhatsAppHelper(whatsAppAccessToken));
 
 var app = builder.Build();
 
