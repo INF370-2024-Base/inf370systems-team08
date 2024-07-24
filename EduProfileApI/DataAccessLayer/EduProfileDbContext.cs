@@ -20,6 +20,7 @@ namespace EduProfileAPI.DataAccessLayer
         public DbSet<Subject> Subject { get; set; } 
         public DbSet<StudentDoc> StudentDocument { get; set; }
         public DbSet<Student> Student { get; set; }
+        public DbSet<Parent> Parent { get; set; }
         public DbSet<StudentAnnouncement> StudentAnnouncement { get; set; }
         public DbSet<Employee> Employee { get; set; }
         public DbSet<StudentAttendance> StudentAttendance { get; set; }
