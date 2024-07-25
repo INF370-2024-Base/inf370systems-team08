@@ -13,10 +13,11 @@ namespace EduProfileAPI.Controllers
     public class DisciplinaryController : ControllerBase
     {
         private readonly IDisciplinaryRepository _disciplinaryRepository;
-
-        public DisciplinaryController(IDisciplinaryRepository disciplinaryRepository)
+        private readonly ILogger<DisciplinaryController> _logger;
+        public DisciplinaryController(IDisciplinaryRepository disciplinaryRepository, ILogger<DisciplinaryController> logger)
         {
             _disciplinaryRepository = disciplinaryRepository;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -78,7 +79,6 @@ namespace EduProfileAPI.Controllers
                 return BadRequest("Invalid transaction");
             }
         }
-
         [HttpPut]
         [Route("EditDisciplinary/{disciplinaryId}")]
         public async Task<IActionResult> EditDisciplinary(Guid disciplinaryId, CreateDisciplinaryVM disciplinaryModel)
@@ -99,13 +99,14 @@ namespace EduProfileAPI.Controllers
 
                 if (await _disciplinaryRepository.SaveChangesAsync())
                     return Ok(existingDisciplinary);
+                else
+                    return StatusCode(500, "Unable to save changes to the database.");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred while editing disciplinary with ID: {DisciplinaryId}", disciplinaryId);
                 return StatusCode(500, "Internal Server Error. Please contact support.");
             }
-
-            return BadRequest("Your request is invalid.");
         }
 
         [HttpDelete]
