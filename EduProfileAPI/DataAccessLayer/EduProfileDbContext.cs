@@ -23,6 +23,7 @@ namespace EduProfileAPI.DataAccessLayer
         public DbSet<StudentAnnouncement> StudentAnnouncement { get; set; }
         public DbSet<Employee> Employee { get; set; }
         public DbSet<RemedialFile> RemedialFile { get; set;}
+        public DbSet<RemedialActivity> RemedialActivity{ get; set; }
 
 
 

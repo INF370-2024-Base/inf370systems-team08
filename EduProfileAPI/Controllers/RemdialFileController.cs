@@ -3,6 +3,7 @@ using EduProfileAPI.Repositories.Interfaces;
 using EduProfileAPI.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Threading.Tasks;
 
 namespace EduProfileAPI.Controllers
 {
@@ -11,10 +12,12 @@ namespace EduProfileAPI.Controllers
     public class RemedialFileController : ControllerBase
     {
         private readonly IRemedialFileRepository _remFileRepo;
+        private readonly IRemedialActivityRepository _remActRepo;
 
-        public RemedialFileController(IRemedialFileRepository remFileRepo)
+        public RemedialFileController(IRemedialFileRepository remFileRepo, IRemedialActivityRepository remActRepo)
         {
             _remFileRepo = remFileRepo;
+            _remActRepo = remActRepo;
         }
 
         [HttpGet]
@@ -33,34 +36,37 @@ namespace EduProfileAPI.Controllers
         }
 
         [HttpGet]
-        [Route("GetRemedialFiles/{remedialFileId}")]
-        public async Task<IActionResult> GetRemedialFilesAsync(Guid remedialFileId)
+        [Route("GetRemedialFile/{remedialFileId}")]
+        public async Task<IActionResult> GetRemedialFileAsync(Guid remedialFileId)
         {
             try
             {
-                var results = await _remFileRepo.GetRemedialFileAsync(remedialFileId);
-                if (results == null) return NotFound("Remedial file does not exist");
-                return Ok(results);
+                var result = await _remFileRepo.GetRemedialFileAsync(remedialFileId);
+                if (result == null) return NotFound("Remedial file does not exist");
+                return Ok(result);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(500, "Internal Server Error. Please contact support");
+                return StatusCode(500, "Internal Server Error. Please contact support.");
             }
         }
 
         [HttpPost]
-        [Route("AddRemedialFiles")]
-        public async Task<IActionResult> AddRemedialFiles(RemedialFileVM rvm)
+        [Route("AddRemedialFile")]
+        public async Task<IActionResult> AddRemedialFile(RemedialFileVM rvm)
         {
-            if (rvm == null || rvm.RemFileId == Guid.Empty)
+            if (rvm == null)
             {
-                return BadRequest("RemedialFileVM cannot be null and RemFileId must be a valid GUID");
+                return BadRequest("RemedialFileVM cannot be null");
             }
+
+            // Create a new GUID for the RemedialFile
+            var remedialFileId = Guid.NewGuid();
 
             // Create a RemedialFile object from the ViewModel
             var remedialFile = new RemedialFile
             {
-                RemFileId = rvm.RemFileId,
+                RemFileId = remedialFileId,
                 EmployeeId = rvm.EmployeeId,
                 SubjectId = rvm.SubjectId,
                 Title = rvm.Title,
@@ -72,25 +78,24 @@ namespace EduProfileAPI.Controllers
             {
                 _remFileRepo.Add(remedialFile);
                 await _remFileRepo.SaveChangesAsync();
+                return Ok(remedialFile);
             }
             catch (Exception ex)
             {
                 return BadRequest($"Invalid transaction: {ex.Message}");
             }
-
-            return Ok(remedialFile);
         }
 
         [HttpPut]
-        [Route("EditRemedialFiles/{remedialFileId}")]
-        public async Task<ActionResult<RemedialFileVM>> EditRemedialFiles(Guid remedialFileId, RemedialFileVM remFileVM)
+        [Route("EditRemedialFile/{remedialFileId}")]
+        public async Task<IActionResult> EditRemedialFile(Guid remedialFileId, RemedialFileVM remFileVM)
         {
             try
             {
                 var existingRemedialFile = await _remFileRepo.GetRemedialFileAsync(remedialFileId);
 
                 if (existingRemedialFile == null)
-                    return NotFound($"The remedial file does not exist");
+                    return NotFound("The remedial file does not exist");
 
                 existingRemedialFile.EmployeeId = remFileVM.EmployeeId;
                 existingRemedialFile.SubjectId = remFileVM.SubjectId;
@@ -103,31 +108,54 @@ namespace EduProfileAPI.Controllers
                     return Ok(existingRemedialFile);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(500, "Internal Server Error. Please contact support.");
+                return StatusCode(500, $"Internal Server Error. Please contact support. {ex.Message}");
             }
 
             return BadRequest("Your request is invalid.");
         }
 
         [HttpDelete]
-        [Route("DeleteRemedialFiles/{remedialFileId}")]
-        public async Task<IActionResult> DeleteRemedialFiles(Guid remedialFileId)
+        [Route("DeleteRemedialFile/{remedialFileId}")]
+        public async Task<IActionResult> DeleteRemedialFile(Guid remedialFileId)
         {
             try
             {
                 var existingRemedialFile = await _remFileRepo.GetRemedialFileAsync(remedialFileId);
-                if (existingRemedialFile == null) return NotFound($"The remedial file does not exist");
+                if (existingRemedialFile == null) return NotFound("The remedial file does not exist");
                 _remFileRepo.Delete(existingRemedialFile);
 
                 if (await _remFileRepo.SaveChangesAsync()) return Ok(existingRemedialFile);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(500, "Internal Server Error. Please contact support.");
+                return StatusCode(500, $"Internal Server Error. Please contact support. {ex.Message}");
             }
             return BadRequest("Your request is invalid");
+        }
+
+        [HttpGet]
+        [Route("DownloadAttachment/{remActId}")]
+        public async Task<IActionResult> DownloadAttachment(Guid remActId)
+        {
+            try
+            {
+                var activity = await _remActRepo.GetRemedialActivityAsync(remActId);
+                if (activity == null || activity.Attachment == null)
+                {
+                    return NotFound("Attachment not found");
+                }
+
+                var fileContent = activity.Attachment;
+                var fileName = activity.Title.EndsWith(".pdf") ? activity.Title : activity.Title + ".pdf";
+
+                return File(fileContent, "application/pdf", fileName);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal Server Error. Please contact support. {ex.Message}");
+            }
         }
     }
 }
