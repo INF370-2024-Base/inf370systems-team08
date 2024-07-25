@@ -3,6 +3,7 @@ using EduProfileAPI.Repositories.Interfaces;
 using EduProfileAPI.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace EduProfileAPI.Controllers
 {
@@ -54,16 +55,21 @@ namespace EduProfileAPI.Controllers
         [Route("AddAssesmentMark")]
         public async Task<IActionResult> AddAssesmentMark(AssesmentMarkVM cvm)
         {
-            var assesmentMark = new AssesmentMark { StudentId = cvm.StudentId, AssesmentId = cvm.AssementId, MarkAchieved = cvm.MarkAchieved };
+            var assesmentMark = new AssesmentMark { StudentId = cvm.StudentId, AssesmentId = cvm.AssesmentId, MarkAchieved = cvm.MarkAchieved };
 
             try
             {
                 _assesmentMarkRepository.Add(assesmentMark);
                 await _assesmentMarkRepository.SaveChangesAsync();
             }
-            catch (Exception)
+            catch (DbUpdateException dbEx)
             {
-                return BadRequest("Invalid transaction");
+                var innerException = dbEx.InnerException?.Message ?? dbEx.Message;
+                return StatusCode(500, $"Internal Server Error: {innerException}");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal Server Error: {ex.Message}");
             }
 
             return Ok(assesmentMark);
@@ -78,7 +84,7 @@ namespace EduProfileAPI.Controllers
                 var existingAssesmentMark = await _assesmentMarkRepository.GetAssesmentMarkAsync(studentId,assesmentId);
                 if (existingAssesmentMark == null) return NotFound($"The assesment mark does not exist");
                 existingAssesmentMark.StudentId = model.StudentId;
-                existingAssesmentMark.AssesmentId = model.AssementId;
+                existingAssesmentMark.AssesmentId = model.AssesmentId;
                 existingAssesmentMark.MarkAchieved = model.MarkAchieved;
 
 

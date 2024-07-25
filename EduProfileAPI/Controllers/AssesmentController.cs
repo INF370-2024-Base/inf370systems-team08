@@ -61,9 +61,9 @@ namespace EduProfileAPI.Controllers
                 _assesmentRepository.Add(assesment);
                 await _assesmentRepository.SaveChangesAsync();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return BadRequest("Invalid transaction");
+                return BadRequest($"Internal Server Error: {ex.Message}");
             }
 
             return Ok(assesment);

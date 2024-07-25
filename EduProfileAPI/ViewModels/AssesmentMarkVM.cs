@@ -7,7 +7,7 @@ namespace EduProfileAPI.ViewModels
         [Key]
         public Guid StudentId { get; set; }
         [Key]
-        public Guid AssementId { get; set; }
+        public Guid AssesmentId { get; set; }
 
         public int MarkAchieved { get; set; }
     }
