@@ -38,28 +38,27 @@ namespace EduProfileAPI.Repositories.Implementation
             return await query.ToArrayAsync();
         }
 
-        public async Task AssignStudentToClassAsync(Guid studentId, Guid classId, Guid gradeId)
+        public async Task AssignStudentToClassAsync(Guid studentId, Guid classId)
         {
             var student = await _context.Student.FindAsync(studentId);
             if (student != null)
             {
                 student.ClassId = classId;
-                student.GradeId = gradeId;
                 await _context.SaveChangesAsync();
             }
         }
 
-        //public async Task AssignStudentToSubjectAsync(Guid studentId, Guid subjectId)
-        //{
-        //    var studentSubject = new StudentSubject
-        //    {
-        //        StudentId = studentId,
-        //        SubjectId = subjectId
-        //    };
+        public async Task AddStudentSubjectAsync(Guid studentId, Guid subjectId)
+        {
+            var studentSubject = new StudentSubject
+            {
+                StudentId = studentId,
+                SubjectId = subjectId
+            };
 
-        //    _context.StudentSubject.Add(studentSubject);
-        //    await _context.SaveChangesAsync();
-        //}
+            await _context.StudentSubject.AddAsync(studentSubject);
+            await _context.SaveChangesAsync();
+        }
 
         public async Task AssignStudentToGradeAsync(Guid studentId, Guid gradeId)
         {

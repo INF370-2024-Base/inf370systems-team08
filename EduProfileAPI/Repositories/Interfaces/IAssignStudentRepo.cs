@@ -8,8 +8,8 @@ namespace EduProfileAPI.Repositories.Interfaces
         Task<Student[]> GettAllStudentsAsync();
         Task<Grade[]> GetAllGradesAsync();
         Task<Subject[]> GetAllSubjectAsync();
-        //Task AssignStudentToSubjectAsync(Guid studentId, Guid subjectId);
-        Task AssignStudentToClassAsync(Guid studentId, Guid classId, Guid gradeId);
+        Task AddStudentSubjectAsync(Guid studentId, Guid subjectId);
+        Task AssignStudentToClassAsync(Guid studentId, Guid classId);
         Task AssignStudentToGradeAsync(Guid studentId, Guid gradeId);
     }
 }

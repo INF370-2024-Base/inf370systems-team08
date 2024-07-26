@@ -1,13 +1,20 @@
-﻿using EduProfileAPI.Repositories.Implementation;
+﻿using EduProfileAPI.Models;
+using EduProfileAPI.Repositories.Implementation;
+using EduProfileAPI.Repositories.Interfaces;
+using EduProfileAPI.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using SendGrid.Helpers.Mail;
 
 namespace EduProfileAPI.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class AssignStudentController : Controller
     {
-        private AssignStudentRepo _repository;
+        private IAssignStudentRepo _repository;
 
-        public AssignStudentController(AssignStudentRepo repository)
+        public AssignStudentController(IAssignStudentRepo repository)
         {
             _repository = repository;
         }
@@ -15,7 +22,7 @@ namespace EduProfileAPI.Controllers
         [HttpGet("GetAllStudents")]
         public async Task<IActionResult> GetAllStudents()
         {
-            var students = await _repository.GetAllStudentsAsync();
+            var students = await _repository.GettAllStudentsAsync();
             return Ok(students);
         }
 
@@ -41,19 +48,28 @@ namespace EduProfileAPI.Controllers
         }
 
         [HttpPut("AssignStudentToClass")]
-        public async Task<IActionResult> AssignStudentToClass(Guid studentId, Guid classId, Guid gradeId)
+        public async Task<IActionResult> AssignStudentToClass(Guid studentId, Guid classId)
         {
-            await _repository.AssignStudentToClassAsync(studentId, classId, gradeId);
+            await _repository.AssignStudentToClassAsync(studentId, classId);
             return Ok();
 
         }
 
-        //[HttpPut("AssignStudentToSubject")]
-        //public async Task<IActionResult> AssignStudentToSubject(Guid studentId, Guid subjectId)
-        //{
-        //    await _repository.AssignStudentToSubjectAsync(studentId, subjectId);
-        //    return Ok();
-        //}
+        // POST: /StudentSubjects
+        [HttpPost("AssignStudentSubject")]
+        public async Task<IActionResult> AddStudentSubject(Guid studentId, Guid subjectId)
+        {
+            try
+            {
+                await ((AssignStudentRepo)_repository).AddStudentSubjectAsync(studentId, subjectId);
+                return Ok("Student subject relationship added successfully.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An error occurred: " + ex.Message);
+            }
+        }
+
 
         [HttpPut("AssignStudentToGrade")]
         public async Task<IActionResult> AssignStudentToGrade(Guid studentId, Guid gradeId)
