@@ -128,5 +128,13 @@ namespace EduProfileAPI.Controllers
 
             return BadRequest("Your request is invalid");
         }
+
+        [HttpGet]
+        [Route("GetParents")]
+        public async Task<ActionResult<Parent[]>> GetAllParents()
+        {
+            var parents = await _studentRepository.GetAllParentsAsync();
+            return Ok(parents);
+        }
     }
 }

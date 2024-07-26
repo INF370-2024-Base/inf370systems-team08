@@ -15,6 +15,7 @@ namespace EduProfileAPI.Controllers
         {
             _employeeRepository = employeeRepository;
         }
+
         [HttpGet]
         [Route("GetAllEmployees")] //returns a list of employees
         public async Task<IActionResult> GetAllEmployees()

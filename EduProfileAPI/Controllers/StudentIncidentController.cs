@@ -20,28 +20,37 @@ namespace EduProfileAPI.Controllers
 
         // GET: api/StudentIncidents
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<StudentIncident>>> GetStudentIncidents()
+        [Route("GetIncidents")]
+        public async Task<IActionResult> GetStudentIncidentsAsync()
         {
             var incidents = await _Repository.GetAllAsync();
             return Ok(incidents);
         }
 
         // GET: api/StudentIncidents/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<StudentIncident>> GetStudentIncident(Guid id)
+        [HttpGet]
+        [Route("GetIncident/{id}")]
+        public async Task<IActionResult> GetStudentIncidentAsync (Guid id)
         {
-            var studentIncident = await _Repository.GetByIdAsync(id);
-
-            if (studentIncident == null)
+            try
             {
-                return NotFound();
-            }
+                var result = await _Repository.GetByIdAsync(id);
+                if (result == null)
+                {
+                    return NotFound("Grade not found.");
+                }
 
-            return studentIncident;
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Database Failure: {ex.Message}");
+            }
         }
 
         // PUT: api/StudentIncidents/5
-        [HttpPut("{id}")]
+        [HttpPut]
+        [Route("Update/{id}")]
         public async Task<IActionResult> UpdateStudentIncident(Guid id, StudentIncident studentIncident)
         {
             if (id != studentIncident.IncidentId)
@@ -70,14 +79,16 @@ namespace EduProfileAPI.Controllers
 
         // POST: api/StudentIncidents
         [HttpPost]
-        public async Task<ActionResult<StudentIncident>> AddStudentIncident(StudentIncident studentIncident)
+        [Route("Add")]
+        public async Task<IActionResult> AddStudentIncident(StudentIncident studentIncident)
         {
             await _Repository.AddAsync(studentIncident);
             return CreatedAtAction("GetStudentIncident", new { id = studentIncident.IncidentId }, studentIncident);
         }
 
         // DELETE: api/StudentIncidents/5
-        [HttpDelete("{id}")]
+        [HttpDelete]
+        [Route("Delete/{id}")]
         public async Task<IActionResult> DeleteStudentIncident(Guid id)
         {
             var result = await _Repository.DeleteAsync(id);
