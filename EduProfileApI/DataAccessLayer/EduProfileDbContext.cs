@@ -30,6 +30,11 @@ namespace EduProfileAPI.DataAccessLayer
         public DbSet<MaintenanceProcedure> MaintenanceProcedure { get; set; }
         public DbSet<Assesment> Assesment { get; set; }
         public DbSet<AssesmentMark> AssesmentMark { get; set; }
+        public DbSet<Report> Report { get; set; }
+        public DbSet<ReportType> ReportType { get; set; }
+        public DbSet<StudentDocumentType> StudentDocumentType { get; set; }
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

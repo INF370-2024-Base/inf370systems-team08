@@ -101,6 +101,9 @@ builder.Services.AddScoped<IMaintenanceType, MaintenanceTypeRepo>();
 builder.Services.AddScoped<IMaintenanceProcedure, MaintenanceProcedureRepo>();
 builder.Services.AddScoped<IAssesment, AssesmentRepo>();
 builder.Services.AddScoped<IAssesmentMark, AssesmentMarkRepo>();
+builder.Services.AddScoped<IReport, ReportRepo>();
+builder.Services.AddScoped<IReportType, ReportTypeRepo>();
+builder.Services.AddScoped<IStudentDocumentType, StudentDocumentTypeRepo>();
 
 
 

@@ -143,5 +143,24 @@ namespace EduProfileAPI.Controllers
 
             return BadRequest("Your request is invalid");
         }
+
+        //[HttpGet]
+        //[Route("DownloadAttachment/{stuDocumentId}")]
+        //public async Task<IActionResult> DownloadAttachment(Guid stuDocumentId)
+        //{
+        //    try
+        //    {
+        //        var doc = await _studentDocRepository.GetStudentDocAsync(studentDocId);
+        //        if (doc == null || doc.StudentDocumentAttachment == null)
+        //        {
+        //            return NotFound();
+
+        //        }
+
+        //        var fileContent = doc.StudentDocumentAttachment;
+        //        var fileName = doc.DocumentName;
+        //        var contentType = doc.
+        //    }
+        //}
     }
 }
