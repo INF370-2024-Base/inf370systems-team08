@@ -97,19 +97,18 @@ namespace EduProfileAPI.Repositories.Implementation
             };
         }
 
-        //delete grade Business Logic 
-        public async Task<bool> DeleteGradeAsync(Guid id)
+        // DELETE grade Business Logic
+        public async Task DeleteGradeAsync(Guid gradeId)
         {
-            var grade = await _context.Grade.FirstOrDefaultAsync(g => g.GradeId == id);
+            var grade = await _context.Grade.FirstOrDefaultAsync(g => g.GradeId == gradeId);
             if (grade == null)
             {
-                return false;
+                throw new ArgumentException("No grade found with the specified ID"); // Optionally, throw an exception if not found
             }
 
             _context.Grade.Remove(grade);
             await _context.SaveChangesAsync();
-
-            return true;
         }
+
     }
 }

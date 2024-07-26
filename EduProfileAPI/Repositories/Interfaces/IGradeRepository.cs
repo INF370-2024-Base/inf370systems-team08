@@ -9,7 +9,8 @@ namespace EduProfileAPI.Repositories.Interfaces
         Task<GradeViewModel> CreateGradeAsync(CreateGradeViewModel model);    
         Task<GradeViewModel> GetGradeByIdAsync(Guid id);
         Task<GradeViewModel> UpdateGradeAsync(UpdateGradeViewModel model);
-        Task<bool> DeleteGradeAsync(Guid id);
-    
+        Task DeleteGradeAsync(Guid gradeId);
+
+
     }
 }

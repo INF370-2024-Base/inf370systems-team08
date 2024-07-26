@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using EduProfileAPI.Models;
 using EduProfileAPI.DataAccessLayer;
 using Microsoft.AspNetCore.Http.HttpResults;
+using EduProfileAPI.Repositories.Implementation;
 
 
 
@@ -95,24 +96,42 @@ namespace EduProfileAPI.Controllers
         }
 
 
-        // Delete Grade
+        //// Delete Grade
 
-        [HttpDelete]
-        [Route("DeleteGrade/{id}")]
-        public async Task<IActionResult> DeleteGradeAsync(Guid id)
+        //[HttpDelete]
+        //[Route("DeleteGrade/{id}")]
+        //public async Task<IActionResult> DeleteGradeAsync(Guid id)
+        //{
+        //    try
+        //    {
+        //        var result = await _gradeRepo.DeleteGradeAsync(id);
+        //        if (!result)
+        //        {
+        //            return NotFound("Grade not found.");
+        //        }
+        //        return Ok("Grade deleted successfully.");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return this.StatusCode(StatusCodes.Status500InternalServerError, $"Database Failure: {ex.Message}");
+        //    }
+        //}
+
+        [HttpDelete("{gradeId}")]
+        public async Task<IActionResult> DeleteGrade(Guid gradeId)
         {
             try
             {
-                var result = await _gradeRepo.DeleteGradeAsync(id);
-                if (!result)
-                {
-                    return NotFound("Grade not found.");
-                }
-                return Ok("Grade deleted successfully.");
+                await _gradeRepo.DeleteGradeAsync(gradeId);
+                return NoContent(); // Returns a 204 No Content status, indicating successful deletion without returning data.
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ex.Message); // Returns a 404 Not Found status if the grade is not found.
             }
             catch (Exception ex)
             {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Database Failure: {ex.Message}");
+                return StatusCode(500, "An error occurred while deleting the grade."); // Returns a 500 Internal Server Error status for any other errors.
             }
         }
 

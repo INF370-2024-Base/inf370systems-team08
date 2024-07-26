@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using EduProfileAPI.PasswordValidator;
 using EduProfileAPI.EmailService;
+using EduProfileAPI.GoogleCalendarService;
+using Google.Apis.Calendar.v3;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
@@ -67,7 +69,8 @@ builder.Services.Configure<IdentityOptions>(options =>
 });
 
 
-
+// Google Calendar Service
+builder.Services.AddSingleton<CalendarService>(provider => GoogleServiceInitializer.GetCalendarService());
 
 // Add services to the container.
 builder.Services.AddControllers();
