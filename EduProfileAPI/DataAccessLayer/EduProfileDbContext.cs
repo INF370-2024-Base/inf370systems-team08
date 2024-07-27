@@ -13,7 +13,7 @@ namespace EduProfileAPI.DataAccessLayer
         {
         }
 
-        public DbSet<User> User { get; set; }
+         public DbSet<User> User { get; set; }
         public DbSet<Class> Class { get; set; }
         public DbSet<StudentEducationPhase> StudentEducationPhase { get; set; }
         public DbSet<Grade> Grade { get; set; }
@@ -58,6 +58,5 @@ namespace EduProfileAPI.DataAccessLayer
                 .WithMany()
                 .HasForeignKey(am => am.AssesmentId);
         }
-
     }
 }
