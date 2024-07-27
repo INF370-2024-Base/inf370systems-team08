@@ -1,14 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace EduProfileAPI.Models
+﻿namespace EduProfileAPI.ViewModels
 {
-    public class Assesment
+    public class AssesmentVM
     {
-        [Key]
-        public Guid AssesmentId { get; set; }
         public Guid SubjectId { get; set; }
         public Guid EmployeeId { get; set; }
-        public string AssesmentName { get; set; } 
+        public string AssesmentName { get; set; }
         public DateTime AssesmentDate { get; set; }
         public string AssesmentType { get; set; }
         public int AchievableMark { get; set; }
