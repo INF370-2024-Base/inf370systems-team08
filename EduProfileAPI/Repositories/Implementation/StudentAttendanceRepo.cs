@@ -51,7 +51,7 @@ namespace EduProfileAPI.Repositories.Implementation
 
         }
 
-        public async Task<StudentAttendance> RecordStudentAttedance(StudentAttendanceViewModel model)
+        public async Task<StudentAttendance> RecordStudentAttedanceAsync(StudentAttendanceViewModel model)
         {
             try
             {
@@ -92,11 +92,13 @@ namespace EduProfileAPI.Repositories.Implementation
             catch (Exception ex)
             {
                 // Log detailed error message
-                Console.WriteLine($"Error: {ex.Message}");
+                Console.WriteLine($"Error in RecordStudentAttedance: {ex.Message}");
+                Console.WriteLine($"Stack Trace: {ex.StackTrace}");
                 throw;
             }
         }
-    
+
+
 
         public async Task<StudentAttendance> UpdateStudentAttendance(Guid studentId, UpdateStudentAttendanceVM model)
         { 
