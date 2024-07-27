@@ -43,6 +43,7 @@ namespace EduProfileAPI.DataAccessLayer
         public DbSet<SchoolEvent> SchoolEvent { get; set; }
         public DbSet<RemedialFile> RemedialFile { get; set;}
         public DbSet<RemedialActivity> RemedialActivity{ get; set; }
+        public DbSet<StudentIncident> StudentIncident { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
