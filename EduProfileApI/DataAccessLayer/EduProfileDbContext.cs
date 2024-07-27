@@ -12,8 +12,8 @@ namespace EduProfileAPI.DataAccessLayer
         public EduProfileDbContext(DbContextOptions<EduProfileDbContext> options) : base(options)
         {
         }
-
-      public DbSet<User> User { get; set; }
+        
+        public DbSet<User> User { get; set; }
         public DbSet<Class> Class { get; set; }
         public DbSet<StudentEducationPhase> StudentEducationPhase { get; set; }
         public DbSet<Grade> Grade { get; set; }
@@ -34,6 +34,9 @@ namespace EduProfileAPI.DataAccessLayer
         public DbSet<StudentAttendance> StudentAttendance { get; set; }
         public DbSet<AttendanceStatus> AttendanceStatus { get; set; }
         public DbSet<AssesmentMark> AssesmentMark { get; set; }
+        public DbSet<Report> Report { get; set; }
+        public DbSet<ReportType> ReportType { get; set; }
+        public DbSet<StudentDocumentType> StudentDocumentType { get; set; }
         public DbSet<MeritType> MeritType { get; set; }
         public DbSet<Assesment> Assesment { get; set; }
         public DbSet<EarlyReleases> EarlyReleases { get; set; }
