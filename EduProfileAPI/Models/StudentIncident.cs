@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Org.BouncyCastle.Asn1.Cms;
+using System.ComponentModel.DataAnnotations;
 
 namespace EduProfileAPI.Models
 {
