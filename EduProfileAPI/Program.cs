@@ -12,6 +12,7 @@ using EduProfileAPI.EmailService;
 using EduProfileAPI.Repositories.Interfaces.Maintenance;
 using EduProfileAPI.Repositories.Implementation.Maintenance;
 using EduProfileAPI.WhatsApp;
+using Microsoft.Data.SqlClient;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -109,6 +110,7 @@ builder.Services.AddScoped<IAssesmentMark, AssesmentMarkRepo>();
 builder.Services.AddScoped<IStudentAttendanceRepo, StudentAttendanceRepo>();
 builder.Services.AddScoped<IContactStudentParent, ContactStudentParent>();
 builder.Services.AddScoped<IStudentReportRepository, StudentReportRepository>();
+builder.Services.AddScoped<IEarlyReleasesRepo, EarlyReleasesRepo>();
 builder.Services.AddScoped<IRemedialFileRepository, RemedialFileRepository>();
 builder.Services.AddScoped<IRemedialActivityRepository, RemedialActivityRepository>();
 
