@@ -53,7 +53,7 @@ namespace EduProfileAPI.Repositories.Implementation
                 var assessmentMark = assessments.FirstOrDefault(a => a.Assessment.AssesmentId == assessment.AssesmentId);
                 if (assessmentMark != null)
                 {
-                    assessment.AssesmentGrades = assessmentMark.MarkAchieved;
+                    // = assessmentMark.MarkAchieved;
                 }
             }
 
