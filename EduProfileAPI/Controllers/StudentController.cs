@@ -54,7 +54,7 @@ namespace EduProfileAPI.Controllers
         [Route("AddStudent")]
         public async Task<IActionResult> AddStudent(StudentVM cvm)
         {
-            var student = new Student { GradeId = cvm.GradeId, ClassId = cvm.ClassId, ParentId = cvm.ParentId, FirstName = cvm.FirstName, LastName = cvm.LastName, DateOfBirth = cvm.DateOfBirth, Age = cvm.Age, Gender = cvm.Gender, Address = cvm.Address, AdmissionNo = cvm.AdmissionNo, EmergencyContactName = cvm.EmergencyContactName, EmergencyContactRelationship = cvm.EmergencyContactRelationship, EmergencyContactPhoneNum = cvm.EmergencyContactPhoneNum };
+            var student = new Student { GradeId = cvm.GradeId, ClassId = cvm.ClassId, ParentId = cvm.ParentId, FirstName = cvm.FirstName, LastName = cvm.LastName, DateOfBirth = cvm.DateOfBirth, Gender = cvm.Gender, Address = cvm.Address, AdmissionNo = cvm.AdmissionNo, EmergencyContactName = cvm.EmergencyContactName, EmergencyContactRelationship = cvm.EmergencyContactRelationship, EmergencyContactPhoneNum = cvm.EmergencyContactPhoneNum };
 
             try
             {
@@ -83,7 +83,6 @@ namespace EduProfileAPI.Controllers
                 existingStudent.FirstName = studentModel.FirstName;
                 existingStudent.LastName = studentModel.LastName;
                 existingStudent.DateOfBirth = studentModel.DateOfBirth;
-                existingStudent.Age = studentModel.Age;
                 existingStudent.Gender = studentModel.Gender;
                 existingStudent.Address = studentModel.Address;
                 existingStudent.AdmissionNo = studentModel.AdmissionNo;
