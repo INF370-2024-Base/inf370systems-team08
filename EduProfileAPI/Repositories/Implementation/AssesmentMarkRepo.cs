@@ -5,23 +5,23 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EduProfileAPI.Repositories.Implementation
 {
-    public class StudentRepository : IStudentRepository
+    public class AssesmentMarkRepo: IAssesmentMark
     {
         private readonly EduProfileDbContext _context;
-        public StudentRepository(EduProfileDbContext context)
+        public AssesmentMarkRepo(EduProfileDbContext context)
         {
             _context = context;
         }
 
-        public async Task<Student[]> GetAllStudentsAsync()
+        public async Task<AssesmentMark[]> GetAllAssesmentMarksAsync()
         {
-            IQueryable<Student> query = _context.Student;
+            IQueryable<AssesmentMark> query = _context.AssesmentMark;
             return await query.ToArrayAsync();
         }
 
-        public async Task<Student> GetStudentAsync(Guid studentId)
+        public async Task<AssesmentMark> GetAssesmentMarkAsync(Guid studentId, Guid assesmentId)
         {
-            IQueryable<Student> query = _context.Student.Where(c => c.StudentId == studentId);
+            IQueryable<AssesmentMark> query = _context.AssesmentMark.Where(c => c.StudentId  == studentId && c.AssesmentId == assesmentId);
             return await query.FirstOrDefaultAsync();
         }
 
@@ -30,20 +30,10 @@ namespace EduProfileAPI.Repositories.Implementation
             _context.Add(entity);
         }
 
-        public void Delete<T>(T entity) where T : class
-        {
-            _context.Remove(entity);
-        }
 
         public async Task<bool> SaveChangesAsync()
         {
             return await _context.SaveChangesAsync() > 0;
-        }
-
-        public async Task<Parent[]> GetAllParentsAsync()
-        {
-            IQueryable<Parent> query =_context.Parent;
-            return await query.ToArrayAsync();
         }
     }
 }

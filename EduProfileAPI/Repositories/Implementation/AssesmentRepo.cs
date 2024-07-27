@@ -5,23 +5,23 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EduProfileAPI.Repositories.Implementation
 {
-    public class StudentRepository : IStudentRepository
+    public class AssesmentRepo: IAssesment
     {
         private readonly EduProfileDbContext _context;
-        public StudentRepository(EduProfileDbContext context)
+        public AssesmentRepo(EduProfileDbContext context)
         {
             _context = context;
         }
 
-        public async Task<Student[]> GetAllStudentsAsync()
+        public async Task<Assesment[]> GetAllAssesmentsAsync()
         {
-            IQueryable<Student> query = _context.Student;
+            IQueryable<Assesment> query = _context.Assesment;
             return await query.ToArrayAsync();
         }
 
-        public async Task<Student> GetStudentAsync(Guid studentId)
+        public async Task<Assesment> GetAssesmentAsync(Guid assesmentId)
         {
-            IQueryable<Student> query = _context.Student.Where(c => c.StudentId == studentId);
+            IQueryable<Assesment> query = _context.Assesment.Where(c => c.AssesmentId == assesmentId);
             return await query.FirstOrDefaultAsync();
         }
 
@@ -38,12 +38,6 @@ namespace EduProfileAPI.Repositories.Implementation
         public async Task<bool> SaveChangesAsync()
         {
             return await _context.SaveChangesAsync() > 0;
-        }
-
-        public async Task<Parent[]> GetAllParentsAsync()
-        {
-            IQueryable<Parent> query =_context.Parent;
-            return await query.ToArrayAsync();
         }
     }
 }

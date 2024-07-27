@@ -9,9 +9,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using EduProfileAPI.PasswordValidator;
 using EduProfileAPI.EmailService;
+using EduProfileAPI.Repositories.Interfaces.Maintenance;
+using EduProfileAPI.Repositories.Implementation.Maintenance;
 using EduProfileAPI.WhatsApp;
 using Microsoft.Data.SqlClient;
-
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -96,14 +97,29 @@ builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 builder.Services.AddScoped<IStudentAnnouncementRepo, StudentAnnouncementRepo>();
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IAssignTeacherToClassRepository, AssignTeacherToClassRepository>();
+builder.Services.AddScoped<IStudentIncidentRepository, StudentIncidentRepository>();
+builder.Services.AddScoped<IAssignStudentRepo, AssignStudentRepo>();
+builder.Services.AddScoped<IDisciplinaryRepository, DisciplinaryRepository>();
+builder.Services.AddScoped<IMaintenanceRequest, MaintenanceRequestRepo>();
+builder.Services.AddScoped<IMaintenanceStatus, MaintenanceStatusRepo>();
+builder.Services.AddScoped<IMaintenancePriority, MaintenancePriorityRepo>();
+builder.Services.AddScoped<IMaintenanceType, MaintenanceTypeRepo>();
+builder.Services.AddScoped<IMaintenanceProcedure, MaintenanceProcedureRepo>();
+builder.Services.AddScoped<IAssesment, AssesmentRepo>();
+builder.Services.AddScoped<IAssesmentMark, AssesmentMarkRepo>();
 builder.Services.AddScoped<IStudentAttendanceRepo, StudentAttendanceRepo>();
 builder.Services.AddScoped<IContactStudentParent, ContactStudentParent>();
 builder.Services.AddScoped<IStudentReportRepository, StudentReportRepository>();
 builder.Services.AddScoped<IEarlyReleasesRepo, EarlyReleasesRepo>();
+builder.Services.AddScoped<IRemedialFileRepository, RemedialFileRepository>();
+builder.Services.AddScoped<IRemedialActivityRepository, RemedialActivityRepository>();
 
 //WhatsApp
 var whatsAppAccessToken = builder.Configuration["WhatsApp:AccessToken"];
 builder.Services.AddSingleton(new WhatsAppHelper(whatsAppAccessToken));
+
+
+
 
 var app = builder.Build();
 
