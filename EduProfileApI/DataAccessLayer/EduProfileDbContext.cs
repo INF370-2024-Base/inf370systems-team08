@@ -13,7 +13,7 @@ namespace EduProfileAPI.DataAccessLayer
         {
         }
 
-        public DbSet<User> User { get; set; }
+      public DbSet<User> User { get; set; }
         public DbSet<Class> Class { get; set; }
         public DbSet<StudentEducationPhase> StudentEducationPhase { get; set; }
         public DbSet<Grade> Grade { get; set; }
@@ -37,9 +37,9 @@ namespace EduProfileAPI.DataAccessLayer
         public DbSet<MeritType> MeritType { get; set; }
         public DbSet<Assesment> Assesment { get; set; }
         public DbSet<EarlyReleases> EarlyReleases { get; set; }
+        public DbSet<SchoolEvent> SchoolEvent { get; set; }
         public DbSet<RemedialFile> RemedialFile { get; set;}
         public DbSet<RemedialActivity> RemedialActivity{ get; set; }
-
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
