@@ -28,5 +28,9 @@ namespace EduProfileAPI.DataAccessLayer
         public DbSet<AssessmentDates> Assessment { get; set; }    
         public DbSet<RemedialFile> RemedialFile { get; set;}
         public DbSet<RemedialActivity> RemedialActivity{ get; set; }
+
+
+
+
     }
 }
