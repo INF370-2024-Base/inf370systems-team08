@@ -2,6 +2,7 @@
 using EduProfileAPI.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace EduProfileAPI.Controllers
 {
@@ -64,15 +65,38 @@ namespace EduProfileAPI.Controllers
                 }
 
                 var result = await _studentAttendanceRepo.RecordStudentAttedance(model);
-                if ( result == null)
+                if (result == null)
                 {
-                    return NotFound("Class, Student or Teahcer not found in the database");
+                    return NotFound("Class, Student, or Teacher not found in the database");
                 }
                 return Ok(result);
             }
+            catch (DbUpdateException dbEx)
+            {
+                // Handle database update specific errors
+                return StatusCode(500, new
+                {
+                    Message = "Database Failure: " + dbEx.Message,
+                    Details = dbEx.InnerException != null ? dbEx.InnerException.Message : dbEx.StackTrace
+                });
+            }
+            catch (InvalidCastException castEx)
+            {
+                // Handle invalid cast specific errors
+                return StatusCode(500, new
+                {
+                    Message = "Data Conversion Failure: " + castEx.Message,
+                    Details = castEx.StackTrace
+                });
+            }
             catch (Exception ex)
             {
-                return StatusCode(500, new { Message = "Database Failure: " + ex.Message });
+                // Handle general errors
+                return StatusCode(500, new
+                {
+                    Message = "An unexpected error occurred: " + ex.Message,
+                    Details = ex.StackTrace
+                });
             }
         }
 
