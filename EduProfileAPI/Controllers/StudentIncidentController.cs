@@ -1,0 +1,104 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using EduProfileAPI.Models;
+using EduProfileAPI.Repositories.Interfaces;
+using EduProfileAPI.ViewModels;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+
+namespace EduProfileAPI.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class StudentIncidentController : ControllerBase
+    {
+        private readonly IStudentIncidentRepository _Repository;
+
+        public StudentIncidentController(IStudentIncidentRepository studentincidentrepository )
+        {
+            _Repository = studentincidentrepository;
+        }
+
+        // GET: api/StudentIncidents
+        [HttpGet]
+        [Route("GetIncidents")]
+        public async Task<IActionResult> GetStudentIncidentsAsync()
+        {
+            var incidents = await _Repository.GetAllAsync();
+            return Ok(incidents);
+        }
+
+        // GET: api/StudentIncidents/5
+        [HttpGet]
+        [Route("GetIncident/{id}")]
+        public async Task<IActionResult> GetStudentIncidentAsync (Guid id)
+        {
+            try
+            {
+                var result = await _Repository.GetByIdAsync(id);
+                if (result == null)
+                {
+                    return NotFound("Grade not found.");
+                }
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Database Failure: {ex.Message}");
+            }
+        }
+
+        // PUT: api/StudentIncidents/5
+        [HttpPut]
+        [Route("Update/{id}")]
+        public async Task<IActionResult> UpdateStudentIncident(Guid id, StudentIncident studentIncident)
+        {
+            if (id != studentIncident.IncidentId)
+            {
+                return BadRequest();
+            }
+
+            try
+            {
+                await _Repository.UpdateAsync(studentIncident);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!await _Repository.ExistsAsync(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
+        // POST: api/StudentIncidents
+        [HttpPost]
+        [Route("Add")]
+        public async Task<IActionResult> AddStudentIncident(StudentIncident studentIncident)
+        {
+            await _Repository.AddAsync(studentIncident);
+            return CreatedAtAction("GetStudentIncident", new { id = studentIncident.IncidentId }, studentIncident);
+        }
+
+        // DELETE: api/StudentIncidents/5
+        [HttpDelete]
+        [Route("Delete/{id}")]
+        public async Task<IActionResult> DeleteStudentIncident(Guid id)
+        {
+            var result = await _Repository.DeleteAsync(id);
+            if (!result)
+            {
+                return NotFound();
+            }
+
+            return NoContent();
+        }
+
+    }
+}

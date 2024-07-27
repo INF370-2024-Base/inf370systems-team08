@@ -39,5 +39,11 @@ namespace EduProfileAPI.Repositories.Implementation
         {
             return await _context.SaveChangesAsync() > 0;
         }
+
+        public async Task<Parent[]> GetAllParentsAsync()
+        {
+            IQueryable<Parent> query =_context.Parent;
+            return await query.ToArrayAsync();
+        }
     }
 }

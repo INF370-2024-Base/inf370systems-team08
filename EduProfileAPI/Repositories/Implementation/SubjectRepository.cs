@@ -44,7 +44,7 @@ namespace EduProfileAPI.Repositories.Implementation
         }
         // Create new subject
         public async Task<SubjectViewModel> CreateSubjectAsync(CreateSubjectViewModel model) //change to CreateSubjectViewModel later 
-        {
+        {  //SubjectViewModel is the return type and CreateSubjectViewModel is the input type
                 var employee = await _context.Employee.FirstOrDefaultAsync(e => e.EmployeeId == model.EmployeeId);
                 if (employee == null)
                 {

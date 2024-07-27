@@ -22,14 +22,5 @@ namespace EduProfileAPI.Models
 
 
 
-
-
-
-
-
-
-
-
-
     }
 }

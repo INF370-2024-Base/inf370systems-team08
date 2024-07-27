@@ -7,7 +7,6 @@ namespace EduProfileAPI.Models
         
         public Guid StudentId { get; set; }
         public Guid AssesmentId { get; set; }
-
         public int MarkAchieved { get; set; }
 
     }
