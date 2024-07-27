@@ -40,11 +40,14 @@ namespace EduProfileAPI.Repositories.Implementation
 
         public async Task<(bool, string)> SendMessageToParent(ContactStudentParentViewModel model)
         {
+            var student = await _context.Student.FirstOrDefaultAsync(s => s.StudentId == model.StudentId);
+            if (student == null)
+                return (false, "Student not found.");
+
             var parent = await _context.Parent.FirstOrDefaultAsync(p => p.ParentId == model.ParentId);
             if (parent == null)
                 return (false, "Parent not found.");
 
-            var message = model.Message;
             var phoneNumber = parent.Parent1CellPhone; // Get phone number from the database
 
             // Ensure the phone number is formatted with the country code
@@ -66,7 +69,12 @@ namespace EduProfileAPI.Repositories.Implementation
                 return (false, "Parent phone number is null or empty.");
             }
 
-            return await _whatsAppHelper.SendMessage(phoneNumber, message);
+            var parentName = parent.Parent1Name; // Assuming you have a ParentName field in your Parent entity
+            var studentName = student.FirstName + " " + student.LastName; // Assuming you have FirstName and LastName fields in your Student entity
+            var messageContent = model.Message;
+
+            return await _whatsAppHelper.SendTemplateMessage(phoneNumber, parentName, studentName, messageContent);
         }
+
     }
 }
