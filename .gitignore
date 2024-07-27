@@ -361,3 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/EduProfileAPI/DataAccessLayer/EduProfileDbContext.cs
+/EduProfileAPI/DataAccessLayer/EduProfileDbContext.cs
+/.gitignore
