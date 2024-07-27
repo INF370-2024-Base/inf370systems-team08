@@ -64,7 +64,7 @@ namespace EduProfileAPI.Controllers
                     return BadRequest("Invalid Input");
                 }
 
-                var result = await _studentAttendanceRepo.RecordStudentAttedanceAsync(model);
+                var result = await _studentAttendanceRepo.RecordStudentAttendanceAsync(model);
                 if (result == null)
                 {
                     return NotFound("Class, Student, or Teacher not found in the database");

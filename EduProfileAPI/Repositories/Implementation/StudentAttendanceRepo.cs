@@ -51,7 +51,7 @@ namespace EduProfileAPI.Repositories.Implementation
 
         }
 
-        public async Task<StudentAttendance> RecordStudentAttedanceAsync(StudentAttendanceViewModel model)
+        public async Task<StudentAttendance> RecordStudentAttendanceAsync(StudentAttendanceViewModel model)
         {
             try
             {
