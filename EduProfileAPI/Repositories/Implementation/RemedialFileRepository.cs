@@ -5,23 +5,28 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EduProfileAPI.Repositories.Implementation
 {
-    public class StudentRepository : IStudentRepository
+    public class RemedialFileRepository: IRemedialFileRepository
     {
         private readonly EduProfileDbContext _context;
-        public StudentRepository(EduProfileDbContext context)
+
+        public RemedialFileRepository(EduProfileDbContext context)
         {
             _context = context;
         }
 
-        public async Task<Student[]> GetAllStudentsAsync()
+        public async Task<RemedialFile[]> GetAllRemedialFileAsync()
         {
-            IQueryable<Student> query = _context.Student;
+
+            // IQueryable<Class> query = _context.Class;
+            var query = _context.RemedialFile;
+
             return await query.ToArrayAsync();
         }
 
-        public async Task<Student> GetStudentAsync(Guid studentId)
+        public async Task<RemedialFile> GetRemedialFileAsync(Guid remFileId)
         {
-            IQueryable<Student> query = _context.Student.Where(c => c.StudentId == studentId);
+            IQueryable<RemedialFile> query = _context.RemedialFile.Where(c => c.RemFileId == remFileId);
+
             return await query.FirstOrDefaultAsync();
         }
 
@@ -38,12 +43,6 @@ namespace EduProfileAPI.Repositories.Implementation
         public async Task<bool> SaveChangesAsync()
         {
             return await _context.SaveChangesAsync() > 0;
-        }
-
-        public async Task<Parent[]> GetAllParentsAsync()
-        {
-            IQueryable<Parent> query =_context.Parent;
-            return await query.ToArrayAsync();
         }
     }
 }

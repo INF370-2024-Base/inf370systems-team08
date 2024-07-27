@@ -44,7 +44,7 @@ namespace EduProfileAPI.Controllers
                 builder.AppendLine("<h2>Assessments</h2>");
                 foreach (var assessment in report.Assessments)
                 {
-                    builder.AppendLine($"<p>{assessment.AssesmentName} - {assessment.AssesmentType} on {assessment.AssesmentDate.ToShortDateString()}: {assessment.AssesmentGrades}/{assessment.AchievableMark}</p>");
+                    builder.AppendLine($"<p>{assessment.AssesmentName} - {assessment.AssesmentType} on {assessment.AssesmentDate.ToShortDateString()}: /{assessment.AchievableMark}</p>");
                 }
             }
             if (report.Merits != null && report.Merits.Any())
