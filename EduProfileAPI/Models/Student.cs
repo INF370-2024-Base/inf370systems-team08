@@ -13,7 +13,7 @@ namespace EduProfileAPI.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTime DateOfBirth { get; set; }
-        public bool Gender { get; set; }
+        public Boolean Gender { get; set; }
         public string Address { get; set; }
         public int AdmissionNo { get; set; }
         public string EmergencyContactName { get; set; }
