@@ -25,12 +25,22 @@ namespace EduProfileAPI.DataAccessLayer
         public DbSet<Employee> Employee { get; set; }
         public DbSet<StudentAttendance> StudentAttendance { get; set; }
         public DbSet<AttendanceStatus> AttendanceStatus { get; set; }
+       // public DbSet<AssessmentDates> Assessment { get; set; }    
+        public DbSet<AssesmentMark> AssesmentMark { get; set; }
+        public DbSet<StudentIncident> StudentIncident { get; set; }
+        public DbSet<MeritType> MeritType { get; set; }
+        public DbSet<Assesment> Assesment { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<AssesmentMark>()
+                .HasKey(am => new { am.StudentId, am.AssesmentId });
+        }
         public DbSet<AssessmentDates> Assessment { get; set; }    
         public DbSet<RemedialFile> RemedialFile { get; set;}
         public DbSet<RemedialActivity> RemedialActivity{ get; set; }
-
-
-
 
     }
 }
