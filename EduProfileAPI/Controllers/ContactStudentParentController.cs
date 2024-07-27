@@ -53,5 +53,6 @@ namespace EduProfileAPI.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}\n{ex.StackTrace}");
             }
         }
+
     }
 }
