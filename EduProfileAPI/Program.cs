@@ -96,6 +96,7 @@ builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 builder.Services.AddScoped<IStudentAnnouncementRepo, StudentAnnouncementRepo>();
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IAssignTeacherToClassRepository, AssignTeacherToClassRepository>();
+builder.Services.AddScoped<IDisciplinaryRepository, DisciplinaryRepository>();
 builder.Services.AddScoped<IMaintenanceRequest, MaintenanceRequestRepo>();
 builder.Services.AddScoped<IMaintenanceStatus, MaintenanceStatusRepo>();
 builder.Services.AddScoped<IMaintenancePriority, MaintenancePriorityRepo>();
@@ -113,6 +114,7 @@ var whatsAppAccessToken = builder.Configuration["WhatsApp:AccessToken"];
 builder.Services.AddSingleton(new WhatsAppHelper(whatsAppAccessToken));
 builder.Services.AddScoped<IRemedialFileRepository, RemedialFileRepository>();
 builder.Services.AddScoped<IRemedialActivityRepository, RemedialActivityRepository>();
+
 
 
 var app = builder.Build();
