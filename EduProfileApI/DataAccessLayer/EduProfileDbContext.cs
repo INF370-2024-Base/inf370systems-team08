@@ -13,7 +13,7 @@ namespace EduProfileAPI.DataAccessLayer
         {
         }
 
-        public DbSet<User> User { get; set; }
+         public DbSet<User> User { get; set; }
         public DbSet<Class> Class { get; set; }
         public DbSet<StudentEducationPhase> StudentEducationPhase { get; set; }
         public DbSet<Grade> Grade { get; set; }
@@ -25,6 +25,7 @@ namespace EduProfileAPI.DataAccessLayer
         public DbSet<Parent> Parent { get; set; }
         public DbSet<StudentAnnouncement> StudentAnnouncement { get; set; }
         public DbSet<Employee> Employee { get; set; }
+        public DbSet<StudentIncident> studentIncident { get; set; }
         public DbSet<MaintenancePriority> MaintenancePriority { get; set; }
         public DbSet<MaintenanceStatus> MaintenanceStatus { get; set; }
         public DbSet<MaintenanceType> MaintenanceType { get; set; }
@@ -33,7 +34,6 @@ namespace EduProfileAPI.DataAccessLayer
         public DbSet<StudentAttendance> StudentAttendance { get; set; }
         public DbSet<AttendanceStatus> AttendanceStatus { get; set; }
         public DbSet<AssesmentMark> AssesmentMark { get; set; }
-        public DbSet<StudentIncident> StudentIncident { get; set; }
         public DbSet<MeritType> MeritType { get; set; }
         public DbSet<Assesment> Assesment { get; set; }
         public DbSet<RemedialFile> RemedialFile { get; set;}

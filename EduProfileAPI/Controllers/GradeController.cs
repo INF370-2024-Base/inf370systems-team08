@@ -108,7 +108,6 @@ namespace EduProfileAPI.Controllers
                 {
                     return NotFound("Grade not found.");
                 }
-
                 return Ok("Grade deleted successfully.");
             }
             catch (Exception ex)
