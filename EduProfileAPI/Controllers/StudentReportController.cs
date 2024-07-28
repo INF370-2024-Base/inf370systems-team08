@@ -42,9 +42,10 @@ namespace EduProfileAPI.Controllers
             if (report.Assessments != null && report.Assessments.Any())
             {
                 builder.AppendLine("<h2>Assessments</h2>");
-                foreach (var assessment in report.Assessments)
+                foreach (var assessmentReport in report.Assessments)
                 {
-                    builder.AppendLine($"<p>{assessment.AssesmentName} - {assessment.AssesmentType} on {assessment.AssesmentDate.ToShortDateString()}: /{assessment.AchievableMark}</p>");
+                    var assessment = assessmentReport.Assesment;
+                    builder.AppendLine($"<p>{assessment.AssesmentName} - {assessment.AssesmentType} on {assessment.AssesmentDate.ToShortDateString()}: {assessmentReport.MarkAchieved}/{assessment.AchievableMark}</p>");
                 }
             }
             if (report.Merits != null && report.Merits.Any())
@@ -63,6 +64,7 @@ namespace EduProfileAPI.Controllers
                     builder.AppendLine($"<p>On {incident.IncidentDate.ToShortDateString()}: {incident.IncidentDescription}</p>");
                 }
             }
+
             return builder.ToString();
         }
         public class SendProgressReportRequest
