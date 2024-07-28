@@ -1,4 +1,5 @@
-﻿using EduProfileAPI.Repositories.Interfaces;
+﻿using EduProfileAPI.Repositories.Implementation;
+using EduProfileAPI.Repositories.Interfaces;
 using EduProfileAPI.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -50,6 +51,78 @@ namespace EduProfileAPI.Controllers
             {
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
+        }
+
+        [HttpGet]
+        [Route("GetSchoolEvent/{eventId}")] // returns a specific merit
+        public async Task<IActionResult> GetSchoolEventAsync(Guid eventId)
+        {
+            try
+            {
+                var results = await _schoolEventRepo.GetSchoolEventAsync(eventId);
+
+                if (results == null) return NotFound("event does not exist");
+
+                return Ok(results);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpPut]
+        [Route("EditSchoolEvent/{eventId}")]
+        public async Task<ActionResult<CreateSchoolEventViewModel>> EditSchoolEvent(Guid eventId, CreateSchoolEventViewModel model)
+        {
+            try
+            {
+                var existingEvent = await _schoolEventRepo.GetSchoolEventAsync(eventId);
+                if (existingEvent == null) return NotFound($"The event does not exist");
+                existingEvent.EmployeeId = model.EmployeeId;
+                existingEvent.EventName = model.EventName;
+                existingEvent.EventType = model.EventType;
+                existingEvent.EventDate = model.EventDate;
+                existingEvent.EventTime = model.EventTime;
+                existingEvent.EventLocation = model.EventLocation;
+                existingEvent.EventDescription = model.EventDescription;
+                existingEvent.ContactPerson = model.ContactPerson;
+                existingEvent.ContactEmail = model.ContactEmail;
+                existingEvent.ContactPhoneNumber = model.ContactPhoneNumber;
+
+                if (await _schoolEventRepo.SaveChangesAsync())
+                {
+                    return Ok(existingEvent);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+            return BadRequest("Your request is invalid.");
+
+
+        }
+
+        [HttpDelete]
+        [Route("DeleteSchoolEvent/{eventId}")]
+        public async Task<IActionResult> DeleteSchoolEvent(Guid eventId)
+        {
+            try
+            {
+                var existingEvent = await _schoolEventRepo.GetSchoolEventAsync(eventId);
+                if (existingEvent == null) return NotFound($"The event does not exist");
+                _schoolEventRepo.Delete(existingEvent);
+
+                if (await _schoolEventRepo.SaveChangesAsync()) return Ok(existingEvent);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+
+            return BadRequest("Your request is invalid");
         }
     }
 }

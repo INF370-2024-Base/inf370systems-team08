@@ -7,5 +7,10 @@ namespace EduProfileAPI.Repositories.Interfaces
     {
         Task<SchoolEvent> CreateSchoolEvent(CreateSchoolEventViewModel model);
         Task<SchoolEvent[]> GetAllSchoolEvents();
+        Task<bool> SaveChangesAsync();
+        void Delete<T>(T entity) where T : class;
+        Task<SchoolEvent> GetSchoolEventAsync(Guid eventId);
+
     }
+
 }

@@ -46,9 +46,27 @@ namespace EduProfileAPI.Repositories.Implementation
 
         }
 
+
         public async Task<SchoolEvent[]> GetAllSchoolEvents()
         {
             return await _context.SchoolEvent.ToArrayAsync();
+        }
+
+        public async Task<SchoolEvent> GetSchoolEventAsync(Guid eventId)
+        {
+            IQueryable<SchoolEvent> query = _context.SchoolEvent.Where(c => c.EventId == eventId);
+            return await query.FirstOrDefaultAsync();
+        }
+
+
+        public void Delete<T>(T entity) where T : class
+        {
+            _context.Remove(entity);
+        }
+
+        public async Task<bool> SaveChangesAsync()
+        {
+            return await _context.SaveChangesAsync() > 0;
         }
     }
 }
