@@ -34,12 +34,12 @@ namespace EduProfileAPI.Controllers
         }
 
         [HttpGet]
-        [Route("GetAssesmentMark/{studentId,assesmentId}")]
-        public async Task<IActionResult> GetAssesmentMark(Guid studentId,Guid assesmentId)
+        [Route("GetAssesmentMark/{studentId}/{assesmentId}")]
+        public async Task<IActionResult> GetAssesmentMark(Guid studentId, Guid assesmentId)
         {
             try
             {
-                var results = await _assesmentMarkRepository.GetAssesmentMarkAsync(studentId,assesmentId);
+                var results = await _assesmentMarkRepository.GetAssesmentMarkAsync(studentId, assesmentId);
 
                 if (results == null) return NotFound("Assesment Mark does not exist");
 
@@ -76,34 +76,40 @@ namespace EduProfileAPI.Controllers
         }
 
         [HttpPut]
-        [Route("EditAssesmentMark/{studentId,assesmentId}")]
-        public async Task<ActionResult<AssesmentMarkVM>> EditAssesmentMark(Guid studentId,Guid assesmentId, AssesmentMarkVM model)
+        [Route("EditAssesmentMark/{studentId}/{assesmentId}")]
+        public async Task<ActionResult<AssesmentMarkVM>> EditAssesmentMark(Guid studentId, Guid assesmentId, [FromBody] AssesmentMarkVM model)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             try
             {
-                var existingAssesmentMark = await _assesmentMarkRepository.GetAssesmentMarkAsync(studentId,assesmentId);
-                if (existingAssesmentMark == null) return NotFound($"The assesment mark does not exist");
+                var existingAssesmentMark = await _assesmentMarkRepository.GetAssesmentMarkAsync(studentId, assesmentId);
+                if (existingAssesmentMark == null)
+                {
+                    return NotFound($"The assesment mark does not exist");
+                }
+
                 existingAssesmentMark.StudentId = model.StudentId;
                 existingAssesmentMark.AssesmentId = model.AssesmentId;
                 existingAssesmentMark.MarkAchieved = model.MarkAchieved;
-
 
                 if (await _assesmentMarkRepository.SaveChangesAsync())
                 {
                     return Ok(existingAssesmentMark);
                 }
-
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(500, "Internal Server Error. Please contact support.");
-
+                return StatusCode(500, $"Internal Server Error: {ex.Message}");
             }
+
             return BadRequest("Your request is invalid.");
-
-
         }
 
-    
+
+
     }
 }
