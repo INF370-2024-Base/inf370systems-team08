@@ -33,23 +33,5 @@ namespace EduProfileAPI.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
-
-        [HttpGet("GetAllSchoolEvents")]
-        public async Task<IActionResult> GetAllSchoolEvents()
-        {
-            try
-            {
-                var schoolEvents = await _schoolEventRepo.GetAllSchoolEvents();
-
-                if (schoolEvents == null)
-                    return NotFound("No School Events found");
-
-                return Ok(schoolEvents);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
-        }
     }
 }
