@@ -100,5 +100,14 @@ namespace EduProfileAPI.Controllers
             return NoContent();
         }
 
+        // GET: api/StudentIncidents
+        [HttpGet]
+        [Route("GetIncidentTypes")]
+        public async Task<IActionResult> GetStudentIncidentTypesAsync()
+        {
+            var types = await _Repository.GetAllTypesAsync();
+            return Ok(types);
+        }
+
     }
 }
