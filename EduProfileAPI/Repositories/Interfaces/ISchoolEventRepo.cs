@@ -6,6 +6,5 @@ namespace EduProfileAPI.Repositories.Interfaces
     public interface ISchoolEventRepo
     {
         Task<SchoolEvent> CreateSchoolEvent(CreateSchoolEventViewModel model);
-        Task<SchoolEvent[]> GetAllSchoolEvents();
     }
 }
