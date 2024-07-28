@@ -133,10 +133,11 @@ namespace EduProfileAPI.Repositories.Implementation
             };
         }
 
-        public async Task<StudentAttendance> GetStudentAttendanceById(Guid saId)
-        { 
+        public async Task<List<StudentAttendance>> GetStudentAttendanceByClassId(Guid classId)
+        {
             return await _context.StudentAttendance
-                .FirstOrDefaultAsync(sa => sa.StudentAttendanceId == saId);
+                .Where(sa => sa.ClassId == classId)
+                .ToListAsync();
         }
     }
 }
