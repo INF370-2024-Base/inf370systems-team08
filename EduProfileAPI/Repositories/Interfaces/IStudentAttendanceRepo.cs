@@ -12,6 +12,6 @@ namespace EduProfileAPI.Repositories.Interfaces
         Task<AttendanceStatusViewModel[]> GetAllAttendanceStatus();
         Task<StudentAttendance> RecordStudentAttendanceAsync(StudentAttendanceViewModel model);
         Task<StudentAttendance> UpdateStudentAttendance(Guid studentId, UpdateStudentAttendanceVM model);
-        Task<StudentAttendance> GetStudentAttendanceById(Guid studentAttendanceId);
+        Task<List<StudentAttendance>> GetStudentAttendanceByClassId(Guid classId);
     }
 }

@@ -125,12 +125,12 @@ namespace EduProfileAPI.Controllers
         }
 
         [HttpGet]
-        [Route("GetStudentAttendance/{studentAttendanceId}")]
-        public async Task<IActionResult> GetStudentAttendance(Guid studentAttendanceId)
+        [Route("GetStudentAttendance/{classId}")]
+        public async Task<IActionResult> GetStudentAttendance(Guid classId)
         {
             try
             {
-                var result = await _studentAttendanceRepo.GetStudentAttendanceById(studentAttendanceId);
+                var result = await _studentAttendanceRepo.GetStudentAttendanceByClassId(classId);
                 if (result == null)
                 {
                     return NotFound("No attendance records found in the database");
