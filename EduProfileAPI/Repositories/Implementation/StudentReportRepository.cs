@@ -22,13 +22,12 @@ namespace EduProfileAPI.Repositories.Implementation
                 return null;
             }
 
-            var assessments = await _context.AssesmentMark
+            var assessmentMarks = await _context.AssesmentMark
                 .Where(am => am.StudentId == studentId)
-                .Select(am => new
-                {
-                    am.MarkAchieved,
-                    Assessment = _context.Assesment.FirstOrDefault(a => a.AssesmentId == am.AssesmentId)
-                })
+                .ToListAsync();
+
+            var assessments = await _context.Assesment
+                .Where(a => assessmentMarks.Select(am => am.AssesmentId).Contains(a.AssesmentId))
                 .ToListAsync();
 
             var merits = await _context.Merit
@@ -42,20 +41,14 @@ namespace EduProfileAPI.Repositories.Implementation
             var report = new StudentProgressReportViewModel
             {
                 StudentName = $"{student.FirstName} {student.LastName}",
-                Assessments = assessments.Select(a => a.Assessment).ToList(),
+                Assessments = assessments.Select(a => new StudentProgressReportViewModel.AssessmentReport
+                {
+                    Assesment = a,
+                    MarkAchieved = assessmentMarks.FirstOrDefault(am => am.AssesmentId == a.AssesmentId)?.MarkAchieved ?? 0
+                }).ToList(),
                 Merits = merits,
                 Incidents = incidents
             };
-
-            // Populate the assessment grades from AssessmentMarks
-            foreach (var assessment in report.Assessments)
-            {
-                var assessmentMark = assessments.FirstOrDefault(a => a.Assessment.AssesmentId == assessment.AssesmentId);
-                if (assessmentMark != null)
-                {
-                    // = assessmentMark.MarkAchieved;
-                }
-            }
 
             return report;
         }
