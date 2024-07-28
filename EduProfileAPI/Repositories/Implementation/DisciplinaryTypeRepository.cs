@@ -19,13 +19,13 @@ namespace EduProfileAPI.Repositories.Implementation
 
         public async Task<DisciplinaryType[]> GetAllDisciplinaryTypesAsync()
         {
-            IQueryable<DisciplinaryType> query = _context.DisciplinaryTypes;
+            IQueryable<DisciplinaryType> query = _context.DisciplinaryType;
             return await query.ToArrayAsync();
         }
 
         public async Task<DisciplinaryType> GetDisciplinaryTypeAsync(Guid disciplinaryTypeId)
         {
-            IQueryable<DisciplinaryType> query = _context.DisciplinaryTypes.Where(d => d.DisciplinaryTypeId == disciplinaryTypeId);
+            IQueryable<DisciplinaryType> query = _context.DisciplinaryType.Where(d => d.DisciplinaryTypeId == disciplinaryTypeId);
             return await query.FirstOrDefaultAsync();
         }
 
