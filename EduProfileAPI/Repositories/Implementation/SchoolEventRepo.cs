@@ -45,5 +45,10 @@ namespace EduProfileAPI.Repositories.Implementation
             return schoolEvent;
 
         }
+
+        public async Task<SchoolEvent[]> GetAllSchoolEvents()
+        {
+            return await _context.SchoolEvent.ToArrayAsync();
+        }
     }
 }
