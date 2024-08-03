@@ -45,5 +45,12 @@ namespace EduProfileAPI.Repositories.Implementation
             IQueryable<Parent> query =_context.Parent;
             return await query.ToArrayAsync();
         }
+
+        public async Task<Parent> GetParentAsync(Guid parentId)
+        {
+            IQueryable<Parent> query = _context.Parent.Where(c => c.ParentId == parentId);
+            return await query.FirstOrDefaultAsync();
+        }
     }
+
 }

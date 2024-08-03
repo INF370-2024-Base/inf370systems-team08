@@ -135,5 +135,78 @@ namespace EduProfileAPI.Controllers
             var parents = await _studentRepository.GetAllParentsAsync();
             return Ok(parents);
         }
+
+        //Get parent by ID
+        [HttpGet("GetParent/{parentId}")]
+        public async Task<IActionResult> GetParent(Guid parentId)
+        {
+            try
+            {
+                var parent = await _studentRepository.GetParentAsync(parentId);
+                if (parent == null)
+                {
+                    return NotFound();
+                }
+                return Ok(parent);
+            }
+            catch (Exception ex)
+            {
+                // Handle the exception as needed
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        // Add Parent
+        [HttpPost("AddParent")]
+        public async Task<IActionResult> AddParent([FromBody] Parent parent)
+        {
+            try
+            {
+                if (parent == null)
+                {
+                    return BadRequest("Parent is null.");
+                }
+
+                _studentRepository.Add(parent);
+                if (await _studentRepository.SaveChangesAsync())
+                {
+                    return CreatedAtAction(nameof(GetParent), new { parentId = parent.ParentId }, parent);
+                }
+
+                return BadRequest("Failed to add parent.");
+            }
+            catch (Exception ex)
+            {
+                // Handle the exception as needed
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        // Delete Parent
+        [HttpDelete("DeleteParent/{parentId}")]
+        public async Task<IActionResult> DeleteParent(Guid parentId)
+        {
+            try
+            {
+                var parent = await _studentRepository.GetParentAsync(parentId);
+                if (parent == null)
+                {
+                    return NotFound();
+                }
+
+                _studentRepository.Delete(parent);
+                if (await _studentRepository.SaveChangesAsync())
+                {
+                    return NoContent();
+                }
+
+                return BadRequest("Failed to delete parent.");
+            }
+            catch (Exception ex)
+            {
+                // Handle the exception as needed
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
     }
 }
