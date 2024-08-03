@@ -3,6 +3,7 @@ using EduProfileAPI.Repositories.Interfaces;
 using EduProfileAPI.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace EduProfileAPI.Controllers
 {
@@ -114,7 +115,7 @@ namespace EduProfileAPI.Controllers
             try
             {
                 var existingStudent = await _studentRepository.GetStudentAsync(studentId);
-                if (existingStudent == null) return NotFound($"The merit does not exist");
+                if (existingStudent == null) return NotFound($"The student does not exist");
                 _studentRepository.Delete(existingStudent);
 
                 if (await _studentRepository.SaveChangesAsync()) return Ok(existingStudent);
@@ -182,18 +183,76 @@ namespace EduProfileAPI.Controllers
             }
         }
 
-        // Delete Parent
-        [HttpDelete("DeleteParent/{parentId}")]
-        public async Task<IActionResult> DeleteParent(Guid parentId)
+        // Edit Parent
+        [HttpPut("EditParent/{parentId}")]
+        public async Task<IActionResult> EditParent(Guid parentId, [FromBody] Parent updatedParent)
         {
             try
             {
+                if (updatedParent == null || parentId != updatedParent.ParentId)
+                {
+                    return BadRequest("Parent data is invalid.");
+                }
+
                 var parent = await _studentRepository.GetParentAsync(parentId);
                 if (parent == null)
                 {
                     return NotFound();
                 }
 
+                // Update the parent properties
+                parent.Parent1Name = updatedParent.Parent1Name;
+                parent.Parent1MaritalStatus = updatedParent.Parent1MaritalStatus;
+                parent.Parent1Occupation = updatedParent.Parent1Occupation;
+                parent.Parent1PhysicalAddress = updatedParent.Parent1PhysicalAddress;
+                parent.Parent1PostalAddress = updatedParent.Parent1PostalAddress;
+                parent.Parent1HomePhone = updatedParent.Parent1HomePhone;
+                parent.Parent1WorkPhone = updatedParent.Parent1WorkPhone;
+                parent.Parent1CellPhone = updatedParent.Parent1CellPhone;
+                parent.Parent2Name = updatedParent.Parent2Name;
+                parent.Parent2MaritalStatus = updatedParent.Parent2MaritalStatus;
+                parent.Parent2Occupation = updatedParent.Parent2Occupation;
+                parent.Parent2PhysicalAddress = updatedParent.Parent2PhysicalAddress;
+                parent.Parent2PostalAddress = updatedParent.Parent2PostalAddress;
+                parent.Parent2HomePhone = updatedParent.Parent2HomePhone;
+                parent.Parent2WorkPhone = updatedParent.Parent2WorkPhone;
+                parent.Parent2CellPhone = updatedParent.Parent2CellPhone;
+
+                if (await _studentRepository.SaveChangesAsync())
+                {
+                    return NoContent();
+                }
+
+                return BadRequest("Failed to update parent.");
+            }
+            catch (Exception ex)
+            {
+                // Handle the exception as needed
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+
+        [HttpDelete("DeleteParent/{parentId}")]
+        public async Task<IActionResult> DeleteParent(Guid parentId)
+        {
+            try
+            {
+                // Retrieve the parent entity
+                var parent = await _studentRepository.GetParentAsync(parentId);
+                if (parent == null)
+                {
+                    return NotFound();
+                }
+
+                // Check if there are any students associated with the parent
+                var students = await _studentRepository.GetStudentsByParentIdAsync(parentId);
+                if (students.Any())
+                {
+                    return BadRequest("Cannot delete parent. There are students associated with this parent.");
+                }
+
+                // Proceed to delete the parent entity
                 _studentRepository.Delete(parent);
                 if (await _studentRepository.SaveChangesAsync())
                 {
@@ -202,11 +261,20 @@ namespace EduProfileAPI.Controllers
 
                 return BadRequest("Failed to delete parent.");
             }
+            catch (DbUpdateException dbEx)
+            {
+                // Log the detailed error
+                var innerException = dbEx.InnerException?.Message ?? dbEx.Message;
+                return StatusCode(500, $"Internal server error: {innerException}");
+            }
             catch (Exception ex)
             {
                 // Handle the exception as needed
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+
+
     }
 }
+

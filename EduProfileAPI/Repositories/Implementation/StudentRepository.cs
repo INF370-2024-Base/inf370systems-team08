@@ -51,6 +51,12 @@ namespace EduProfileAPI.Repositories.Implementation
             IQueryable<Parent> query = _context.Parent.Where(c => c.ParentId == parentId);
             return await query.FirstOrDefaultAsync();
         }
+
+        public async Task<Student[]> GetStudentsByParentIdAsync(Guid parentId)
+        {
+            IQueryable<Student> query = _context.Student.Where(s => s.ParentId == parentId);
+            return await query.ToArrayAsync();
+        }
     }
 
 }

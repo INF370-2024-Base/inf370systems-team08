@@ -64,6 +64,14 @@ namespace EduProfileAPI.DataAccessLayer
                 .HasOne<Assesment>()
                 .WithMany()
                 .HasForeignKey(am => am.AssesmentId);
+
+            modelBuilder.Entity<Student>()
+                .HasOne<Parent>()
+                .WithMany()
+                .HasForeignKey(p => p.ParentId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }
