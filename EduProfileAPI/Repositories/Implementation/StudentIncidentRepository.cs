@@ -18,24 +18,8 @@ namespace EduProfileAPI.Repositories.Implementation
 
         public async Task<IEnumerable<StudentIncident>> GetAllAsync()
         {
-            return await _context.studentIncident
-                .Select(si => new StudentIncident
-                {
-                    IncidentId = si.IncidentId,
-                    StudentId = si.StudentId,
-                    IncidentTypeId = si.IncidentTypeId,
-                    IncidentDate = si.IncidentDate,
-                    IncidentTime = si.IncidentTime,
-                    IncidentLocation = si.IncidentLocation ?? string.Empty,
-                    IncidentDescription = si.IncidentDescription ?? string.Empty,
-                    ReportedBy = si.ReportedBy ?? string.Empty,
-                    ReportedDate = si.ReportedDate,
-                    IncidentStatus = si.IncidentStatus ?? string.Empty,
-                    ParentNotified = si.ParentNotified,
-                    Comments = si.Comments ?? string.Empty,
-                    IncidentAttachment = si.IncidentAttachment ?? new byte[0]
-                })
-                .ToListAsync();
+            var incidents = await _context.studentIncident.ToListAsync();
+            return incidents;
         }
 
         public async Task<StudentIncident> GetByIdAsync(Guid? id)
@@ -125,6 +109,11 @@ namespace EduProfileAPI.Repositories.Implementation
                     IncidentSeverity = si.IncidentSeverity
                 })
                 .ToListAsync();
+        }
+
+        public async Task<bool> SaveChangesAsync()
+        {
+            return await _context.SaveChangesAsync() > 0;
         }
     }
 }

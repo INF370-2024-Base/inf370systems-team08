@@ -80,10 +80,26 @@ namespace EduProfileAPI.Controllers
         // POST: api/StudentIncidents
         [HttpPost]
         [Route("Add")]
-        public async Task<IActionResult> AddStudentIncident(StudentIncident studentIncident)
+        public async Task<IActionResult> AddStudentIncident([FromBody] StudentIncident studentIncident)
         {
-            await _Repository.AddAsync(studentIncident);
-            return CreatedAtAction("GetStudentIncident", new { id = studentIncident.IncidentId }, studentIncident);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                //studentIncident.IncidentId = Guid.NewGuid();
+                await _Repository.AddAsync(studentIncident);
+                await _Repository.SaveChangesAsync(); // Ensure changes are saved to the database
+                return CreatedAtAction("GetStudentIncident", new { id = studentIncident.IncidentId }, studentIncident);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                Console.WriteLine($"Error adding student incident: {ex.Message}");
+                return StatusCode(500, "Internal server error");
+            }
         }
 
         // DELETE: api/StudentIncidents/5

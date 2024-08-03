@@ -10,7 +10,8 @@ namespace EduProfileAPI.Models
             public Guid IncidentId { get; set; }
         [Required]
             public Guid StudentId { get; set; }
-            public Guid? IncidentTypeId { get; set; }
+        [Required]
+            public Guid IncidentTypeId { get; set; }
             public DateTime IncidentDate { get; set; }
             public TimeSpan? IncidentTime { get; set; }
             public string? IncidentLocation { get; set; }
