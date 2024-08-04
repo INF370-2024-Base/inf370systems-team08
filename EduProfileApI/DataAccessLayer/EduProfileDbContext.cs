@@ -25,6 +25,7 @@ namespace EduProfileAPI.DataAccessLayer
         public DbSet<Parent> Parent { get; set; }
         public DbSet<StudentAnnouncement> StudentAnnouncement { get; set; }
         public DbSet<Employee> Employee { get; set; }
+        public DbSet<EmployeeStatus> EmployeeStatus { get; set; }
         public DbSet<StudentIncident> studentIncident { get; set; }
         public DbSet<MaintenancePriority> MaintenancePriority { get; set; }
         public DbSet<MaintenanceStatus> MaintenanceStatus { get; set; }
