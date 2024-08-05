@@ -69,7 +69,29 @@ namespace EduProfileAPI.DataAccessLayer
                 .HasOne<Parent>()
                 .WithMany()
                 .HasForeignKey(p => p.ParentId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Student>()
+                .HasOne<Grade>()
+                .WithMany()
+                .HasForeignKey(s => s.GradeId)
+                .OnDelete(DeleteBehavior.Restrict);  // Prevent grade deletion if associated with students
+
+            modelBuilder.Entity<Student>()
+                .HasOne<Class>()
+                .WithMany()
+                .HasForeignKey(s => s.ClassId)
+                .OnDelete(DeleteBehavior.Restrict);  // Prevent class deletion if associated with students
+
+            modelBuilder.Entity<Student>()
+              .HasMany<StudentSubject>()
+              .WithOne(ss => ss.Student)
+              .HasForeignKey(ss => ss.StudentId)
+              .OnDelete(DeleteBehavior.Restrict);  // Prevent student deletion if associated with StudentSubjects
+
+            modelBuilder.Entity<StudentSubject>()
+                .HasKey(ss => new { ss.StudentId, ss.SubjectId });
+
 
             base.OnModelCreating(modelBuilder);
         }
