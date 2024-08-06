@@ -45,6 +45,7 @@ namespace EduProfileAPI.DataAccessLayer
         public DbSet<RemedialActivity> RemedialActivity{ get; set; }
         public DbSet<StudentIncident> StudentIncident { get; set; }
         public DbSet<IncidentType> IncidentType { get; set; }
+        public DbSet<StudentSubject> StudentSubject { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -83,14 +84,19 @@ namespace EduProfileAPI.DataAccessLayer
                 .HasForeignKey(s => s.ClassId)
                 .OnDelete(DeleteBehavior.Restrict);  // Prevent class deletion if associated with students
 
-            modelBuilder.Entity<Student>()
-              .HasMany<StudentSubject>()
-              .WithOne(ss => ss.Student)
-              .HasForeignKey(ss => ss.StudentId)
-              .OnDelete(DeleteBehavior.Restrict);  // Prevent student deletion if associated with StudentSubjects
+            modelBuilder.Entity<StudentSubject>()
+                .HasKey(ss => ss.StudentSubjectId);  // Now using a single primary key
+
+            // Keep the foreign keys
+            modelBuilder.Entity<StudentSubject>()
+                .HasOne(ss => ss.Student)
+                .WithMany(s => s.StudentSubjects)
+                .HasForeignKey(ss => ss.StudentId);
 
             modelBuilder.Entity<StudentSubject>()
-                .HasKey(ss => new { ss.StudentId, ss.SubjectId });
+                .HasOne(ss => ss.Subject)
+                .WithMany(s => s.StudentSubjects)
+                .HasForeignKey(ss => ss.SubjectId);
 
 
             base.OnModelCreating(modelBuilder);

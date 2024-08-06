@@ -18,6 +18,8 @@ namespace EduProfileAPI.Models
 
         [ForeignKey(nameof(EmployeeId))]
         public Employee Employee { get; set; }
-        
+
+        public ICollection<StudentSubject> StudentSubjects { get; set; }
+
     }
 }

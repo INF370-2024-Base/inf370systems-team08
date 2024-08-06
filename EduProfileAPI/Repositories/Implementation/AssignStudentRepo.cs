@@ -1,6 +1,7 @@
 ﻿using EduProfileAPI.DataAccessLayer;
 using EduProfileAPI.Models;
 using EduProfileAPI.Repositories.Interfaces;
+using EduProfileAPI.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,52 +15,58 @@ namespace EduProfileAPI.Repositories.Implementation
         {
             _context = context;
         }
-        public async Task<Student[]> GetAllStudentsAsync()
-        {
-            IQueryable<Student> query = _context.Student;
-            return await query.ToArrayAsync();
-        }
 
-        public async Task<Class[]> GetAllClassesAsync()
-        {
-            var query = _context.Class;
-            return await query.ToArrayAsync();
-        }
-
-        public async Task<Grade[]> GetAllGradesAsync()
-        {
-            IQueryable<Grade> query = _context.Grade;
-            return await query.ToArrayAsync();
-        }
-
-        public async Task<Subject[]> GetAllSubjectAsync()
-        {
-            IQueryable<Subject> query = _context.Subject;
-            return await query.ToArrayAsync();
-        }
-
-        public async Task AssignStudentToClassAsync(Guid studentId, Guid classId, Guid gradeId)
+        public async Task AssignStudentToClassAsync(Guid studentId, Guid classId)
         {
             var student = await _context.Student.FindAsync(studentId);
             if (student != null)
             {
                 student.ClassId = classId;
-                student.GradeId = gradeId;
                 await _context.SaveChangesAsync();
             }
         }
 
-        //public async Task AssignStudentToSubjectAsync(Guid studentId, Guid subjectId)
-        //{
-        //    var studentSubject = new StudentSubject
-        //    {
-        //        StudentId = studentId,
-        //        SubjectId = subjectId
-        //    };
+        public async Task AssignStudentToSubjectAsync(StudentSubjectVM request)
+        {
+            try
+            {
+                var studentExists = await _context.Student.AnyAsync(s => s.StudentId == request.StudentId);
+                var subjectExists = await _context.Subject.AnyAsync(s => s.SubjectId == request.SubjectId);
+                var gradeExists = await _context.Grade.AnyAsync(g => g.GradeId == request.GradeId);
 
-        //    _context.StudentSubject.Add(studentSubject);
-        //    await _context.SaveChangesAsync();
-        //}
+                if (!studentExists)
+                {
+                    throw new ArgumentException("The studentId does not exist.");
+                }
+
+                if (!subjectExists)
+                {
+                    throw new ArgumentException("The subjectId does not exist.");
+                }
+
+                var studentSubject = new StudentSubject
+                {
+                    StudentSubjectId = Guid.NewGuid(),
+                    StudentId = request.StudentId,
+                    GradeId = request.GradeId,
+                    SubjectId = request.SubjectId
+                };
+
+                _context.StudentSubject.Add(studentSubject);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+                if (ex.InnerException != null)
+                {
+                    Console.WriteLine($"Inner exception: {ex.InnerException.Message}");
+                }
+                throw;
+            }
+        }
+
+
 
         public async Task AssignStudentToGradeAsync(Guid studentId, Guid gradeId)
         {
@@ -71,9 +78,26 @@ namespace EduProfileAPI.Repositories.Implementation
             }
         }
 
-        public Task<Student[]> GettAllStudentsAsync()
+        public async Task<List<Student>> GetStudentsByClassIdAsync(Guid classId)
         {
-            throw new NotImplementedException();
+            return await _context.Student
+                .Where(s => s.ClassId == classId)
+                .ToListAsync();
+        }
+
+        public async Task<List<Student>> GetStudentsByGradeIdAsync(Guid gradeId)
+        {
+            return await _context.Student
+                .Where(s => s.GradeId == gradeId)
+                .ToListAsync();
+        }
+
+        public async Task<List<Student>> GetStudentsBySubjectIdAsync(Guid subjectId)
+        {
+            return await _context.StudentSubject
+                .Where(ss => ss.SubjectId == subjectId)
+                .Select(ss => ss.Student)
+                .ToListAsync();
         }
     }
 }
