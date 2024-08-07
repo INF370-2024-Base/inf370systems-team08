@@ -124,6 +124,14 @@ namespace EduProfileAPI.Controllers
             {
                 var existingRemedialFile = await _remFileRepo.GetRemedialFileAsync(remedialFileId);
                 if (existingRemedialFile == null) return NotFound("The remedial file does not exist");
+
+                // Delete associated remedial activities
+                var activities = await _remActRepo.GetActivitiesByFileId(remedialFileId);
+                foreach (var activity in activities)
+                {
+                    _remActRepo.Delete(activity);
+                }
+
                 _remFileRepo.Delete(existingRemedialFile);
 
                 if (await _remFileRepo.SaveChangesAsync()) return Ok(existingRemedialFile);
@@ -134,6 +142,7 @@ namespace EduProfileAPI.Controllers
             }
             return BadRequest("Your request is invalid");
         }
+
 
         [HttpGet]
         [Route("DownloadAttachment/{remActId}")]
