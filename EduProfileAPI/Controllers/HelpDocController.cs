@@ -8,32 +8,22 @@ namespace EduProfileAPI.Controllers
     [ApiController]
     public class HelpDocController : ControllerBase
     {
-        // Hardcoded help document content
-        public static string helpDocument = "Welcome to the EduProfile Help Document." +
-                              "Here you will find all the information you need to navigate and use the system effectively. " +
-                              "This document is designed to assist users in understanding the various features and functionalities of our system." +
-                              "Getting Started:" +
-                              "- How to log in:";
-
-        // GET: api/helpdoc
         [HttpGet]
-        [Route("GetHelpDoc")]
-        public ActionResult<string> GetHelpDocument()
+        public async Task<IActionResult> GetHelpDocument()
         {
-            return Ok(helpDocument);
-        }
+            // Combine paths to get the full path to the text file
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Documents", "Help.txt");
 
-        // PUT: api/helpdoc
-        [HttpPut]
-        public IActionResult UpdateHelpDocument([FromBody] HelpDoc model)
-        {
-            if (model == null || string.IsNullOrEmpty(model.Content))
+            // Check if the file exists
+            if (System.IO.File.Exists(filePath))
             {
-                return BadRequest("The help document content cannot be empty.");
+                // Read the content of the file
+                var content = await System.IO.File.ReadAllTextAsync(filePath);
+                return Ok(content); // Return the content to the client
             }
 
-            helpDocument = model.Content;
-            return Ok("Help document updated successfully.");
+            // Return a 404 if the file is not found
+            return NotFound("Help document not found.");
         }
 
     }
