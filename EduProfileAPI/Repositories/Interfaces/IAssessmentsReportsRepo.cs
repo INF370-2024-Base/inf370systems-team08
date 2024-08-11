@@ -5,5 +5,6 @@ namespace EduProfileAPI.Repositories.Interfaces
     public interface IAssessmentsReportsRepo
     {
         Task<List<AssessmentAverageReportViewModel>> GetAssessmentAverageReport();
+        Task<List<AssessmentHighestMarkReportViewModel>> GetAssessmentHighestMarkReport();
     }
 }

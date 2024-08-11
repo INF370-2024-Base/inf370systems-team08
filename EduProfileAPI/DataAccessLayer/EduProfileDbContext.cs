@@ -46,6 +46,7 @@ namespace EduProfileAPI.DataAccessLayer
         public DbSet<StudentIncident> StudentIncident { get; set; }
         public DbSet<IncidentType> IncidentType { get; set; }
         public DbSet<StudentSubject> StudentSubject { get; set; }
+        public DbSet<DisciplinaryType> DisciplinaryType { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

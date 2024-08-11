@@ -51,43 +51,54 @@ namespace EduProfileAPI.Repositories.Implementation
 
         }
 
-        public async Task<StudentAttendance> RecordStudentAttedance(StudentAttendanceViewModel model)
+        public async Task<StudentAttendance> RecordStudentAttendanceAsync(StudentAttendanceViewModel model)
         {
-            var student = await _context.Student.FirstOrDefaultAsync(s => s.StudentId == model.StudentId);
-            if (student == null)
+            try
             {
-                return null;
+                var student = await _context.Student.FirstOrDefaultAsync(s => s.StudentId == model.StudentId);
+                if (student == null)
+                {
+                    throw new Exception("Student not found.");
+                }
+
+                var classs = await _context.Class.FirstOrDefaultAsync(c => c.ClassId == model.ClassId);
+                if (classs == null)
+                {
+                    throw new Exception("Class not found.");
+                }
+
+                var employee = await _context.Employee.FirstOrDefaultAsync(e => e.EmployeeId == model.EmployeeId);
+                if (employee == null)
+                {
+                    throw new Exception("Employee not found.");
+                }
+
+                var studentAttendance = new StudentAttendance
+                {
+                    StudentAttendanceId = Guid.NewGuid(),
+                    StudentId = model.StudentId,
+                    ClassId = model.ClassId,
+                    EmployeeId = model.EmployeeId,
+                    AttendanceDate = model.AttendanceDate,
+                    AttendanceStatusId = model.AttendanceStatusId,
+                    Remarks = model.Remarks
+                };
+
+                await _context.StudentAttendance.AddAsync(studentAttendance);
+                await _context.SaveChangesAsync();
+
+                return studentAttendance;
             }
-
-            var classs = await _context.Class.FirstOrDefaultAsync(c => c.ClassId == model.ClassId);
-            if (classs == null)
+            catch (Exception ex)
             {
-                return null;
+                // Log detailed error message
+                Console.WriteLine($"Error in RecordStudentAttedance: {ex.Message}");
+                Console.WriteLine($"Stack Trace: {ex.StackTrace}");
+                throw;
             }
-            
-            var employee = await _context.Employee.FirstOrDefaultAsync(e => e.EmployeeId == model.EmployeeId);
-            if (employee == null)
-            {
-                return null;
-            }
-
-
-            var studentAttendance = new StudentAttendance
-            {
-                StudentAttendanceId = Guid.NewGuid(),
-                StudentId = model.StudentId,
-                ClassId = model.ClassId,
-                EmployeeId = model.EmployeeId,
-                AttendanceDate = model.AttendanceDate,
-                AttendanceStatusId = model.AttendanceStatusId,
-                Remarks = model.Remarks.ToString()
-            };
-
-            await _context.StudentAttendance.AddAsync(studentAttendance);
-            await _context.SaveChangesAsync();
-
-            return studentAttendance;
         }
+
+
 
         public async Task<StudentAttendance> UpdateStudentAttendance(Guid studentId, UpdateStudentAttendanceVM model)
         { 
@@ -122,10 +133,11 @@ namespace EduProfileAPI.Repositories.Implementation
             };
         }
 
-        public async Task<StudentAttendance> GetStudentAttendanceById(Guid saId)
-        { 
+        public async Task<List<StudentAttendance>> GetStudentAttendanceByClassId(Guid classId)
+        {
             return await _context.StudentAttendance
-                .FirstOrDefaultAsync(sa => sa.StudentAttendanceId == saId);
+                .Where(sa => sa.ClassId == classId)
+                .ToListAsync();
         }
     }
 }

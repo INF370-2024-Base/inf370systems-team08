@@ -115,7 +115,7 @@ namespace EduProfileAPI.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "Internal Server Error. Please contact support.");
+                return StatusCode(500, $"Internal Server Error. Please contact support. {ex}");
             }
             return BadRequest("Your request is invalid.");
         

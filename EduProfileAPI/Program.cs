@@ -102,6 +102,7 @@ builder.Services.AddScoped<IAssignTeacherToClassRepository, AssignTeacherToClass
 builder.Services.AddScoped<IStudentIncidentRepository, StudentIncidentRepository>();
 builder.Services.AddScoped<IAssignStudentRepo, AssignStudentRepo>();
 builder.Services.AddScoped<IDisciplinaryRepository, DisciplinaryRepository>();
+builder.Services.AddScoped<IDisciplinaryTypeRepository, DisciplinaryTypeRepository>();
 builder.Services.AddScoped<IMaintenanceRequest, MaintenanceRequestRepo>();
 builder.Services.AddScoped<IMaintenanceStatus, MaintenanceStatusRepo>();
 builder.Services.AddScoped<IMaintenancePriority, MaintenancePriorityRepo>();

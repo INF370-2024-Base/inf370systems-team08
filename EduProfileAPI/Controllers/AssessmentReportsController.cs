@@ -22,5 +22,12 @@ namespace EduProfileAPI.Controllers
             var report = await _assessmentsReportsRepo.GetAssessmentAverageReport();
             return Ok(report);
         }
+
+        [HttpGet("highest-mark-report")]
+        public async Task<ActionResult<List<AssessmentHighestMarkReportViewModel>>> GetAssessmentHighestMarkReport()
+        {
+            var report = await _assessmentsReportsRepo.GetAssessmentHighestMarkReport();
+            return Ok(report);
+        }
     }
 }
