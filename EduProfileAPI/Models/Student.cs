@@ -20,7 +20,7 @@ namespace EduProfileAPI.Models
         public string EmergencyContactRelationship { get; set; }
         public string EmergencyContactPhoneNum { get; set; }
 
-
+        public ICollection<StudentSubject> StudentSubjects { get; set; }
 
     }
 }

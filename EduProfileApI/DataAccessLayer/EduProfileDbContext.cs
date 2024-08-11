@@ -44,6 +44,8 @@ namespace EduProfileAPI.DataAccessLayer
         public DbSet<RemedialFile> RemedialFile { get; set;}
         public DbSet<RemedialActivity> RemedialActivity{ get; set; }
         public DbSet<StudentIncident> StudentIncident { get; set; }
+        public DbSet<IncidentType> IncidentType { get; set; }
+        public DbSet<StudentSubject> StudentSubject { get; set; }
         public DbSet<DisciplinaryType> DisciplinaryType { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -64,6 +66,41 @@ namespace EduProfileAPI.DataAccessLayer
                 .HasOne<Assesment>()
                 .WithMany()
                 .HasForeignKey(am => am.AssesmentId);
+
+            modelBuilder.Entity<Student>()
+                .HasOne<Parent>()
+                .WithMany()
+                .HasForeignKey(p => p.ParentId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Student>()
+                .HasOne<Grade>()
+                .WithMany()
+                .HasForeignKey(s => s.GradeId)
+                .OnDelete(DeleteBehavior.Restrict);  // Prevent grade deletion if associated with students
+
+            modelBuilder.Entity<Student>()
+                .HasOne<Class>()
+                .WithMany()
+                .HasForeignKey(s => s.ClassId)
+                .OnDelete(DeleteBehavior.Restrict);  // Prevent class deletion if associated with students
+
+            modelBuilder.Entity<StudentSubject>()
+                .HasKey(ss => ss.StudentSubjectId);  // Now using a single primary key
+
+            // Keep the foreign keys
+            modelBuilder.Entity<StudentSubject>()
+                .HasOne(ss => ss.Student)
+                .WithMany(s => s.StudentSubjects)
+                .HasForeignKey(ss => ss.StudentId);
+
+            modelBuilder.Entity<StudentSubject>()
+                .HasOne(ss => ss.Subject)
+                .WithMany(s => s.StudentSubjects)
+                .HasForeignKey(ss => ss.SubjectId);
+
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

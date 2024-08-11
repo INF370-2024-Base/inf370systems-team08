@@ -1,65 +1,73 @@
 ﻿using EduProfileAPI.Repositories.Implementation;
+using EduProfileAPI.Repositories.Interfaces;
+using EduProfileAPI.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Cryptography.Pkcs;
 
 namespace EduProfileAPI.Controllers
 {
-    public class AssignStudentController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class AssignStudentController : ControllerBase
     {
-        private AssignStudentRepo _repository;
+        private readonly IAssignStudentRepo _repository;
 
-        public AssignStudentController(AssignStudentRepo repository)
+        public AssignStudentController(IAssignStudentRepo assignRepository)
         {
-            _repository = repository;
+            _repository = assignRepository;
         }
 
-        [HttpGet("GetAllStudents")]
-        public async Task<IActionResult> GetAllStudents()
-        {
-            var students = await _repository.GetAllStudentsAsync();
-            return Ok(students);
-        }
-
-        [HttpGet("GetAllClasses")]
-        public async Task<IActionResult> GetAllClasses()
-        {
-            var classes = await _repository.GetAllClassesAsync();
-            return Ok(classes);
-        }
-
-        [HttpGet("GetAllGrades")]
-        public async Task<IActionResult> GetAllGrades()
-        {
-            var grades = await _repository.GetAllGradesAsync();
-            return Ok(grades);
-        }
-
-        [HttpGet("GetAllSubjects")]
-        public async Task<IActionResult> GetAllSubjects()
-        {
-            var subjects = await _repository.GetAllSubjectAsync();
-            return Ok(subjects);
-        }
 
         [HttpPut("AssignStudentToClass")]
-        public async Task<IActionResult> AssignStudentToClass(Guid studentId, Guid classId, Guid gradeId)
+        public async Task<IActionResult> AssignStudentToClass(Guid studentId, Guid classId)
         {
-            await _repository.AssignStudentToClassAsync(studentId, classId, gradeId);
+            await _repository.AssignStudentToClassAsync(studentId, classId);
             return Ok();
 
         }
 
-        //[HttpPut("AssignStudentToSubject")]
-        //public async Task<IActionResult> AssignStudentToSubject(Guid studentId, Guid subjectId)
-        //{
-        //    await _repository.AssignStudentToSubjectAsync(studentId, subjectId);
-        //    return Ok();
-        //}
+        [HttpPost("AssignStudentToSubject")]
+        public async Task<IActionResult> AssignStudentToSubject([FromBody] StudentSubjectVM request)
+        {
+            var studentsub  = new StudentSubjectVM { StudentId = request.StudentId, SubjectId = request.SubjectId, GradeId = request.GradeId };
+
+            try
+            {
+                await _repository.AssignStudentToSubjectAsync(studentsub);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Internal Server Error: {ex.Message}");
+            }
+        }
 
         [HttpPut("AssignStudentToGrade")]
         public async Task<IActionResult> AssignStudentToGrade(Guid studentId, Guid gradeId)
         {
             await _repository.AssignStudentToGradeAsync(studentId, gradeId);
             return Ok();
+        }
+
+        [HttpGet("GetStudentsByClassId/{classId}")]
+        public async Task<IActionResult> GetStudentsByClassId(Guid classId)
+        {
+            var students = await _repository.GetStudentsByClassIdAsync(classId);
+            return Ok(students);
+        }
+
+        [HttpGet("GetStudentsByGradeId/{gradeId}")]
+        public async Task<IActionResult> GetStudentsByGradeId(Guid gradeId)
+        {
+            var students = await _repository.GetStudentsByGradeIdAsync(gradeId);
+            return Ok(students);
+        }
+
+        [HttpGet("GetStudentsBySubjectId/{subjectId}")]
+        public async Task<IActionResult> GetStudentsBySubjectId(Guid subjectId)
+        {
+            var students = await _repository.GetStudentsBySubjectIdAsync(subjectId);
+            return Ok(students);
         }
     }
 }
