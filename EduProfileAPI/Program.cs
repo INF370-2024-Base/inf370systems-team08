@@ -98,6 +98,7 @@ builder.Services.AddScoped<IStudentDocRepository, StudentDocRepository>();
 builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 builder.Services.AddScoped<IStudentAnnouncementRepo, StudentAnnouncementRepo>();
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+builder.Services.AddScoped<IEmployeeStatusRepository, EmployeeStatusRepository>();
 builder.Services.AddScoped<IAssignTeacherToClassRepository, AssignTeacherToClassRepository>();
 builder.Services.AddScoped<IStudentIncidentRepository, StudentIncidentRepository>();
 builder.Services.AddScoped<IAssignStudentRepo, AssignStudentRepo>();
