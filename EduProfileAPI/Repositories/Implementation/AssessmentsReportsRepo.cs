@@ -32,6 +32,7 @@ namespace EduProfileAPI.Repositories.Implementation
                     AssesmentId = x.Assessment.AssesmentId,
                     AssesmentName = x.Assessment.AssesmentName,
                     AssesmentDate = x.Assessment.AssesmentDate,
+                    Marks = x.Marks.ToList(),
                     AverageMark = x.Marks.Any() ? x.Marks.Average(m => m.MarkAchieved) : 0
                 })
                 .ToListAsync();
@@ -63,12 +64,14 @@ namespace EduProfileAPI.Repositories.Implementation
                         Student = student
                     }
                 )
-                .GroupBy(x => new { x.Assessment.SubjectId, x.Assessment.AssesmentId, x.Assessment.AssesmentName })
+                .GroupBy(x => new { x.Assessment.SubjectId, x.Assessment.AssesmentId, x.Assessment.AssesmentName, x.Assessment.AchievableMark })
                 .Select(g => new AssessmentHighestMarkReportViewModel
                 {
                     SubjectId = g.Key.SubjectId,
                     AssesmentId = g.Key.AssesmentId,
                     AssesmentName = g.Key.AssesmentName,
+                    Total = g.Key.AchievableMark,
+                    Marks = g.Select(x => x.Mark).ToList(),  // Ensure this is a List<AssesmentMark>
                     HighestMark = g.Max(x => x.Mark.MarkAchieved),
                     StudentFirstName = g.Where(x => x.Mark.MarkAchieved == g.Max(m => m.Mark.MarkAchieved)).Select(s => s.Student.FirstName).FirstOrDefault(),
                     StudentLastName = g.Where(x => x.Mark.MarkAchieved == g.Max(m => m.Mark.MarkAchieved)).Select(s => s.Student.LastName).FirstOrDefault()
