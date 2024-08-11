@@ -1,0 +1,1098 @@
+<h1>Login</h1>
+
+<h3>Follow these steps to log in to your account:</h3>
+<ul>
+    <li>Navigate to the Login Page</li>
+    <li>Open your web browser and go to the EduProfile website.</li>
+    <li>Enter Your Credentials</li>
+    <li>In the login form, enter your Username (Email Address) in the first field.</li>
+    <li>In the second field, enter your Password.</li>
+    <li>Submit the Form</li>
+    <li>Click on the “Login” button below the form.</li>
+    <li>If your credentials are correct, you will be directed to the Two-Factor Authentication screen.</li>
+</ul>
+
+<h3>Two-Factor Authentication</h3>
+<ul>
+    <li>An email will be sent with the verification code.</li>
+    <li>Enter the verification code in the textbox and click the “Verify” button.</li>
+    <li>If your credentials are correct, you will be directed to the admin home page.</li>
+</ul>
+
+<h3>Forgot Your Password?</h3>
+<ul>
+    <li>If you have forgotten your password, click on the “Forgot Password?” link below the login form.</li>
+    <li>Follow the prompts to reset your password.</li>
+</ul>
+
+<h3>Update Password</h3>
+<ul>
+    <li>If you need to update your password, click on the “Update Password” link below the login form.</li>
+    <li>Follow the prompts to update your password.</li>
+</ul>
+
+
+<h2>Logout</h2>
+
+<p>To log out of your account, follow these steps:</p>
+
+<h3>Locate the Side Navbar</h3>
+<p>While logged in, look at the left side of the screen to find the Side Navbar.</p>
+
+<h3>Find the Logout Button</h3>
+<p>The last link on the Side Navbar is the “Logout” button.</p>
+
+<h3>Click on Logout</h3>
+<p>Click the “Logout” button to immediately log out of your account.</p>
+
+<h3>Logout Confirmation</h3>
+<p>After clicking the “Logout” button, you will be logged out and redirected to the login page.</p>
+
+<h3>Security Tip:</h3>
+<p><strong>If you are using a shared or public computer, make sure to close your web browser after logging out to keep your account secure.</strong></p>
+
+
+<h2>Update Password</h2>
+
+<p>If you need to change your password, follow these steps:</p>
+
+<h3>Go to the Login Page</h3>
+<p>Open your web browser and navigate to the login page of the EduProfile website.</p>
+
+<h3>Select “Update Password”</h3>
+<p>On the login page, locate the “Update Password” link below the “Login” button. Click on “Update Password” to open the password update form.</p>
+
+<h3>Fill in the Required Information</h3>
+<ul>
+    <li>Enter your Email address in the first field.</li>
+    <li>In the second field, input your Old Password.</li>
+    <li>In the third field, type your New Password.</li>
+    <li>Re-enter the new password in the Confirm New Password field to confirm it.</li>
+</ul>
+
+<h3>Update Your Password</h3>
+<p>After completing all the fields and ensuring that your password meets the required strength criteria, click the “Update Password” button at the bottom of the form.</p>
+
+<h3>Confirmation</h3>
+<p>If the update is successful, you will receive a confirmation message. You can then log in with your new password.</p>
+
+<h3>Security Tip:</h3>
+<p><strong>Make sure your new password is strong, containing a mix of uppercase and lowercase letters, numbers, and special characters.</strong></p>
+
+ 
+
+<h2>Forgot Password</h2>
+
+<p>If you’ve forgotten your password, follow these steps to reset it:</p>
+
+<h3>Go to the Login Page</h3>
+<p>Navigate to the login page of the EduProfile website.</p>
+
+<h3>Select 'Forgot Password?'</h3>
+<p>On the login page, click the “Forgot Password?” link located below the “Login” button.</p>
+
+<h3>Enter Your Email Address</h3>
+<p>You will be directed to a page where you can reset your password. Enter the email address associated with your account in the provided field.</p>
+
+<h3>Submit Your Request</h3>
+<p>Click the “Continue” button. An email with a link to reset your password will be sent to the provided email address.</p>
+
+<h3>Check Your Email</h3>
+<p>Open your email inbox and look for a message from EduProfile. Click the link “here” in the instructions to reset your password.</p>
+
+<h3>Reset Your Password</h3>
+<p>After clicking the link in your email, you will be redirected to a page where you can create a new password. Enter your new password in the “New Password” field and confirm it in the “Confirm New Password” field. Click the “Reset Password” button to update your password.</p>
+
+<h3>Return to Login</h3>
+<p>Once you’ve successfully reset your password, return to the login page and log in with your new password.</p>
+
+<h3>Security Tip:</h3>
+<p><strong>Ensure your new password is strong and unique to keep your account secure.</strong></p>
+
+ 
+<h2>Remedial Files</h2>
+
+<h3>Overview</h3>
+<p>Remedial Files in the EduProfile system are used to manage additional educational materials or activities designated for specific subjects to assist students in improving their understanding or performance. These files can be associated with various subjects and can have multiple remedial activities linked to them.</p>
+
+<h3>Navigating to Remedial Files</h3>
+
+<h4>Accessing the Remedial Files Section</h4>
+<p>Locate and click on the Student tab in the navigation menu.</p>
+
+<h4>Navigating from the Student's Home Page</h4>
+<p>On the Student's Home Page, click the “Remedial Files” button. This action will direct you to the Remedial Files page where you can view and manage all remedial files.</p>
+
+<h3>Viewing Remedial Files</h3>
+<p>The Remedial Files page will display all existing files. Each file card will show the title, description, and the date it was created.</p>
+<p><strong>Utilizing the Search Bar:</strong> A search bar is available on the Remedial Files page, allowing you to quickly find files by entering the title of the remedial file you are looking for. This feature helps in efficiently locating specific files without the need to scroll through the entire list.</p>
+
+<h3>Managing Remedial Files</h3>
+
+<h4>Adding a New Remedial File</h4>
+<h5>Initiating the Add Process</h5>
+<p>Click the “Add File” button located at the bottom of the Remedial Files page.</p>
+
+<h5>Filling Out File Details</h5>
+<p>In the modal, select the employee responsible for the file, the subject, and enter the title and description of the remedial file. The date will automatically default to the current date.</p>
+
+<h5>Saving the New File</h5>
+<p>Click “Add” to save the new remedial file or “Cancel” to discard changes.</p>
+
+<h4>Editing an Existing Remedial File</h4>
+<h5>Selecting a File to Edit</h5>
+<p>Click the “Edit” button on the remedial file you wish to modify.</p>
+
+<h5>Updating File Details</h5>
+<p>Modify the employee name, subject name, title, and description as needed. The creation date will be displayed but will not be able to change.</p>
+
+<h5>Applying Changes</h5>
+<p>Click “Update” to save changes or “Cancel” to leave the file unchanged.</p>
+
+<h4>Deleting a Remedial File</h4>
+<h5>Initiating Deletion</h5>
+<p>Click the “Delete” button on the remedial file you wish to remove.</p>
+
+<h5>Confirming Deletion</h5>
+<p>A confirmation dialog will appear. Confirm the deletion by clicking “Yes” or cancel by clicking “Cancel”.</p>
+<p><strong>Note:</strong> Deleting a remedial file will also remove all associated remedial activities.</p>
+
+<h3>Viewing and Managing Remedial Activities</h3>
+
+<h4>Accessing Activities</h4>
+<p>Click “View Activities” on a remedial file to see all linked activities. This takes you to a page listing all activities related to that remedial file, where you can add, edit, or delete activities.</p>
+
+<h4>Viewing and Downloading Files</h4>
+<h5>Interacting with Files</h5>
+<p>Within the expanded accordion, locate the View and Download buttons next to each listed file or activity. Click View to open and review the file directly within the system. Click Download to save the file locally on your device for offline access.</p>
+
+<h4>Best Practices</h4>
+<p><strong>Regular Updates:</strong> Regularly update remedial files and activities to ensure they remain relevant and effective.</p>
+<p><strong>Clear Descriptions:</strong> Provide clear and detailed descriptions for each file and activity to facilitate easy understanding and usage.</p>
+
+<h4>Troubleshooting</h4>
+<p><strong>Missing Files or Activities:</strong> If any files or activities are missing or not displaying correctly, refresh the website.</p>
+
+ 
+<h2>Remedial Activities</h2>
+
+<h3>Overview</h3>
+<p>Remedial Activities are designed to complement the Remedial Files, offering specific tasks, resources, or assignments related to various subjects. These activities help students to improve their knowledge and skills in particular areas.</p>
+
+<h3>Navigating to Remedial Activities</h3>
+
+<h4>Accessing Remedial Activities</h4>
+<p>From any Remedial Files page, click the “View Activities” button on the file card to access all activities related to that file.</p>
+
+<h3>Managing Remedial Activities</h3>
+
+<h4>Viewing Remedial Activities</h4>
+<p>The Remedial Activities page lists all activities for a specific remedial file. Each entry includes the title of the activity, a brief description, and the date created.</p>
+<p><strong>Utilizing the Search Bar:</strong> Use the search bar to quickly find specific activities by title or content description.</p>
+
+<h4>Adding a New Remedial Activity</h4>
+<h5>Initiating the Addition</h5>
+<p>Click the “Add New Remedial Activity” button located at the bottom of the Remedial Activities page.</p>
+
+<h5>Filling Out Activity Details</h5>
+<p>In the modal, fill out the activity title, description, attach relevant files, and set the date. Select the attachment type and provide a name for the attachment if applicable.</p>
+
+<h5>Saving the New Activity</h5>
+<p>Click “Add” to save the new activity or “Cancel” to discard the entry.</p>
+
+<h4>Editing an Existing Remedial Activity</h4>
+<h5>Selecting an Activity to Edit</h5>
+<p>Click the “Edit” button next to the activity you wish to modify.</p>
+
+<h5>Updating Activity Details</h5>
+<p>Update the title, description, attachment, and date as necessary.</p>
+
+<h5>Applying Changes</h5>
+<p>Click “Save Changes” to update the activity or “Cancel” to leave the activity unchanged.</p>
+
+<h4>Deleting a Remedial Activity</h4>
+<h5>Initiating Deletion</h5>
+<p>Click the “Delete” button next to the activity you wish to remove.</p>
+
+<h5>Confirming Deletion</h5>
+<p>Confirm the deletion in the dialog box to permanently remove the activity.</p>
+
+<h4>Best Practices</h4>
+<p><strong>Consistent Updates:</strong> Regularly review and update activities to ensure they remain relevant and effective for student needs.</p>
+<p><strong>Clear Descriptions:</strong> Provide detailed descriptions for each activity to aid understanding and ensure proper use by students and teachers.</p>
+
+<h4>Troubleshooting</h4>
+<p><strong>Issues Accessing Activities:</strong> If you encounter problems accessing or viewing activities, refresh the page, and check your network connection.</p>
+
+ 
+<h2>Managing Employee Profiles</h2>
+<p>This section provides guidance for admin users on how to manage employee profiles within the EduProfile system. Only admin users can perform these actions.</p>
+
+<h3>Viewing Employees</h3>
+<p>Navigate to the admin dashboard by going to <code>adminhome > Employees</code>. All Employees will be listed here. You can use the search bar to quickly find a specific employee profile.</p>
+
+<h3>Creating a New Employee Profile</h3>
+<ol>
+    <li>Go to the 'Employee' section in the admin dashboard.</li>
+    <li>Click on the '+' button.</li>
+    <li>Fill in the form with the employee's status, name, surname, date of birth, gender, phone number, address, salary, and ID number.</li>
+    <li>Click 'Add Employee' to add the profile to the system.</li>
+</ol>
+
+<h3>Updating an Employee</h3>
+<ol>
+    <li>In the 'Employee' section, find the profile you want to edit and click on the 'Edit' button next to it.</li>
+    <li>Modify the details in the form as required.</li>
+    <li>Click 'Update' to save the changes.</li>
+</ol>
+
+<h3>Deleting an Employee</h3>
+<ol>
+    <li>Locate the Employee you wish to remove in the list of employees.</li>
+    <li>Click on the 'Delete' button next to the employee.</li>
+    <li>Confirm the deletion to permanently remove the employee profile from the system.</li>
+</ol>
+
+<p><strong>Note:</strong> Only admin users can manage employee profiles.</p>
+
+ 
+<h2>Managing Student Profiles</h2>
+<p>This section provides guidance for admin users on how to manage student profiles within the EduProfile system. Only admin users can perform these actions.</p>
+
+<h3>Viewing Student Profiles</h3>
+<p>Navigate to the Students Section:</p>
+<ol>
+    <li>From the admin dashboard, go to <code>Admin > Students</code>.</li>
+    <li>All student profiles will be listed here. You can use the search bar to quickly find a specific student by name, ID, or other identifiers.</li>
+</ol>
+
+<h3>Creating a New Student Profile</h3>
+<ol>
+    <li>Go to the 'Students' section in the admin dashboard.</li>
+    <li>Click on the '+' Button.</li>
+    <li>Click the + New Student button to open the student creation form.</li>
+</ol>
+
+<h4>Fill in the Student Details</h4>
+<ul>
+    <li>First Name</li>
+    <li>Last Name</li>
+    <li>Date of Birth</li>
+    <li>Gender</li>
+    <li>Grade</li>
+    <li>Class</li>
+    <li>Parent/Guardian Information</li>
+    <li>Address</li>
+    <li>Contact Information</li>
+    <li>Emergency Contact Details</li>
+    <li>Admission Number</li>
+</ul>
+
+<h4>Save the Student Profile</h4>
+<p>Click Add Student to save the student profile to the system.</p>
+
+<h3>Updating an Existing Student Profile</h3>
+<ol>
+    <li>Find the Student Profile to Update:</li>
+    <li>In the Students section, locate the student profile you want to update.</li>
+    <li>Click on the 'Edit' Button.</li>
+    <li>Click the Edit button next to the student profile you wish to modify.</li>
+</ol>
+
+<h4>Update the Student Details</h4>
+<p>Modify the student details as needed in the provided form.</p>
+
+<h4>Save the Changes</h4>
+<p>Click Update to save the updated student profile.</p>
+
+<h3>Deleting a Student Profile</h3>
+<ol>
+    <li>Locate the Student Profile to Delete:</li>
+    <li>In the list of student profiles, find the student you want to delete.</li>
+    <li>Click on the 'Delete' Button.</li>
+    <li>Click the Delete button next to the student profile.</li>
+</ol>
+
+<h4>Confirm the Deletion</h4>
+<p>Confirm the deletion in the dialog box to permanently remove the student profile from the system.</p>
+<p><strong>Note:</strong> Deleting a student profile is irreversible and will remove all related data from the system, including academic records and associated information. Ensure that the profile is no longer needed before proceeding with deletion.</p>
+
+ 
+<h2>Managing Student Incidents</h2>
+<p>This section provides guidance for admin users on how to manage student incidents within the EduProfile system. Only admin users can perform these actions.</p>
+
+<h3>Viewing Student Incidents</h3>
+<p>Navigate to the Incidents Section:</p>
+<ol>
+    <li>From the admin dashboard, go to <code>Admin > Students > Incidents</code>.</li>
+    <li>All recorded incidents will be listed here. You can use the search bar to quickly find a specific incident by student name, date, or type.</li>
+</ol>
+
+<h3>Creating a New Student Incident</h3>
+<ol>
+    <li>Go to the 'Incidents' section in the admin dashboard.</li>
+    <li>Click on the '+' Button.</li>
+    <li>Click the + New Incident button to open the incident creation form.</li>
+</ol>
+
+<h4>Fill in the Incident Details</h4>
+<ul>
+    <li>Incident Type (e.g., bullying, tardiness, rule violation)</li>
+    <li>Student Name or ID</li>
+    <li>Date and Time of Incident</li>
+    <li>Location of Incident</li>
+    <li>Description of Incident</li>
+    <li>Reported By (e.g., teacher or staff member)</li>
+    <li>Attachments (e.g., evidence, reports)</li>
+</ul>
+
+<h4>Save the Incident Record</h4>
+<p>Click Add Incident to save the incident record to the system.</p>
+
+<h3>Updating an Existing Student Incident</h3>
+<ol>
+    <li>Find the Incident to Update:</li>
+    <li>In the Incidents section, locate the incident record you want to update.</li>
+    <li>Click on the 'Edit' Button.</li>
+    <li>Click the Edit button next to the incident you wish to modify.</li>
+</ol>
+
+<h4>Update the Incident Details</h4>
+<p>Modify the details as needed in the provided form.</p>
+
+<h4>Save the Changes</h4>
+<p>Click Update to save the updated incident record.</p>
+
+<h3>Deleting a Student Incident</h3>
+<ol>
+    <li>Locate the Incident to Delete:</li>
+    <li>In the list of incidents, find the incident record you want to delete.</li>
+    <li>Click on the 'Delete' Button.</li>
+    <li>Click the Delete button next to the incident.</li>
+</ol>
+
+<h4>Confirm the Deletion</h4>
+<p>Confirm the deletion in the dialog box to permanently remove the incident record from the system.</p>
+<p><strong>Note:</strong> Deleting an incident record is irreversible and will remove all related data from the system. Ensure that the record is no longer needed before proceeding with deletion.</p>
+
+ 
+<h2>Viewing and Assigning a Teacher to a Class</h2>
+<p>This section provides guidance for admin users on how to view a teacher's profile and assign the teacher to a class within the EduProfile system. Only admin users and principals can perform these actions.</p>
+
+<h3>Viewing a Teacher's Profile</h3>
+<ol>
+    <li>Navigate to the Teachers Section:</li>
+    <li>From the admin dashboard, go to <code>Admin > Teachers</code>.</li>
+    <li>A list of all teachers will be displayed. You can use the search bar to quickly find a specific teacher by surname or other identifiers.</li>
+</ol>
+
+<h4>Select the Teacher's Profile</h4>
+<p>Click on the name of the teacher you wish to view. The teacher's profile will open, displaying details such as:</p>
+<ul>
+    <li>Full Name</li>
+    <li>Subjects Taught</li>
+    <li>Assigned Classes</li>
+    <li>Contact Information</li>
+    <li>Employment Status</li>
+    <li>Additional Notes</li>
+</ul>
+
+<h3>Assigning a Teacher to a Class</h3>
+<ol>
+    <li>Navigate to the Assign Teacher to Class Screen:</li>
+    <li>From the admin dashboard, go to <code>Admin > Assign Teacher to Class</code>.</li>
+</ol>
+
+<h4>Open the Assign Teacher Modal</h4>
+<p>Click on the Assign Teacher button to open the modal for assigning a teacher to a class.</p>
+
+<h4>Enter the Teacher's Surname</h4>
+<p>In the modal, enter the surname of the teacher in the search field. The system will auto-select the teacher based on the surname entered.</p>
+
+<h4>Select the Teacher and Class</h4>
+<p>Once the teacher is selected, choose the class to which the teacher will be assigned from the dropdown menu.</p>
+
+<h4>Assign the Teacher</h4>
+<p>Click the Assign button to assign the teacher to the selected class.</p>
+
+<h4>Success Message</h4>
+<p>A success message will be displayed confirming that the teacher has been successfully assigned to the class.</p>
+
+<p><strong>Note:</strong> Ensure that the correct teacher and class are selected before confirming the assignment.</p>
+
+ 
+<h2>Contacting a Student's Parent</h2>
+<p>This section provides guidance for admin users and teachers on how to contact a student’s parent through the EduProfile system using WhatsApp.</p>
+
+<h3>Contacting a Parent via WhatsApp</h3>
+
+<h4>Navigate to the Contact Parent Section</h4>
+<ol>
+    <li>From the admin or teacher dashboard, go to <code>Admin/Teacher > Students > Contact Parent</code>.</li>
+</ol>
+
+<h4>Enter the Student's Surname</h4>
+<ol>
+    <li>The system will prompt you to enter the surname of the student you wish to contact.</li>
+    <li>Input the surname in the provided field.</li>
+    <li>The system will return a list of students that match the surname.</li>
+</ol>
+
+<h4>Select the Student</h4>
+<p>From the list of students, select the specific student you want to contact.</p>
+
+<h4>Compose the Message</h4>
+<p>After selecting the parent, the system will provide a field to input your message. Type the message you wish to send.</p>
+
+<h4>Send the Message</h4>
+<p>Click the Send Message button to send the message via WhatsApp to the selected parent.</p>
+
+<h4>Confirmation</h4>
+<p>A confirmation message will appear on the screen, indicating that the message has been successfully sent.</p>
+
+<p><strong>Note:</strong> Ensure that the correct student and parent are selected before sending the message to avoid any communication errors.</p>
+
+ 
+<h2>Creating an Early Release for a Student</h2>
+<p>This section provides guidance for admin users on how to create an early release record for a student within the EduProfile system.</p>
+
+<h3>Creating an Early Release Record</h3>
+
+<h4>Navigate to the Early Release Section</h4>
+<ol>
+    <li>From the admin dashboard, go to <code>Admin > Students > Early Release</code>.</li>
+</ol>
+
+<h4>Enter the Student's Surname</h4>
+<ol>
+    <li>The system will prompt you to enter the surname of the student for whom you wish to create an early release.</li>
+    <li>Input the surname in the provided field.</li>
+    <li>The system will return a list of students that match the surname.</li>
+</ol>
+
+<h4>Select the Student and Request to Make an Early Release Record</h4>
+<ol>
+    <li>From the list of students, select the specific student you want to release early.</li>
+    <li>Select to make an early release record.</li>
+    <li>The system will then open a modal to gather the early release information.</li>
+</ol>
+
+<h4>Input Early Release Information</h4>
+<p>In the modal, provide the necessary early release details, including:</p>
+<ul>
+    <li>Reason for Early Release</li>
+    <li>Release Date and Time</li>
+    <li>Authorized Person for Pickup (if applicable)</li>
+    <li>Additional Notes (if any)</li>
+</ul>
+
+<h4>Create the Early Release Record</h4>
+<ol>
+    <li>After entering the required information, click the Create Early Release button.</li>
+    <li>The system will create the early release record in the database.</li>
+</ol>
+
+<h4>Redirection to Student Profile</h4>
+<p>Once the record is created, the system will automatically redirect you to the Student Profile page, where the early release information will be displayed.</p>
+
+<p><strong>Note:</strong> Ensure that all information provided is accurate before submitting the early release record to maintain proper student tracking and records.</p>
+
+ 
+<h2>Managing Student Disciplinaries</h2>
+<p>This section provides guidance for admin users on how to manage student disciplinaries within the EduProfile system. Only admin users can perform these actions.</p>
+
+<h3>Viewing Student Disciplinaries</h3>
+<ol>
+    <li>Navigate to the Disciplinaries Section:</li>
+    <li>From the admin dashboard, go to <code>Admin > Students > Disciplinaries</code>.</li>
+    <li>All recorded disciplinaries will be listed here. You can use the search bar to quickly find a specific disciplinary by student name, date, or type.</li>
+</ol>
+
+<h3>Creating a New Student Disciplinary</h3>
+<ol>
+    <li>Go to the 'Disciplinaries' section in the admin dashboard.</li>
+    <li>Click on the '+' Button.</li>
+    <li>Click the + New Disciplinary button to open the disciplinary creation form.</li>
+</ol>
+
+<h4>Fill in the Disciplinary Details</h4>
+<p>Complete the form with the necessary details, including:</p>
+<ul>
+    <li>Disciplinary Action (e.g., warning, detention, suspension)</li>
+    <li>Student Name or ID</li>
+    <li>Date and Time of Disciplinary Action</li>
+    <li>Reason for Disciplinary Action</li>
+    <li>Reported By (e.g., teacher or staff member)</li>
+    <li>Attachments (e.g., evidence, reports)</li>
+</ul>
+
+<h4>Save the Disciplinary Record</h4>
+<p>Click Add Disciplinary to save the disciplinary record to the system.</p>
+
+<h3>Updating an Existing Student Disciplinary</h3>
+<ol>
+    <li>Find the Disciplinary to Update:</li>
+    <li>In the Disciplinaries section, locate the disciplinary record you want to update.</li>
+    <li>Click on the 'Edit' Button.</li>
+    <li>Click the Edit button next to the disciplinary you wish to modify.</li>
+</ol>
+
+<h4>Update the Disciplinary Details</h4>
+<p>Modify the details as needed in the provided form.</p>
+
+<h4>Save the Changes</h4>
+<p>Click Update to save the updated disciplinary record.</p>
+
+<h3>Deleting a Student Disciplinary</h3>
+<ol>
+    <li>Locate the Disciplinary to Delete:</li>
+    <li>In the list of disciplinaries, find the disciplinary record you want to delete.</li>
+    <li>Click on the 'Delete' Button.</li>
+    <li>Click the Delete button next to the disciplinary.</li>
+</ol>
+
+<h4>Confirm the Deletion</h4>
+<p>Confirm the deletion in the dialog box to permanently remove the disciplinary record from the system.</p>
+<p><strong>Note:</strong> Deleting a disciplinary record is irreversible and will remove all related data from the system. Ensure that the record is no longer needed before proceeding with deletion.</p>
+
+ <h2>Managing School Events</h2>
+<p>This section provides guidance for admin users on how to manage school events within the EduProfile system. Only admin users can perform these actions.</p>
+
+<h3>Viewing School Events</h3>
+<ol>
+    <li>Navigate to the Events Section:</li>
+    <li>From the admin dashboard, go to <code>Admin > Events</code>.</li>
+    <li>All scheduled events will be listed here. You can use the search bar to quickly find a specific event by name or date.</li>
+</ol>
+
+<h3>Creating a New School Event</h3>
+<ol>
+    <li>Go to the 'Events' section in the admin dashboard.</li>
+    <li>Click on the '+' Button.</li>
+    <li>Click the + New Event button to open the event creation form.</li>
+</ol>
+
+<h4>Fill in the Event Details</h4>
+<p>Complete the form with the necessary event details, including:</p>
+<ul>
+    <li>Event Name</li>
+    <li>Event Description</li>
+    <li>Event Date and Time</li>
+    <li>Location</li>
+    <li>Organizer</li>
+    <li>Participants</li>
+    <li>Additional Notes</li>
+</ul>
+
+<h4>Save the Event</h4>
+<p>Click Add Event to save the event to the system.</p>
+
+<h3>Updating an Existing School Event</h3>
+<ol>
+    <li>Find the Event to Update:</li>
+    <li>In the Events section, locate the event you want to update.</li>
+    <li>Click on the 'Edit' Button.</li>
+    <li>Click the Edit button next to the event you wish to modify.</li>
+</ol>
+
+<h4>Update the Event Details</h4>
+<p>Modify the event details as needed in the provided form.</p>
+
+<h4>Save the Changes</h4>
+<p>Click Update to save the updated event details.</p>
+
+<h3>Deleting a School Event</h3>
+<ol>
+    <li>Locate the Event to Delete:</li>
+    <li>In the list of events, find the event you want to delete.</li>
+    <li>Click on the 'Delete' Button.</li>
+    <li>Click the Delete button next to the event.</li>
+</ol>
+
+<h4>Confirm the Deletion</h4>
+<p>Confirm the deletion in the dialog box to permanently remove the event from the system.</p>
+<p><strong>Note:</strong> Deleting an event is irreversible and will remove all related data from the system. Ensure that the event is no longer needed before proceeding with deletion.</p>
+
+ 
+<h2>Managing Maintenance Requests</h2>
+<p>This section provides guidance for admin users on how to manage maintenance requests within the EduProfile system. Only admin users can perform these actions.</p>
+
+<h3>Viewing Maintenance Requests</h3>
+<ol>
+    <li>Navigate to the Maintenance Requests Section:</li>
+    <li>From the admin dashboard, go to <code>Admin > Maintenance Requests</code>.</li>
+    <li>All maintenance requests will be listed here. You can use the search bar to quickly find a specific request by type, priority, or status.</li>
+</ol>
+
+<h3>Creating a New Maintenance Request</h3>
+<ol>
+    <li>Go to the 'Maintenance Requests' section in the admin dashboard.</li>
+    <li>Click on the '+' Button.</li>
+    <li>Click the + New Maintenance Request button to open the request creation form.</li>
+</ol>
+
+<h4>Select the Priority and Type</h4>
+<p>The system will prompt you to select the priority (e.g., High, Medium, Low) and the type (e.g., Electrical, Plumbing, General Repair) of the maintenance request.</p>
+
+<h4>Input the Requested Details</h4>
+<p>Fill out the form with the necessary details, including:</p>
+<ul>
+    <li>Description of the Issue</li>
+    <li>Location of the Problem</li>
+    <li>Requested Completion Date</li>
+    <li>Additional Notes (if any)</li>
+</ul>
+
+<h4>Save the Maintenance Request</h4>
+<p>Click the Save button to capture the maintenance request. The system will save the new maintenance request to the Maintenance Request Entity.</p>
+
+<h4>Confirmation</h4>
+<p>A message will be displayed confirming that the maintenance request has been successfully added.</p>
+
+<h3>Updating an Existing Maintenance Request</h3>
+<ol>
+    <li>Find the Maintenance Request to Update:</li>
+    <li>In the Maintenance Requests section, locate the request you want to update.</li>
+    <li>Click on the 'Edit' Button.</li>
+    <li>Click the Edit button next to the maintenance request you wish to modify.</li>
+</ol>
+
+<h4>Update the Request Details</h4>
+<p>Modify the details as needed in the provided form, including any changes to priority, type, description, or other relevant information.</p>
+
+<h4>Save the Changes</h4>
+<p>Click Update to save the updated maintenance request.</p>
+
+<h4>Confirmation</h4>
+<p>A message will be displayed confirming that the maintenance request has been successfully updated.</p>
+
+<h3>Deleting a Maintenance Request</h3>
+<ol>
+    <li>Locate the Maintenance Request to Delete:</li>
+    <li>In the list of maintenance requests, find the request you want to delete.</li>
+    <li>Click on the 'Delete' Button.</li>
+    <li>Click the Delete button next to the maintenance request.</li>
+</ol>
+
+<h4>Confirm the Deletion</h4>
+<p>Confirm the deletion in the dialog box to permanently remove the maintenance request from the system.</p>
+
+<h4>Confirmation</h4>
+<p>A message will be displayed confirming that the maintenance request has been successfully deleted.</p>
+
+<h3>Best Practices</h3>
+<ul>
+    <li><strong>Timely Updates:</strong> Keep maintenance requests up-to-date to ensure that all issues are tracked and resolved promptly.</li>
+    <li><strong>Accurate Record Keeping:</strong> Ensure all details are accurately recorded in the maintenance requests to maintain clear communication with maintenance teams.</li>
+</ul>
+
+ 
+<h2>Generating and Managing Reports</h2>
+
+<h3>Overview</h3>
+<p>The Reports section of the EduProfile system provides a variety of reports that cover different aspects of the educational environment, including maintenance requests, employee details, and other custom reports. These reports help administrators and staff monitor, analyze, and make informed decisions based on the data available.</p>
+
+<h3>Accessing Reports</h3>
+
+<h4>Navigating to Reports</h4>
+<ol>
+    <li>From the EduProfile dashboard, click on the “Reports” link in the side navigation bar to access the reports page.</li>
+</ol>
+
+<h3>Generating Reports</h3>
+
+<h4>Selecting a Report</h4>
+<p>The Reports page displays a series of icons, each representing a different type of report such as "Maintenance Request Report," "Generate Employee Report," and others. Click on any report icon that you wish to generate. This action will initiate the generation of the selected report.</p>
+
+<h4>Viewing and Exporting Reports</h4>
+
+<h5>Viewing the Report</h5>
+<p>Once a report is generated, it will be displayed on your screen. You can review the details and verify the data presented.</p>
+
+<h5>Exporting the Report</h5>
+<p>If you need to save the report for offline access or for distribution, look for an option to export the report and click “Export”. The reports can be exported in PDF format.</p>
+
+<h3>Best Practices</h3>
+<ul>
+    <li><strong>Regular Reviews:</strong> Regularly generate and review reports to stay up-to-date with the various aspects of the school's operations.</li>
+    <li><strong>Data Analysis:</strong> Use the reports for comprehensive data analysis to improve decision-making processes and operational efficiency.</li>
+</ul>
+
+ 
+<h2>Assigning a Maintenance Request to a Maintenance Worker</h2>
+<p>This section provides guidance for admin users on how to assign a maintenance request to a maintenance worker within the EduProfile system.</p>
+
+<h3>Assigning a Maintenance Request</h3>
+
+<h4>Navigate to the Maintenance Requests Section</h4>
+<ol>
+    <li>From the admin dashboard, go to <code>Admin > Maintenance > Requests</code>.</li>
+    <li>Locate the specific maintenance request that you want to assign.</li>
+</ol>
+
+<h4>Open the Assign Maintenance Worker Modal</h4>
+<p>Click on the Assign Worker button next to the maintenance request you wish to assign. This will open a modal for assigning the maintenance request.</p>
+
+<h4>Select the Maintenance Worker</h4>
+<p>In the modal, you will see a dropdown list populated with employee names retrieved from the Employee Entity. Select the name of the maintenance worker to whom the request will be assigned.</p>
+
+<h4>Assign the Maintenance Request</h4>
+<p>Once the maintenance worker is selected, click the Assign Maintenance Request button.</p>
+
+<h4>Success Message</h4>
+<p>A success message will be displayed, confirming that the maintenance request has been successfully assigned to the selected maintenance worker.</p>
+
+<p><strong>Note:</strong> Ensure that the correct maintenance worker is selected before assigning the request to ensure that the task is directed to the appropriate individual.</p>
+
+ 
+<h2>Managing Maintenance Procedures (CRUD)</h2>
+<p>This section provides guidance for admin users on how to manage maintenance procedures within the EduProfile system. Remember that a maintenance procedure can only be created after a maintenance request exists.</p>
+
+<h3>Viewing Maintenance Procedures</h3>
+<ol>
+    <li>Navigate to the Maintenance Procedures Section:</li>
+    <li>From the admin dashboard, go to <code>Admin > Maintenance > Procedures</code>.</li>
+    <li>All existing maintenance procedures will be listed here. Use the search bar to find a specific procedure by request, description, or other identifiers.</li>
+</ol>
+
+<h3>Creating a New Maintenance Procedure</h3>
+
+<h4>Ensure a Maintenance Request Exists</h4>
+<p>Before creating a procedure, ensure that the related maintenance request has been created.</p>
+
+<h4>Click on the 'Create Maintenance Procedure' Button</h4>
+<p>Follow the steps outlined in the “Creating a New Maintenance Procedure” section to add the procedure.</p>
+
+<h3>Updating an Existing Maintenance Procedure</h3>
+<ol>
+    <li>Find the Maintenance Procedure to Update:</li>
+    <li>In the Maintenance Procedures section, locate the procedure you want to update.</li>
+    <li>Click on the 'Edit' Button.</li>
+    <li>Click the Edit button next to the maintenance procedure you wish to modify.</li>
+</ol>
+
+<h4>Update the Procedure Details</h4>
+<p>Modify the details as needed in the provided form, including any changes to the procedure description, steps, tools, or estimated time.</p>
+
+<h4>Save the Changes</h4>
+<p>Click Update to save the updated procedure.</p>
+
+<h4>Confirmation and Success Message</h4>
+<p>A success message will be displayed, confirming that the procedure has been successfully updated.</p>
+
+<h3>Deleting a Maintenance Procedure</h3>
+<ol>
+    <li>Locate the Maintenance Procedure to Delete:</li>
+    <li>In the list of maintenance procedures, find the procedure you want to delete.</li>
+    <li>Click on the 'Delete' Button.</li>
+    <li>Click the Delete button next to the maintenance procedure.</li>
+</ol>
+
+<h4>Confirm the Deletion</h4>
+<p>Confirm the deletion in the dialog box to permanently remove the procedure from the system.</p>
+
+<h4>Success Message</h4>
+<p>A success message will be displayed, confirming that the procedure has been successfully deleted.</p>
+
+ 
+<h2>Managing Assessments</h2>
+
+<h3>Overview</h3>
+<p>This section provides guidance on creating, viewing, updating, and deleting assessment dates and student assessments in the EduProfile system. It also covers how to handle student assessment marks efficiently.</p>
+
+<h3>Navigating to Assessments</h3>
+<ol>
+    <li>Click on <strong>Admin</strong> in the side navigation bar.</li>
+    <li>From the options on the screen, select <strong>Assessments</strong>.</li>
+    <li>Click on <strong>Assessments</strong> again to access the full list or management options for assessments.</li>
+</ol>
+
+<h3>Managing Student Assessments</h3>
+
+<h4>Create Student Assessment</h4>
+<h5>Creating an Assessment</h5>
+<ol>
+    <li>Click “<strong>Create Assessment</strong>” in the Assessments section.</li>
+    <li>Enter details such as name, date, type, subject, achievable mark, and weighting.</li>
+    <li>Assign the assessment to a teacher and click “<strong>Add</strong>”.</li>
+</ol>
+
+<h5>View Student Assessment</h5>
+<p>All created assessments can be viewed in the Assessments section, with details like date, subject, and type listed.</p>
+
+<h5>Update Student Assessment</h5>
+<p>Edit any assessment by clicking the “<strong>Edit</strong>” button, modifying the details in the form, and saving the changes.</p>
+
+<h5>Delete Student Assessment</h5>
+<p>Delete an assessment by selecting the “<strong>Delete</strong>” button next to the assessment entry. There will be a confirmation for the deletion with <strong>Yes</strong> or <strong>Cancel</strong> buttons.</p>
+
+<h3>Assessment Calendar</h3>
+
+<h4>Create Assessment Date</h4>
+
+<h5>Accessing the Calendar</h5>
+<ol>
+    <li>Navigate to the Assessments section and click on <strong>Open Calendar</strong>.</li>
+</ol>
+
+<h5>Adding a Date</h5>
+<ol>
+    <li>Select the date for the new assessment on the calendar.</li>
+    <li>Click <strong>Create Assessment</strong>, fill in the details, and save.</li>
+</ol>
+
+<h5>View Assessment Schedule</h5>
+<p>View scheduled assessments by navigating to the calendar where dates with scheduled assessments are highlighted.</p>
+
+<h5>Update Assessment Date</h5>
+<p>To modify an assessment date, click on <strong>Edit</strong> in the table, adjust the date and details in the pop-up form, and save the changes.</p>
+
+<h5>Delete Assessment Date</h5>
+<p>Remove an assessment date by selecting the assessment in the calendar and clicking the <strong>Delete</strong> option.</p>
+
+<h3>Student Assessment Marks</h3>
+
+<h4>Record Student Assessment Mark</h4>
+
+<h5>Recording Marks</h5>
+<ol>
+    <li>In the Assessments section, select <strong>View Marks</strong> next to the relevant assessment.</li>
+    <li>Click the <strong>Record Mark</strong> button.</li>
+    <li>Enter the marks for each student and save.</li>
+</ol>
+
+<h5>View Student Assessment Mark</h5>
+<p>View recorded marks by selecting <strong>View Marks</strong> next to an assessment in the Assessments list.</p>
+
+<h5>Update Student Assessment Mark</h5>
+<p>Update marks by accessing the <strong>View Marks</strong> section, selecting <strong>Edit Mark</strong>, and then modifying the marks. Save the updates.</p>
+
+<h3>Best Practices</h3>
+<ul>
+    <li><strong>Timely Updates:</strong> Keep assessment schedules and student marks up-to-date to reflect true academic progress.</li>
+    <li><strong>Accurate Record Keeping:</strong> Ensure all assessment details and marks are recorded accurately to maintain integrity in student evaluations.</li>
+</ul>
+
+<h3>Troubleshooting</h3>
+<ul>
+    <li><strong>Access Issues:</strong> Ensure you have the appropriate permissions to create or modify assessments.</li>
+    <li><strong>Technical Problems:</strong> For persistent issues, refresh the page, and clear your browser cache.</li>
+</ul>
+
+ 
+<h2>Managing Merits (Admins and Teachers Only)</h2>
+
+<h3>Overview</h3>
+<p>This section provides guidance for admin users on how to manage merits within the EduProfile system. Admin and Teacher users can perform these actions.</p>
+
+<h3>Viewing Merits</h3>
+<ol>
+    <li>Navigate to the Merits Section:</li>
+    <li>From the admin dashboard, go to <code>Admin > Students > Merits</code>.</li>
+    <li>All merits will be listed here. You can use the search bar to quickly find specific merits.</li>
+</ol>
+
+<h3>Creating a New Merit</h3>
+
+<h4>Accessing the Merits Section</h4>
+<ol>
+    <li>Go to the Merits section in the admin dashboard.</li>
+</ol>
+
+<h4>Adding a New Merit</h4>
+<ol>
+    <li>Click on the <strong>“Create Merit”</strong> button.</li>
+    <li>Fill in the form with the merit's details, such as the merit name and description.</li>
+    <li>Click <strong>Add</strong> to save the new merit to the system.</li>
+</ol>
+
+<h3>Updating a Merit</h3>
+
+<h4>Editing a Merit</h4>
+<ol>
+    <li>In the Merits section, find the merit you want to edit and click on the <strong>“Edit”</strong> button next to it.</li>
+    <li>Modify the details in the form as required.</li>
+    <li>Click <strong>Update</strong> to save the changes.</li>
+</ol>
+
+<h3>Deleting a Merit</h3>
+
+<h4>Removing a Merit</h4>
+<ol>
+    <li>Locate the merit you wish to remove in the Merits list.</li>
+    <li>Click on the <strong>“Delete”</strong> button next to the merit.</li>
+    <li>Confirm the deletion to permanently remove the merit from the system.</li>
+</ol>
+
+<p><strong>Note:</strong> Be cautious when deleting merits, as this action is irreversible and may affect records that reference the deleted merit.</p>
+
+<h2>Managing Student Documents (Admins and Teachers Only)</h2>
+
+<h3>Overview</h3>
+<p>This section provides guidance for admin users on how to manage student documents within the EduProfile system. Only teacher and admin users can perform these actions.</p>
+
+<h3>Viewing Student Documents</h3>
+<ol>
+    <li>Navigate to the Student Documents Section:</li>
+    <li>From the admin dashboard, go to <code>Admin > Students > Student Documents</code>.</li>
+    <li>All documents will be listed here. You can use the search bar to quickly find specific documents.</li>
+</ol>
+
+<h3>Adding a New Student Document</h3>
+
+<h4>Accessing the Student Documents Section</h4>
+<ol>
+    <li>Go to the Student Documents section in the admin dashboard.</li>
+</ol>
+
+<h4>Creating a Document</h4>
+<ol>
+    <li>Click on the <strong>“Create Document”</strong> button.</li>
+    <li>Fill in the form with the document's details, such as the document name.</li>
+    <li>Attach the document file by clicking <strong>Choose File</strong> and selecting the file you wish to upload.</li>
+    <li>Click <strong>Add</strong> to save the new document to the system.</li>
+</ol>
+
+<h3>Updating a Student Document</h3>
+
+<h4>Editing a Document</h4>
+<ol>
+    <li>In the Student Documents section, find the document you want to edit and click on the <strong>“Edit”</strong> button next to it.</li>
+    <li>Modify the details in the form as required, including changing the attached file if necessary.</li>
+    <li>Click <strong>Update</strong> to save the changes.</li>
+</ol>
+
+<h3>Deleting a Student Document</h3>
+
+<h4>Removing a Document</h4>
+<ol>
+    <li>Locate the document you wish to remove in the Student Documents list.</li>
+    <li>Click on the <strong>“Delete”</strong> button next to the document.</li>
+    <li>Confirm the deletion to permanently remove the document from the system.</li>
+</ol>
+
+<p><strong>Note:</strong> Exercise caution when deleting documents, as this action is irreversible and may affect records or requirements related to the student’s academic profile.</p>
+
+ 
+<h2>Managing Subjects (Admin Only)</h2>
+<p>This section provides guidance for admin users on how to manage subjects within the EduProfile system. Only admin users can perform these actions.</p>
+
+<h3>Viewing Subjects</h3>
+<ol>
+    <li>To view all subjects:</li>
+    <li>Navigate admin dashboard <code>adminhome > grades > subjects</code>.</li>
+    <li>All subjects will be listed here. You can use the search bar to quickly find specific subjects.</li>
+</ol>
+
+<h3>Creating a New Subject</h3>
+<ol>
+    <li>To create a new subject:</li>
+    <li>Go to the 'Subjects' section in the admin dashboard.</li>
+    <li>Click on the <strong>'+'</strong> button.</li>
+    <li>Fill in the form with the subject's details, such as subject name, description, year, and select employee, and class.</li>
+    <li>Click <strong>'Add Subject'</strong> to add the subject to the system.</li>
+</ol>
+
+<h3>Updating a Subject</h3>
+<ol>
+    <li>To update an existing subject:</li>
+    <li>In the 'Subjects' section, find the subject you want to edit and click on the <strong>'Edit'</strong> button next to it.</li>
+    <li>Modify the details in the form as required.</li>
+    <li>Click <strong>'Update'</strong> to save the changes.</li>
+</ol>
+
+<h3>Deleting a Subject</h3>
+<ol>
+    <li>To delete a subject:</li>
+    <li>Locate the subject you wish to remove in the 'Subjects' list.</li>
+    <li>Click on the <strong>'Delete'</strong> button next to the subject.</li>
+    <li>Confirm the deletion to permanently remove the subject from the system.</li>
+</ol>
+
+<p><strong>Note:</strong> You cannot delete a subject if the subject is associated with a student profile, employee profile, or a class.</p>
+
+<hr>
+
+<h2>Managing Grades</h2>
+<p>This section provides guidance for admin users on how to manage grades within the EduProfile system.</p>
+
+<h3>Viewing Grades</h3>
+<ol>
+    <li>Navigate to the Grades Section:</li>
+    <li>From the admin dashboard, go to <code>Admin > Grades</code>.</li>
+    <li>All existing grades will be listed here. Use the search bar to quickly find a specific grade by level, phase, or other identifiers.</li>
+</ol>
+
+<h3>Creating a New Grade</h3>
+<ol>
+    <li>Go to the 'Grades' Section:</li>
+    <li>In the admin dashboard, navigate to the Grades section.</li>
+    <li>Click on the <strong>'+'</strong> Button.</li>
+    <li>Click the <strong>+ New Grade</strong> button to open the grade creation form.</li>
+    <li>Enter the Grade Details:</li>
+    <ul>
+        <li>Grade Level (e.g., Grade 1, Grade 2)</li>
+        <li>Student Education Phase (e.g., Foundation Phase, Intermediate Phase)<
+
+
+ <h2>Managing Classes</h2>
+<p>This section provides guidance for admin users on how to manage classes within the EduProfile system.</p>
+
+<h3>Viewing Classes</h3>
+<ol>
+    <li>Navigate to the Classes Section:</li>
+    <li>From the admin dashboard, go to <code>Admin > Classes</code>.</li>
+    <li>All existing classes will be listed here. Use the search bar to quickly find a specific class by name, grade, or other identifiers.</li>
+</ol>
+
+<h3>Creating a New Class</h3>
+<ol>
+    <li>Go to the 'Classes' Section:</li>
+    <li>In the admin dashboard, navigate to the Classes section.</li>
+    <li>Click on the <strong>'+'</strong> Button.</li>
+    <li>Click the <strong>+ New Class</strong> button to open the class creation form.</li>
+    <li>Enter the Class Details:</li>
+    <ul>
+        <li>Class Name (e.g., 1A, 2B)</li>
+        <li>Grade (e.g., Grade 1, Grade 2)</li>
+        <li>Class Description (optional)</li>
+        <li>Employee assigned to</li>
+    </ul>
+    <li>Click the <strong>Save</strong> button to add the class to the system.</li>
+</ol>
+
+<p><strong>Confirmation:</strong> A success message will be displayed, confirming that the class has been successfully added.</p>
+
+<h3>Updating an Existing Class</h3>
+<ol>
+    <li>Find the Class to Update:</li>
+    <li>In the Classes section, locate the class you want to update.</li>
+    <li>Click on the <strong>'Edit'</strong> Button.</li>
+    <li>Click the Edit button next to the class you wish to modify.</li>
+    <li>Update the Class Details:</li>
+    <ul>
+        <li>Modify the details as needed in the provided form, including any changes to the class name, grade, description, or teacher assignment.</li>
+    </ul>
+    <li>Click <strong>Update</strong> to save the updated class.</li>
+</ol>
+
+<p><strong>Confirmation:</strong> A success message will be displayed, confirming that the class has been successfully updated.</p>
+
+<h3>Deleting a Class</h3>
+<ol>
+    <li>Locate the Class to Delete:</li>
+    <li>In the list of classes, find the class you want to delete.</li>
+    <li>Click on the <strong>'Delete'</strong> Button.</li>
+    <li>Click the Delete button next to the class.</li>
+    <li>Confirm the Deletion:</li>
+    <ul>
+        <li>Confirm the deletion in the dialog box to permanently remove the class from the system.</li>
+    </ul>
+</ol>
+
+<p><strong>Confirmation:</strong> A success message will be displayed, confirming that the class has been successfully deleted.</p>
+
+
+
+
+
