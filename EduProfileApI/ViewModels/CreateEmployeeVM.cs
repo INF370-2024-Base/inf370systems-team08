@@ -15,7 +15,7 @@ namespace EduProfileAPI.ViewModels
 
         public DateTime DateOfBirth { get; set; }
 
-        public bool Gender { get; set; }
+        public string Gender { get; set; }
 
         [StringLength(10)]
         public string PhoneNumber { get; set; }
