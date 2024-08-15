@@ -145,7 +145,8 @@ namespace EduProfileAPI.Controllers
                 Email = model.Email,
                 SecurityStamp = Guid.NewGuid().ToString(),
                 UserName = model.Email,
-                TwoFactorEnabled = model.TwoFactorEnabled
+                TwoFactorEnabled = model.TwoFactorEnabled,
+                PhoneNumber = model.PhoneNumber
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);
