@@ -167,7 +167,7 @@ namespace EduProfileAPI.Controllers
 
             var result = await _userManager.VerifyTwoFactorTokenAsync(
                 user,
-                "Email", // The provider, should match the one used to generate the code
+                "Email",
                 model.Code);
 
             if (!result)
