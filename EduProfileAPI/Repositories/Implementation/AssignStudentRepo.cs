@@ -99,5 +99,28 @@ namespace EduProfileAPI.Repositories.Implementation
                 .Select(ss => ss.Student)
                 .ToListAsync();
         }
+
+
+        public async Task<List<Student>> GetFilteredStudentsAsync(Guid? classId, Guid? gradeId, Guid? subjectId)
+        {
+            IQueryable<Student> query = _context.Student;
+
+            if (classId.HasValue)
+            {
+                query = query.Where(s => s.ClassId == classId.Value);
+            }
+            if (gradeId.HasValue)
+            {
+                query = query.Where(s => s.GradeId == gradeId.Value);
+            }
+            if (subjectId.HasValue)
+            {
+                query = query.Include(s => s.StudentSubjects)
+                             .ThenInclude(ss => ss.Subject)
+                             .Where(s => s.StudentSubjects.Any(ss => ss.SubjectId == subjectId.Value));
+            }
+
+            return await query.ToListAsync();
+        }
     }
 }
