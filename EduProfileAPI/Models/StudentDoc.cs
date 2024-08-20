@@ -13,5 +13,7 @@ namespace EduProfileAPI.Models
         //[Required]
         public string DocumentName { get; set; }
         public byte[] StudentDocumentAttachment { get; set; }
+        public string? AttachmentType { get; set; }
+
     }
 }

@@ -13,6 +13,7 @@ using EduProfileAPI.Repositories.Interfaces.Maintenance;
 using EduProfileAPI.Repositories.Implementation.Maintenance;
 using EduProfileAPI.WhatsApp;
 using Microsoft.Data.SqlClient;
+using EduProfileAPI.Models;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -123,6 +124,8 @@ builder.Services.AddScoped<ITeacherClassListRepo,  TeacherClassListRepo>();
 builder.Services.AddScoped<IRemedialFileRepository, RemedialFileRepository>();
 builder.Services.AddScoped<IRemedialActivityRepository, RemedialActivityRepository>();
 builder.Services.AddScoped<IAssessmentsReportsRepo, AssessmentsReportsRepo>();
+builder.Services.AddScoped<IMeritType, MeritTypeRepo>();
+
 
 //WhatsApp
 var whatsAppAccessToken = builder.Configuration["WhatsApp:AccessToken"];
