@@ -12,6 +12,8 @@ using EduProfileAPI.PasswordValidator;
 using Org.BouncyCastle.Bcpg;
 using Newtonsoft.Json.Linq;
 using System.Web;
+using Microsoft.EntityFrameworkCore;
+using EduProfileAPI.DataAccessLayer;
 
 namespace EduProfileAPI.Controllers
 {
@@ -23,12 +25,14 @@ namespace EduProfileAPI.Controllers
         private readonly IEmailService _emailService;
         private readonly IConfiguration _configuration;
         private readonly RoleManager<IdentityRole> _roleManager;
-        public AccountController(UserManager<IdentityUser> userManager, IEmailService emailService, IConfiguration configuration, RoleManager<IdentityRole> roleManager)
+        private readonly EduProfileDbContext _dbContext;
+        public AccountController(UserManager<IdentityUser> userManager, IEmailService emailService, IConfiguration configuration, RoleManager<IdentityRole> roleManager, EduProfileDbContext dbContext)
         {
             _userManager = userManager;
             _emailService = emailService;
             _configuration = configuration;
             _roleManager = roleManager;
+            _dbContext = dbContext;
         }
 
         [HttpPost("login")]
@@ -146,13 +150,16 @@ namespace EduProfileAPI.Controllers
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
+        //registering an account -- works conjunction with the saving of the information in the next endpoint
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] Register model)
         {
+            // Check if the user already exists
             var userExists = await _userManager.FindByEmailAsync(model.Email);
             if (userExists != null)
                 return StatusCode(StatusCodes.Status500InternalServerError, new { Status = "Error", Message = "User already exists!" });
 
+            // Create the AspNetUser
             IdentityUser user = new IdentityUser()
             {
                 Email = model.Email,
@@ -164,13 +171,39 @@ namespace EduProfileAPI.Controllers
 
             var result = await _userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
-                return StatusCode(StatusCodes.Status500InternalServerError, new { Status = "Error", Message = string.Join(", ", result.Errors.Select(x => x.Description)) });
+                return StatusCode(StatusCodes.Status500InternalServerError, new { Status = "Error", Message = string.Join("Please contact support, ", result.Errors.Select(x => x.Description)) });
 
             // Set IsActive to false
             await _userManager.AddClaimAsync(user, new Claim("IsActive", "false"));
 
-            return Ok(new { Status = "Success", Message = "User created successfully, but account is inactive." });
+            // Create a new entry in the User table with FirstName, LastName, and the FK to AspNetUsers
+            var newUser = new User
+            {
+                UserId = Guid.NewGuid(), 
+                FirstName = model.Name,  
+                LastName = model.Surname, 
+                AspNetUserId = user.Id,
+                DisplayImage = null
+            };
+
+            // Add the new user to the database (Assume you have a DbContext injected as _dbContext)
+            _dbContext.User.Add(newUser);
+            await _dbContext.SaveChangesAsync();
+
+            // Assign the role to the user by adding an entry to AspNetUserRoles
+            var role = await _roleManager.FindByIdAsync(model.RoleId); // Assuming model.RoleId is the selected role's ID
+            if (role != null)
+            {
+                await _userManager.AddToRoleAsync(user, role.Name);
+            }
+
+            return Ok(new { Status = "Success", Message = "Registered successfuly, but please note your account is inactive untill approved by an admin." });
         }
+
+
+
+
+
 
         [HttpPost("verify-2fa")]
         public async Task<IActionResult> VerifyTwoFactorCode([FromBody] Verify2FA model)
@@ -234,5 +267,7 @@ namespace EduProfileAPI.Controllers
 
             return Ok(roles);
         }
+
+        
     }
 }
