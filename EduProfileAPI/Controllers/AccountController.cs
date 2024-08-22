@@ -22,20 +22,33 @@ namespace EduProfileAPI.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IEmailService _emailService;
         private readonly IConfiguration _configuration;
-        public AccountController(UserManager<IdentityUser> userManager, IEmailService emailService, IConfiguration configuration)
+        private readonly RoleManager<IdentityRole> _roleManager;
+        public AccountController(UserManager<IdentityUser> userManager, IEmailService emailService, IConfiguration configuration, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _emailService = emailService;
             _configuration = configuration;
+            _roleManager = roleManager;
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] Login model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
+
+
             if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password))
             {
-                return Unauthorized();
+                return Unauthorized(new { Message = "Incorrect Username or Password" });
+            }
+
+            // Check if the user is active
+            var isActive = await _userManager.GetClaimsAsync(user);
+            var isActiveClaim = isActive.FirstOrDefault(c => c.Type == "IsActive")?.Value;
+
+            if (string.IsNullOrEmpty(isActiveClaim) || !bool.TryParse(isActiveClaim, out var isActiveFlag) || !isActiveFlag)
+            {
+                return Unauthorized(new { Message = "Your account is inactive. Please contact administrator." });
             }
 
             // Check if two-factor is enabled
@@ -153,7 +166,10 @@ namespace EduProfileAPI.Controllers
             if (!result.Succeeded)
                 return StatusCode(StatusCodes.Status500InternalServerError, new { Status = "Error", Message = string.Join(", ", result.Errors.Select(x => x.Description)) });
 
-            return Ok(new { Status = "Success", Message = "User created successfully!" });
+            // Set IsActive to false
+            await _userManager.AddClaimAsync(user, new Claim("IsActive", "false"));
+
+            return Ok(new { Status = "Success", Message = "User created successfully, but account is inactive." });
         }
 
         [HttpPost("verify-2fa")]
@@ -178,6 +194,45 @@ namespace EduProfileAPI.Controllers
             // Generate JWT token upon successful 2FA verification
             var tokenString = GenerateJwtToken(user);
             return Ok(new { Token = tokenString });
+        }
+
+        //Role endpoint
+        [HttpPost("add-role")]
+        public async Task<IActionResult> AddRole([FromBody] string roleName)
+        {
+            if (string.IsNullOrWhiteSpace(roleName))
+            {
+                return BadRequest(new { Status = "Error", Message = "Role name must be provided." });
+            }
+
+            var roleExists = await _roleManager.RoleExistsAsync(roleName);
+            if (roleExists)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { Status = "Error", Message = "Role already exists!" });
+            }
+
+            var roleResult = await _roleManager.CreateAsync(new IdentityRole(roleName));
+            if (!roleResult.Succeeded)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { Status = "Error", Message = string.Join(", ", roleResult.Errors.Select(x => x.Description)) });
+            }
+
+            return Ok(new { Status = "Success", Message = "Role created successfully!" });
+        }
+
+        //retrieve all the roles
+        [HttpGet("roles")]
+        public IActionResult GetAllRoles()
+        {
+            var roles = _roleManager.Roles
+                                    .Select(r => new Roles
+                                    {
+                                        Id = r.Id,
+                                        Name = r.Name
+                                    })
+                                    .ToList();
+
+            return Ok(roles);
         }
     }
 }

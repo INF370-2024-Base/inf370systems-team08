@@ -6,5 +6,6 @@
         public Guid HelpId { get; set; }
         public string DisplayName { get; set; }
         public byte[] DisplayImage { get; set; }
+        public string AspNetUserId { get; set; }
     }
 }
