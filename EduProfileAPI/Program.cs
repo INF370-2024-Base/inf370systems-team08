@@ -13,6 +13,7 @@ using EduProfileAPI.Repositories.Interfaces.Maintenance;
 using EduProfileAPI.Repositories.Implementation.Maintenance;
 using EduProfileAPI.WhatsApp;
 using Microsoft.Data.SqlClient;
+using EduProfileAPI.SmsService;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -128,7 +129,9 @@ builder.Services.AddScoped<IAssessmentsReportsRepo, AssessmentsReportsRepo>();
 var whatsAppAccessToken = builder.Configuration["WhatsApp:AccessToken"];
 builder.Services.AddSingleton(new WhatsAppHelper(whatsAppAccessToken));
 
-
+// Register the SmsService
+builder.Services.AddHttpClient();
+builder.Services.AddTransient<ISmsService, SmsService>();
 
 
 var app = builder.Build();

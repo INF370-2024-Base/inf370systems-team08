@@ -14,6 +14,7 @@ using Newtonsoft.Json.Linq;
 using System.Web;
 using Microsoft.EntityFrameworkCore;
 using EduProfileAPI.DataAccessLayer;
+using EduProfileAPI.SmsService;
 
 namespace EduProfileAPI.Controllers
 {
@@ -26,13 +27,15 @@ namespace EduProfileAPI.Controllers
         private readonly IConfiguration _configuration;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly EduProfileDbContext _dbContext;
-        public AccountController(UserManager<IdentityUser> userManager, IEmailService emailService, IConfiguration configuration, RoleManager<IdentityRole> roleManager, EduProfileDbContext dbContext)
+        private readonly ISmsService _smsService;
+        public AccountController(UserManager<IdentityUser> userManager, IEmailService emailService, ISmsService smsService, IConfiguration configuration, RoleManager<IdentityRole> roleManager, EduProfileDbContext dbContext)
         {
             _userManager = userManager;
             _emailService = emailService;
             _configuration = configuration;
             _roleManager = roleManager;
             _dbContext = dbContext;
+            _smsService = smsService;
         }
 
         [HttpPost("login")]
@@ -58,11 +61,10 @@ namespace EduProfileAPI.Controllers
             // Check if two-factor is enabled
             if (await _userManager.GetTwoFactorEnabledAsync(user))
             {
-                var token = await _userManager.GenerateTwoFactorTokenAsync(user, "Email");
+                var token = await _userManager.GenerateTwoFactorTokenAsync(user, TokenOptions.DefaultPhoneProvider);
+                var formattedPhoneNumber = "27" + user.PhoneNumber.Substring(1);
 
-                await _emailService.SendEmailAsync("no-reply@yourdomain.com", user.Email,
-                                                   "Your verification code",
-                                                   $"Your code is: {token}");
+                await _smsService.SendSmsAsync(formattedPhoneNumber, $"Your verification code is: {token}");
 
                 return Ok(new { Message = "Two factor authentication required.", userId = user.Id });
             }
@@ -216,7 +218,7 @@ namespace EduProfileAPI.Controllers
 
             var result = await _userManager.VerifyTwoFactorTokenAsync(
                 user,
-                "Email",
+                TokenOptions.DefaultPhoneProvider,
                 model.Code);
 
             if (!result)
@@ -228,6 +230,8 @@ namespace EduProfileAPI.Controllers
             var tokenString = GenerateJwtToken(user);
             return Ok(new { Token = tokenString });
         }
+
+
 
         //Role endpoint
         [HttpPost("add-role")]
