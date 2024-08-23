@@ -274,6 +274,23 @@ namespace EduProfileAPI.Controllers
             }
         }
 
+        [HttpGet("parent-emails")]
+        public async Task<ActionResult<List<ParentEmailVM>>> GetParentEmails()
+        {
+            try
+            {
+                var emails = await _studentRepository.GetAllParentEmailsAsync();
+                if (emails == null || emails.Count == 0)
+                    return NotFound("No parent emails found.");
+
+                return Ok(emails);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception details
+                return StatusCode(500, "An error occurred while retrieving parent emails.");
+            }
+        }
 
     }
 }
