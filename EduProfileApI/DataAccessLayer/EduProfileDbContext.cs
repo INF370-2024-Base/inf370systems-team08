@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using EduProfileAPI.Models.Maintenance;
 
-
 namespace EduProfileAPI.DataAccessLayer
 {
     public class EduProfileDbContext : IdentityDbContext<IdentityUser>
@@ -13,12 +12,7 @@ namespace EduProfileAPI.DataAccessLayer
         public EduProfileDbContext(DbContextOptions<EduProfileDbContext> options) : base(options)
         {
         }
-
-        public DbSet<IdentityUser> AspNetUsers { get; set; }
-        public DbSet<IdentityUserClaim<string>> AspNetUserClaims { get; set; }
-        public DbSet<IdentityUserRole<string>> AspNetUserRoles { get; set; }
-        public DbSet<IdentityRole> AspNetRoles { get; set; }
-
+        
         public DbSet<User> User { get; set; }
         public DbSet<Class> Class { get; set; }
         public DbSet<StudentEducationPhase> StudentEducationPhase { get; set; }
