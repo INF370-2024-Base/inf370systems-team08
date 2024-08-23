@@ -6,5 +6,7 @@
         public Guid DocumentTypeId { get; set; }
         public string DocumentName { get; set; }
         public IFormFile StudentDocumentAttachment { get; set; }
+        public string? AttachmentType { get; set; }
+
     }
 }

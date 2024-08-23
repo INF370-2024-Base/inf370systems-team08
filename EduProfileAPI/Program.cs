@@ -14,6 +14,7 @@ using EduProfileAPI.Repositories.Implementation.Maintenance;
 using EduProfileAPI.WhatsApp;
 using Microsoft.Data.SqlClient;
 using EduProfileAPI.SmsService;
+using EduProfileAPI.Models;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -79,6 +80,11 @@ builder.Services.Configure<IdentityOptions>(options =>
 // Add services to the container.
 builder.Services.AddControllers();
 
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+});
+
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -124,6 +130,8 @@ builder.Services.AddScoped<ITeacherClassListRepo,  TeacherClassListRepo>();
 builder.Services.AddScoped<IRemedialFileRepository, RemedialFileRepository>();
 builder.Services.AddScoped<IRemedialActivityRepository, RemedialActivityRepository>();
 builder.Services.AddScoped<IAssessmentsReportsRepo, AssessmentsReportsRepo>();
+builder.Services.AddScoped<IMeritType, MeritTypeRepo>();
+
 
 //WhatsApp
 var whatsAppAccessToken = builder.Configuration["WhatsApp:AccessToken"];

@@ -69,5 +69,16 @@ namespace EduProfileAPI.Controllers
             var students = await _repository.GetStudentsBySubjectIdAsync(subjectId);
             return Ok(students);
         }
+
+        [HttpGet("GetEverything")]
+        public async Task<IActionResult> GetFilteredStudents([FromQuery] string classId, [FromQuery] string gradeId, [FromQuery] string subjectId)
+        {
+            Guid? classGuid = !string.IsNullOrEmpty(classId) ? Guid.Parse(classId) : null;
+            Guid? gradeGuid = !string.IsNullOrEmpty(gradeId) ? Guid.Parse(gradeId) : null;
+            Guid? subjectGuid = !string.IsNullOrEmpty(subjectId) ? Guid.Parse(subjectId) : null;
+
+            var students = await _repository.GetFilteredStudentsAsync(classGuid, gradeGuid, subjectGuid);
+            return Ok(students);
+        }
     }
 }
