@@ -193,7 +193,7 @@ namespace EduProfileAPI.Controllers
             await _dbContext.SaveChangesAsync();
 
             // Assign the role to the user by adding an entry to AspNetUserRoles
-            var role = await _roleManager.FindByIdAsync(model.RoleId); // Assuming model.RoleId is the selected role's ID
+            var role = await _roleManager.FindByIdAsync(model.RoleId); 
             if (role != null)
             {
                 await _userManager.AddToRoleAsync(user, role.Name);
