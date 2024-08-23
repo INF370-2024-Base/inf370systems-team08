@@ -12,6 +12,5 @@ namespace EduProfileAPI.Repositories.Interfaces
         Task<List<Student>> GetStudentsByClassIdAsync(Guid classId);
         Task<List<Student>> GetStudentsByGradeIdAsync(Guid gradeId);
         Task<List<Student>> GetStudentsBySubjectIdAsync(Guid subjectId);
-        Task<List<Student>> GetFilteredStudentsAsync(Guid? classId, Guid? gradeId, Guid? subjectId);
     }
 }
