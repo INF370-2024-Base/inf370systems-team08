@@ -12,9 +12,6 @@ using EduProfileAPI.PasswordValidator;
 using Org.BouncyCastle.Bcpg;
 using Newtonsoft.Json.Linq;
 using System.Web;
-using Microsoft.EntityFrameworkCore;
-using EduProfileAPI.DataAccessLayer;
-using EduProfileAPI.SmsService;
 
 namespace EduProfileAPI.Controllers
 {
@@ -25,46 +22,30 @@ namespace EduProfileAPI.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IEmailService _emailService;
         private readonly IConfiguration _configuration;
-        private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly EduProfileDbContext _dbContext;
-        private readonly ISmsService _smsService;
-        public AccountController(UserManager<IdentityUser> userManager, IEmailService emailService, ISmsService smsService, IConfiguration configuration, RoleManager<IdentityRole> roleManager, EduProfileDbContext dbContext)
+        public AccountController(UserManager<IdentityUser> userManager, IEmailService emailService, IConfiguration configuration)
         {
             _userManager = userManager;
             _emailService = emailService;
             _configuration = configuration;
-            _roleManager = roleManager;
-            _dbContext = dbContext;
-            _smsService = smsService;
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] Login model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
-
-
             if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password))
             {
-                return Unauthorized(new { Message = "Incorrect Username or Password" });
-            }
-
-            // Check if the user is active
-            var isActive = await _userManager.GetClaimsAsync(user);
-            var isActiveClaim = isActive.FirstOrDefault(c => c.Type == "IsActive")?.Value;
-
-            if (string.IsNullOrEmpty(isActiveClaim) || !bool.TryParse(isActiveClaim, out var isActiveFlag) || !isActiveFlag)
-            {
-                return Unauthorized(new { Message = "Your account is inactive. Please contact administrator." });
+                return Unauthorized();
             }
 
             // Check if two-factor is enabled
             if (await _userManager.GetTwoFactorEnabledAsync(user))
             {
-                var token = await _userManager.GenerateTwoFactorTokenAsync(user, TokenOptions.DefaultPhoneProvider);
-                var formattedPhoneNumber = "27" + user.PhoneNumber.Substring(1);
+                var token = await _userManager.GenerateTwoFactorTokenAsync(user, "Email");
 
-                await _smsService.SendSmsAsync(formattedPhoneNumber, $"Your verification code is: {token}");
+                await _emailService.SendEmailAsync("no-reply@yourdomain.com", user.Email,
+                                                   "Your verification code",
+                                                   $"Your code is: {token}");
 
                 return Ok(new { Message = "Two factor authentication required.", userId = user.Id });
             }
@@ -152,27 +133,24 @@ namespace EduProfileAPI.Controllers
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        //registering an account -- works conjunction with the saving of the information in the next endpoint
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] Register model)
         {
-            // Check if the user already exists
             var userExists = await _userManager.FindByEmailAsync(model.Email);
             if (userExists != null)
                 return StatusCode(StatusCodes.Status500InternalServerError, new { Status = "Error", Message = "User already exists!" });
 
-            // Create the AspNetUser
             IdentityUser user = new IdentityUser()
             {
                 Email = model.Email,
                 SecurityStamp = Guid.NewGuid().ToString(),
                 UserName = model.Email,
-                TwoFactorEnabled = model.TwoFactorEnabled,
-                PhoneNumber = model.PhoneNumber
+                TwoFactorEnabled = model.TwoFactorEnabled
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
+
                 return StatusCode(StatusCodes.Status500InternalServerError, new { Status = "Error", Message = string.Join("Please contact support, ", result.Errors.Select(x => x.Description)) });
 
             // Set IsActive to false
@@ -199,13 +177,11 @@ namespace EduProfileAPI.Controllers
                 await _userManager.AddToRoleAsync(user, role.Name);
             }
 
-            return Ok(new { Status = "Success", Message = "Registered successfuly, but please note your account is inactive untill approved by an admin." });
+                return StatusCode(StatusCodes.Status500InternalServerError, new { Status = "Error", Message = string.Join(", ", result.Errors.Select(x => x.Description)) });
+
+
+            return Ok(new { Status = "Success", Message = "User created successfully!" });
         }
-
-
-
-
-
 
         [HttpPost("verify-2fa")]
         public async Task<IActionResult> VerifyTwoFactorCode([FromBody] Verify2FA model)
@@ -218,7 +194,7 @@ namespace EduProfileAPI.Controllers
 
             var result = await _userManager.VerifyTwoFactorTokenAsync(
                 user,
-                TokenOptions.DefaultPhoneProvider,
+                "Email", // The provider, should match the one used to generate the code
                 model.Code);
 
             if (!result)
@@ -230,48 +206,5 @@ namespace EduProfileAPI.Controllers
             var tokenString = GenerateJwtToken(user);
             return Ok(new { Token = tokenString });
         }
-
-
-
-        //Role endpoint
-        [HttpPost("add-role")]
-        public async Task<IActionResult> AddRole([FromBody] string roleName)
-        {
-            if (string.IsNullOrWhiteSpace(roleName))
-            {
-                return BadRequest(new { Status = "Error", Message = "Role name must be provided." });
-            }
-
-            var roleExists = await _roleManager.RoleExistsAsync(roleName);
-            if (roleExists)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, new { Status = "Error", Message = "Role already exists!" });
-            }
-
-            var roleResult = await _roleManager.CreateAsync(new IdentityRole(roleName));
-            if (!roleResult.Succeeded)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, new { Status = "Error", Message = string.Join(", ", roleResult.Errors.Select(x => x.Description)) });
-            }
-
-            return Ok(new { Status = "Success", Message = "Role created successfully!" });
-        }
-
-        //retrieve all the roles
-        [HttpGet("roles")]
-        public IActionResult GetAllRoles()
-        {
-            var roles = _roleManager.Roles
-                                    .Select(r => new Roles
-                                    {
-                                        Id = r.Id,
-                                        Name = r.Name
-                                    })
-                                    .ToList();
-
-            return Ok(roles);
-        }
-
-        
     }
 }
