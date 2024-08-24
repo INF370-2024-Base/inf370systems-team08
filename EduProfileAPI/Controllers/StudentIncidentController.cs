@@ -13,7 +13,7 @@ namespace EduProfileAPI.Controllers
     {
         private readonly IStudentIncidentRepository _Repository;
 
-        public StudentIncidentController(IStudentIncidentRepository studentincidentrepository )
+        public StudentIncidentController(IStudentIncidentRepository studentincidentrepository)
         {
             _Repository = studentincidentrepository;
         }
@@ -30,7 +30,7 @@ namespace EduProfileAPI.Controllers
         // GET: api/StudentIncidents/5
         [HttpGet]
         [Route("GetIncident/{id}")]
-        public async Task<IActionResult> GetStudentIncidentAsync (Guid id)
+        public async Task<IActionResult> GetStudentIncidentAsync(Guid id)
         {
             try
             {
@@ -125,5 +125,89 @@ namespace EduProfileAPI.Controllers
             return Ok(types);
         }
 
+        // GET: api/StudentIncidents/5
+        [HttpGet]
+        [Route("GetStudentIncidentTypeById/{id}")]
+        public async Task<IActionResult> GetStudentIncidentTypeById(Guid id)
+        {
+            try
+            {
+                var result = await _Repository.GetByTypeIdAsync(id);
+                if (result == null)
+                {
+                    return NotFound("incident not found.");
+                }
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Database Failure: {ex.Message}");
+            }
+        }
+
+        [HttpPost("IncidentType")]
+        public async Task<IActionResult> AddIncidentType([FromBody] IncidentType incidentType)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                await _Repository.AddIncidentAsync(incidentType);
+                await _Repository.SaveChangesAsync(); // Ensure changes are saved to the database
+                return Ok(incidentType);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                Console.WriteLine($"Error adding incident type: {ex.Message}");
+                return StatusCode(500, "Internal server error");
+            }
+
+        }
+
+        [HttpPut]
+        [Route("UpdateIncidentType/{id}")]
+        public async Task<IActionResult> UpdateIncidentType(Guid id, IncidentType incidentType)
+        {
+            if (id != incidentType.IncidentTypeId)
+            {
+                return BadRequest();
+            }
+
+            try
+            {
+                await _Repository.UpdateIncidentType(incidentType);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!await _Repository.ExistTypeAsync(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
+        [HttpDelete]
+        [Route("DeleteIncidentType/{id}")]
+        public async Task<IActionResult> DeleteIncidentType(Guid id)
+        {
+            var result = await _Repository.DeleteAsync(id);
+            if (!result)
+            {
+                return NotFound();
+            }
+
+            return NoContent();
+        }
     }
 }

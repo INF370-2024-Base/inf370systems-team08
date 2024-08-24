@@ -68,5 +68,53 @@ namespace EduProfileAPI.Controllers
 
             return Ok(type);
         }
+
+        [HttpPut]
+        [Route("EditStudentDocumentType/{studentDocumentTypeId}")]
+        public async Task<ActionResult<StudentDocumentType>> EditStudentDocumentType(Guid studentDocumentTypeId, StudentDocumentTypeVM model)
+        {
+            try
+            {
+                var existing = await _studentDocumentTypeRepo.GetDocTypeAsync(studentDocumentTypeId);
+                if (existing == null) return NotFound($"The student document type does not exist");
+                existing.StudentDocumentTypeName = model.StudentDocumentTypeName;
+
+
+                if (await _studentDocumentTypeRepo.SaveChangesAsync())
+                {
+                    return Ok(existing);
+                }
+
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Internal Server Error. Please contact support.");
+
+            }
+            return BadRequest("Your request is invalid.");
+
+
+        }
+
+        [HttpDelete]
+        [Route("DeleteStudentDocumentType/{studentDocumentTypeId}")]
+        public async Task<IActionResult> DeleteStudentDocumentType(Guid studentDocumentTypeId)
+        {
+            try
+            {
+                var existing = await _studentDocumentTypeRepo.GetDocTypeAsync(studentDocumentTypeId);
+                if (existing == null) return NotFound($"The merit Type does not exist");
+                _studentDocumentTypeRepo.Delete(existing);
+
+                if (await _studentDocumentTypeRepo.SaveChangesAsync()) return Ok(existing);
+            }
+            catch (Exception)
+            {
+
+                return StatusCode(500, "Internal Server Error. Please contact support.");
+            }
+
+            return BadRequest("Your request is invalid");
+        }
     }
 }

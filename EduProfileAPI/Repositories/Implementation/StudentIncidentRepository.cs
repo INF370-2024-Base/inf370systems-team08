@@ -50,6 +50,27 @@ namespace EduProfileAPI.Repositories.Implementation
 
         }
 
+        public async Task<IncidentType> GetByTypeIdAsync(Guid? id)
+        {
+            var studentIncident = await _context.IncidentType.FindAsync(id);
+
+            if (studentIncident == null)
+            {
+                return null;
+            }
+
+            return new IncidentType
+            {
+ 
+                IncidentTypeId = studentIncident.IncidentTypeId,
+                IncidentSeverity = studentIncident.IncidentSeverity,
+                IncidentCategory = studentIncident.IncidentCategory,
+
+
+            };
+
+        }
+
         public async Task<StudentIncident> AddAsync(StudentIncident studentIncident)
         {
             studentIncident.IncidentId = Guid.NewGuid(); // Generate a new Guid for the IncidentId
@@ -99,6 +120,10 @@ namespace EduProfileAPI.Repositories.Implementation
             return await _context.studentIncident.AnyAsync(e => e.IncidentId == id);
         }
 
+        public async Task<bool> ExistTypeAsync(Guid id)
+        {
+            return await _context.IncidentType.AnyAsync(e => e.IncidentTypeId == id);
+        }
         public async Task<IEnumerable<IncidentType>> GetAllTypesAsync()
         {
             return await _context.IncidentType
@@ -111,9 +136,46 @@ namespace EduProfileAPI.Repositories.Implementation
                 .ToListAsync();
         }
 
+  
         public async Task<bool> SaveChangesAsync()
         {
             return await _context.SaveChangesAsync() > 0;
+        }
+
+        public async Task<IEnumerable<IncidentType>> AddIncidentAsync(IncidentType incidentType)
+        {
+            incidentType.IncidentTypeId = Guid.NewGuid();
+            incidentType.IncidentCategory = incidentType.IncidentCategory;
+            incidentType.IncidentSeverity = incidentType.IncidentSeverity;
+
+            await _context.IncidentType.AddAsync(incidentType);
+            await _context.SaveChangesAsync();
+            return await _context.IncidentType.ToListAsync();
+        }
+
+        public async Task<IncidentType> UpdateIncidentType(IncidentType incidentType)
+        {
+            incidentType.IncidentTypeId = incidentType.IncidentTypeId;
+            incidentType.IncidentCategory = incidentType.IncidentCategory ?? string.Empty;
+            incidentType.IncidentSeverity = incidentType.IncidentSeverity ?? string.Empty;
+
+
+            _context.IncidentType.Update(incidentType);
+            await _context.SaveChangesAsync();
+            return incidentType;
+        }
+
+        public async Task<bool> DeleteTypeAsync(Guid id)
+        {
+            var type = await _context.IncidentType.FindAsync(id);
+            if (type == null)
+            {
+                return false;
+            }
+
+            _context.IncidentType.Remove(type);
+            await _context.SaveChangesAsync();
+            return true;
         }
     }
 }
