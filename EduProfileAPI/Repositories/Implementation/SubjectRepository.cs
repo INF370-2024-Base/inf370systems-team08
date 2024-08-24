@@ -137,5 +137,11 @@ namespace EduProfileAPI.Repositories.Implementation
             return true;
         }
 
+        public async Task<StudentSubject[]> GetAllStudentSubjectAsync()
+        {
+            IQueryable<StudentSubject> query = _context.StudentSubject;
+            return await query.ToArrayAsync();
+        }
+
     }
 }

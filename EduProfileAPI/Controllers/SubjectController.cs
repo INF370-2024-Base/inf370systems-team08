@@ -122,5 +122,20 @@ namespace EduProfileAPI.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, $"Database Failure: {ex.Message}");
             }
         }
+
+        [HttpGet]
+        [Route("GetAllStudentSubjects")]
+        public async Task<IActionResult> GetAllStudentSubjectsAsync()
+        {
+            try
+            {
+                var results = await _subjectRepository.GetAllStudentSubjectAsync();
+                return Ok(results);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Database Failure: {ex.Message}");
+            }
+        }
     }
 }

@@ -10,5 +10,6 @@ namespace EduProfileAPI.Repositories.Interfaces
         Task<SubjectViewModel> GetSubjectByIdAsync(Guid id);
         Task<SubjectViewModel> UpdateSubjectAsync(UpdateSubjectViewModel model);
         Task<bool> DeleteSubjectAsync(Guid id);
+        Task<StudentSubject[]> GetAllStudentSubjectAsync();
     }
 }
