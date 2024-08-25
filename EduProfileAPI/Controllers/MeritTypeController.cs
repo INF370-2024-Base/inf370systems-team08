@@ -1,4 +1,8 @@
-﻿using EduProfileAPI.Repositories.Interfaces;
+﻿using EduProfileAPI.Models;
+using EduProfileAPI.Repositories.Implementation;
+using EduProfileAPI.Repositories.Interfaces;
+using EduProfileAPI.ViewModels;
+using EduProfileAPI.ViewModels.Maintenance;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -46,6 +50,73 @@ namespace EduProfileAPI.Controllers
             {
                 return StatusCode(500, "Internal Server Error. Please contact support.");
             }
+        }
+
+        [HttpPost]
+        [Route("AddMeritType")]
+        public async Task<IActionResult> AddMeritType(MeritTypeVm cvm)
+        {
+            var merit = new MeritType { MeritTypeName = cvm.MeritTypeName };
+
+            try
+            {
+                _meritTypeRepository.Add(merit);
+                await _meritTypeRepository.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return BadRequest("Invalid transaction");
+            }
+
+            return Ok(merit);
+        }
+
+        [HttpPut]
+        [Route("EditMeritType/{meritTypeId}")]
+        public async Task<ActionResult<MeritTypeVm>> EditMeritType(Guid meritTypeId, MeritTypeVm model)
+        {
+            try
+            {
+                var existingMerit = await _meritTypeRepository.GetMeritTypeAsync(meritTypeId);
+                if (existingMerit == null) return NotFound($"The merit type does not exist");
+                existingMerit.MeritTypeName = model.MeritTypeName;
+
+
+                if (await _meritTypeRepository.SaveChangesAsync())
+                {
+                    return Ok(existingMerit);
+                }
+
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Internal Server Error. Please contact support.");
+
+            }
+            return BadRequest("Your request is invalid.");
+
+
+        }
+
+        [HttpDelete]
+        [Route("DeleteMeritType/{meritTypeId}")]
+        public async Task<IActionResult> DeleteMeritType(Guid meritTypeId)
+        {
+            try
+            {
+                var existingMerit = await _meritTypeRepository.GetMeritTypeAsync(meritTypeId);
+                if (existingMerit == null) return NotFound($"The merit Type does not exist");
+                _meritTypeRepository.Delete(existingMerit);
+
+                if (await _meritTypeRepository.SaveChangesAsync()) return Ok(existingMerit);
+            }
+            catch (Exception)
+            {
+
+                return StatusCode(500, "Internal Server Error. Please contact support.");
+            }
+
+            return BadRequest("Your request is invalid");
         }
     }
 }

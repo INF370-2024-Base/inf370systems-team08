@@ -14,6 +14,7 @@ namespace EduProfileAPI.Models
         public string Parent1HomePhone { get; set; }
         public string Parent1WorkPhone { get; set; }
         public string Parent1CellPhone { get; set; }
+        public string Parent1Email { get; set; }
         public string Parent2Name { get; set; }
         public bool Parent2MaritalStatus { get; set; }
         public string Parent2Occupation { get; set; }
@@ -22,5 +23,6 @@ namespace EduProfileAPI.Models
         public string Parent2HomePhone { get; set; }
         public string Parent2WorkPhone { get; set; }
         public string Parent2CellPhone { get; set; }
+        public string Parent2Email { get; set; }
     }
 }

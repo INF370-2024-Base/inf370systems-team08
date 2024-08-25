@@ -27,5 +27,6 @@ namespace EduProfileAPI.Models.Maintenance
 
         public DateTime ScheduleDate { get; set; }
 
+        public bool? Verified { get; set; }
     }
 }

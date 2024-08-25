@@ -27,7 +27,9 @@ namespace EduProfileAPI.Controllers
             }
             catch (Exception ex)
             {
+
                 return StatusCode(500, $"Internal Server Error. Please contact support. {ex}");
+
             }
         }
 
@@ -90,7 +92,6 @@ namespace EduProfileAPI.Controllers
                 if (existingEmployee == null)
                     return NotFound($"The employee does not exist");
 
-                existingEmployee.EmployeeId = employeeModel.EmployeeId;
                 existingEmployee.EmployeeStatusId = employeeModel.EmployeeStatusId;
                 existingEmployee.FirstName = employeeModel.FirstName;
                 existingEmployee.LastName = employeeModel.LastName;

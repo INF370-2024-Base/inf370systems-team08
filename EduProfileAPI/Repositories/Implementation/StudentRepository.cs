@@ -1,6 +1,7 @@
 ﻿using EduProfileAPI.DataAccessLayer;
 using EduProfileAPI.Models;
 using EduProfileAPI.Repositories.Interfaces;
+using EduProfileAPI.ViewModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace EduProfileAPI.Repositories.Implementation
@@ -56,6 +57,25 @@ namespace EduProfileAPI.Repositories.Implementation
         {
             IQueryable<Student> query = _context.Student.Where(s => s.ParentId == parentId);
             return await query.ToArrayAsync();
+        }
+
+        public async Task<List<ParentEmailVM>> GetAllParentEmailsAsync()
+        {
+            return await _context.Parent.Select(p => new ParentEmailVM
+            {
+                ParentId = p.ParentId,
+                Parent1Email = p.Parent1Email,
+                Parent2Email = p.Parent2Email
+            }).ToListAsync();
+        }
+
+        public async Task<string> GetRandomParentIdAsync()
+        {
+            var parentIds = await _context.Parent.Select(p => p.ParentId).ToListAsync();
+
+            Random random = new Random();
+            int index = random.Next(parentIds.Count);
+            return parentIds[index].ToString();
         }
     }
 

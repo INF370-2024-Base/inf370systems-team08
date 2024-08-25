@@ -4,7 +4,6 @@ namespace EduProfileAPI.ViewModels
 {
     public class CreateEmployeeVM
     {
-        public Guid EmployeeId { get; set; }
 
         public Guid EmployeeStatusId { get; set; }
         [StringLength(30)]
