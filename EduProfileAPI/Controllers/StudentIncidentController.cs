@@ -146,7 +146,7 @@ namespace EduProfileAPI.Controllers
             }
         }
 
-        [HttpPost("IncidentType")]
+        [HttpPost("AddIncidentType")]
         public async Task<IActionResult> AddIncidentType([FromBody] IncidentType incidentType)
         {
             if (!ModelState.IsValid)

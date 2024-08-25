@@ -57,7 +57,7 @@ namespace EduProfileAPI.Controllers.Maintenance
         [Route("AddRequest")]
         public async Task<IActionResult> AddRequest(MaintenanceRequestVM cvm)
         {
-            var request = new MaintenanceRequest { MaintenanceProId = cvm.MaintenanceProId, MaintenanceStatusId = cvm.MaintenanceStatusId, MaintenanceTypeId = cvm.MaintenanceTypeId, EmployeeId = cvm.EmployeeId, RequestDate = cvm.RequestDate, Description = cvm.Description, Location = cvm.Location, AssignedTo = cvm.AssignedTo, ScheduleDate = cvm.ScheduleDate, PriorityId = cvm.PriorityId };
+            var request = new MaintenanceRequest { MaintenanceProId = cvm.MaintenanceProId, MaintenanceStatusId = cvm.MaintenanceStatusId, MaintenanceTypeId = cvm.MaintenanceTypeId, EmployeeId = cvm.EmployeeId, RequestDate = cvm.RequestDate, Description = cvm.Description, Location = cvm.Location, AssignedTo = cvm.AssignedTo, ScheduleDate = cvm.ScheduleDate, PriorityId = cvm.PriorityId, Verified = cvm.Verified };
 
             try
             {
@@ -90,6 +90,7 @@ namespace EduProfileAPI.Controllers.Maintenance
                 existingReq.Location = mvm.Location;
                 existingReq.AssignedTo = mvm.AssignedTo;
                 existingReq.ScheduleDate = mvm.ScheduleDate;
+                existingReq.Verified = mvm.Verified;
 
 
                 if (await _reqRepository.SaveChangesAsync())

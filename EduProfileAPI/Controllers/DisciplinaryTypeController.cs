@@ -63,7 +63,6 @@ namespace EduProfileAPI.Controllers
         {
             var disciplinaryType = new DisciplinaryType
             {
-                DisciplinaryTypeId = cvm.DisciplinaryTypeId,
                 DisciplinaryTypeName = cvm.DisciplinaryTypeName,
                 DisciplinaryTypeDescription = cvm.DisciplinaryTypeDescription
             };

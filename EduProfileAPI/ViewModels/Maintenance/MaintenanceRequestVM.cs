@@ -24,5 +24,6 @@ namespace EduProfileAPI.ViewModels.Maintenance
         public string AssignedTo { get; set; }
 
         public DateTime ScheduleDate { get; set; }
+        public bool? Verified { get; set; }
     }
 }

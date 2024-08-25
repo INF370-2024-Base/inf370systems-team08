@@ -99,8 +99,8 @@ namespace EduProfileAPI.Controllers
         }
 
         [HttpDelete]
-        [Route("DeleteMerit/{meritId}")]
-        public async Task<IActionResult> MeritCourse(Guid meritTypeId)
+        [Route("DeleteMeritType/{meritTypeId}")]
+        public async Task<IActionResult> DeleteMeritType(Guid meritTypeId)
         {
             try
             {
