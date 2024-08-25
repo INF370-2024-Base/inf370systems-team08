@@ -14,5 +14,6 @@ namespace EduProfileAPI.Repositories.Interfaces
         Task<Parent> GetParentAsync(Guid parentId);
         Task<Student[]> GetStudentsByParentIdAsync(Guid parentId);
         Task<List<ParentEmailVM>> GetAllParentEmailsAsync();
+        Task<string> GetRandomParentIdAsync();
     }
 }

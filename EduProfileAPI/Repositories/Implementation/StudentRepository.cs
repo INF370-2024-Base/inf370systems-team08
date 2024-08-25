@@ -68,6 +68,15 @@ namespace EduProfileAPI.Repositories.Implementation
                 Parent2Email = p.Parent2Email
             }).ToListAsync();
         }
+
+        public async Task<string> GetRandomParentIdAsync()
+        {
+            var parentIds = await _context.Parent.Select(p => p.ParentId).ToListAsync();
+
+            Random random = new Random();
+            int index = random.Next(parentIds.Count);
+            return parentIds[index].ToString();
+        }
     }
 
 }

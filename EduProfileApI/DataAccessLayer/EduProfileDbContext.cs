@@ -106,6 +106,59 @@ namespace EduProfileAPI.DataAccessLayer
                 .WithMany(s => s.StudentSubjects)
                 .HasForeignKey(ss => ss.SubjectId);
 
+            modelBuilder.Entity<StudentIncident>()
+                .HasOne<Student>()
+                .WithMany() // One student many incidents
+                .HasForeignKey(si => si.StudentId);
+
+            modelBuilder.Entity<Merit>()
+                .HasOne<Student>()
+                .WithMany() // One student many Merits
+                .HasForeignKey(m => m.StudentId);
+
+            modelBuilder.Entity<Disciplinary>()
+                .HasOne<Student>()
+                .WithMany() // One Student many Disciplinaries
+                .HasForeignKey(d => d.StudentId);
+
+            modelBuilder.Entity<StudentDoc>()
+                .HasOne<Student>()
+                .WithMany() // One Student many Docs
+                .HasForeignKey(sd => sd.StudentId);
+
+            modelBuilder.Entity<MeritType>()
+                .HasMany<Merit>() // One MeritType can be associated with many Merits
+                .WithOne() // Each Merit has one MeritType
+                .HasForeignKey(m => m.MeritTypeId) // Foreign key in Merit to MeritType
+                .OnDelete(DeleteBehavior.Restrict); // Prevent MeritType deletion if associated with Merits
+
+            modelBuilder.Entity<MaintenanceType>()
+                .HasMany<MaintenanceRequest>() // each MaintenanceType can be associated with many MaintenanceRequests
+                .WithOne() //MaintenanceRequest has one MaintenanceType
+                .HasForeignKey(mr => mr.MaintenanceTypeId) // Foreign key in MaintenanceRequest pointing to MaintenanceType
+                .OnDelete(DeleteBehavior.Restrict); // Prevent MaintenanceType deletion if associated with MaintenanceRequests
+
+            modelBuilder.Entity<IncidentType>()
+                 .HasMany<StudentIncident>() // each IncidentType can be associated with many StudentIncidents
+                 .WithOne() //tudentIncident has one IncidentType
+                 .HasForeignKey(si => si.IncidentTypeId) // Foreign key in StudentIncident pointing to IncidentType
+                 .OnDelete(DeleteBehavior.Restrict); // Prevent IncidentType deletion if associated with StudentIncidents
+
+            modelBuilder.Entity<DisciplinaryType>()
+                .HasMany<Disciplinary>() // Assuming each DisciplinaryType can be associated with many Disciplinaries
+                .WithOne() // Each Disciplinary has one DisciplinaryType
+                .HasForeignKey(d => d.DisciplinaryTypeId) // Foreign key in Disciplinary pointing to DisciplinaryType
+                .OnDelete(DeleteBehavior.Restrict); // Prevent DisciplinaryType deletion if associated with Disciplinaries
+
+            modelBuilder.Entity<StudentDocumentType>()
+                .HasMany<StudentDoc>() // Assuming each StudentDocumentType can be associated with many StudentDocs
+                .WithOne() // Each StudentDoc has one StudentDocumentType
+                .HasForeignKey(sd => sd.StuDocumentId) // Foreign key in StudentDoc pointing to StudentDocumentType
+                .OnDelete(DeleteBehavior.Restrict); // Prevent StudentDocumentType deletion if associated with StudentDocs
+
+
+
+
 
             base.OnModelCreating(modelBuilder);
         }
