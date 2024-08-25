@@ -16,6 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using EduProfileAPI.DataAccessLayer;
 using EduProfileAPI.SmsService;
 
+
 namespace EduProfileAPI.Controllers
 {
     [Route("api/[controller]")]
@@ -72,7 +73,20 @@ namespace EduProfileAPI.Controllers
             var role = roles.FirstOrDefault();
             // Normal login when 2FA is not enabled
             var tokenString = GenerateJwtToken(user);
-            return Ok(new { Token = tokenString, Roles = role });
+            //check if they have userid
+            var userTabel = _dbContext.User.FirstOrDefault(x => x.AspNetUserId == user.Id);
+            if ( userTabel == null)
+            {
+                return Ok(new { Token = tokenString, Roles = role });
+            }
+
+            var employeeId = _dbContext.EmployeeUser.FirstOrDefault(x => x.UserId == userTabel.UserId);
+            if (employeeId == null)
+            {
+                return Ok(new { Token = tokenString, Roles = role, UserIds = userTabel.UserId });
+            }
+
+            return Ok(new { Token = tokenString, Roles = role, UserIds   = userTabel.UserId, EmployeeId = employeeId });
         }
 
 
@@ -230,7 +244,20 @@ namespace EduProfileAPI.Controllers
             var role = roles.FirstOrDefault();
             // Generate JWT token upon successful 2FA verification
             var tokenString = GenerateJwtToken(user);
-            return Ok(new { Token = tokenString, Roles = role });
+            var userTabel = _dbContext.User.FirstOrDefault(x => x.AspNetUserId == user.Id);
+            if (userTabel == null)
+            {
+                return Ok(new { Token = tokenString, Roles = role });
+            }
+
+
+            var employeeId = _dbContext.EmployeeUser.FirstOrDefault(x => x.UserId == userTabel.UserId);
+            if (employeeId == null)
+            {
+                return Ok(new { Token = tokenString, Roles = role, UserIds = userTabel.UserId });
+            }
+
+            return Ok(new { Token = tokenString, Roles = role, UserIds = userTabel.UserId, EmployeeId = employeeId });
         }
 
 
