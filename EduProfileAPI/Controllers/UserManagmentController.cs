@@ -84,6 +84,7 @@ namespace EduProfileAPI.Controllers
             }
         }
 
+
         [HttpPost("update-user-isactive")]
         public async Task<IActionResult> UpdateUserIsActive([FromBody] UpdateUserIsActiveViewModel model)
         {
