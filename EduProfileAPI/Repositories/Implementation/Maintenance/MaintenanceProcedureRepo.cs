@@ -13,6 +13,12 @@ namespace EduProfileAPI.Repositories.Implementation.Maintenance
             _context = context;
         }
 
+        public async Task<MaintenanceProcedure[]> GetAllProceduresAsync()
+        {
+            IQueryable<MaintenanceProcedure> query = _context.MaintenanceProcedure;
+            return await query.ToArrayAsync();
+        }
+
         public async Task<MaintenanceProcedure> GetProcedureAsync(Guid maintenanceProId)
         {
             IQueryable<MaintenanceProcedure> query = _context.MaintenanceProcedure.Where(c => c.MaintenanceProId == maintenanceProId);
