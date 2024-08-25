@@ -17,6 +17,20 @@ namespace EduProfileAPI.Controllers.Maintenance
             _proRepository = proRepository;
         }
 
+        [HttpGet]
+        [Route("GetAllProcedures")] //returns a list of merits
+        public async Task<IActionResult> GetAllProcedures()
+        {
+            try
+            {
+                var results = await _proRepository.GetAllProceduresAsync();
+                return Ok(results);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal Server Error: {ex.Message}");
+            }
+        }
 
         [HttpGet]
         [Route("GetProcedure/{maintenanceProId}")]
