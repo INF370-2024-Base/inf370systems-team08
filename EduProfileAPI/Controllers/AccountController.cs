@@ -16,7 +16,6 @@ using Microsoft.EntityFrameworkCore;
 using EduProfileAPI.DataAccessLayer;
 using EduProfileAPI.SmsService;
 
-
 namespace EduProfileAPI.Controllers
 {
     [Route("api/[controller]")]
@@ -69,24 +68,10 @@ namespace EduProfileAPI.Controllers
 
                 return Ok(new { Message = "Two factor authentication required.", userId = user.Id });
             }
-            var roles = await _userManager.GetRolesAsync(user);
-            var role = roles.FirstOrDefault();
+
             // Normal login when 2FA is not enabled
             var tokenString = GenerateJwtToken(user);
-            //check if they have userid
-            var userTabel = _dbContext.User.FirstOrDefault(x => x.AspNetUserId == user.Id);
-            if ( userTabel == null)
-            {
-                return Ok(new { Token = tokenString, Roles = role });
-            }
-
-            var employeeId = _dbContext.EmployeeUser.FirstOrDefault(x => x.UserId == userTabel.UserId);
-            if (employeeId == null)
-            {
-                return Ok(new { Token = tokenString, Roles = role, UserIds = userTabel.UserId });
-            }
-
-            return Ok(new { Token = tokenString, Roles = role, UserIds   = userTabel.UserId, EmployeeId = employeeId });
+            return Ok(new { Token = tokenString });
         }
 
 
@@ -99,7 +84,7 @@ namespace EduProfileAPI.Controllers
                 var result = await _userManager.ChangePasswordAsync(user, model.oldPassword, model.newPassword);
                 if (result.Succeeded)
                 {
-                    return Ok(new { Status = "Success", Message = "Password has been reset successfully" });
+                    return Ok("Password updated successfully.");
                 }
                 return BadRequest(result.Errors);
             }
@@ -139,7 +124,7 @@ namespace EduProfileAPI.Controllers
             var result = await _userManager.ResetPasswordAsync(user, model.token, model.newPassword);
             if (result.Succeeded)
             {
-                return Ok(new { Status = "Success", Message="Password has been reset successfully" });
+                return Ok("Password has been reset successfully");
             }
             return BadRequest(result.Errors);
         }
@@ -240,24 +225,10 @@ namespace EduProfileAPI.Controllers
             {
                 return BadRequest("Invalid 2FA code.");
             }
-            var roles = await _userManager.GetRolesAsync(user);
-            var role = roles.FirstOrDefault();
+
             // Generate JWT token upon successful 2FA verification
             var tokenString = GenerateJwtToken(user);
-            var userTabel = _dbContext.User.FirstOrDefault(x => x.AspNetUserId == user.Id);
-            if (userTabel == null)
-            {
-                return Ok(new { Token = tokenString, Roles = role });
-            }
-
-
-            var employeeId = _dbContext.EmployeeUser.FirstOrDefault(x => x.UserId == userTabel.UserId);
-            if (employeeId == null)
-            {
-                return Ok(new { Token = tokenString, Roles = role, UserIds = userTabel.UserId });
-            }
-
-            return Ok(new { Token = tokenString, Roles = role, UserIds = userTabel.UserId, EmployeeId = employeeId });
+            return Ok(new { Token = tokenString });
         }
 
 

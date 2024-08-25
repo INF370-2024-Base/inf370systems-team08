@@ -35,19 +35,6 @@ namespace EduProfileAPI.Controllers
             }
         }
 
-        //[HttpGet("GetRemedialFilesForStudent")]
-        //public async Task<IActionResult> GetAllRemFilesForStudent([FromBody])
-        //{
-        //    try
-        //    { 
-                
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, $"Internal Server Error. Please contact support. {ex.Message}");
-        //    }
-        //}
-
         [HttpGet]
         [Route("GetRemedialFile/{remedialFileId}")]
         public async Task<IActionResult> GetRemedialFileAsync(Guid remedialFileId)
