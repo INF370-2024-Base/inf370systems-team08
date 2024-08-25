@@ -25,9 +25,9 @@ namespace EduProfileAPI.Controllers
                 var results = await _employeeRepository.GetAllEmployeesAsync();
                 return Ok(results);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(500, "Internal Server Error. Please contact support.");
+                return StatusCode(500, $"Internal Server Error: {ex.Message}");
             }
         }
 
@@ -90,7 +90,6 @@ namespace EduProfileAPI.Controllers
                 if (existingEmployee == null)
                     return NotFound($"The employee does not exist");
 
-                existingEmployee.EmployeeId = employeeModel.EmployeeId;
                 existingEmployee.EmployeeStatusId = employeeModel.EmployeeStatusId;
                 existingEmployee.FirstName = employeeModel.FirstName;
                 existingEmployee.LastName = employeeModel.LastName;
