@@ -5,7 +5,6 @@ namespace EduProfileAPI.ViewModels
 {
     public class CreateDisciplinaryTypeVM
     {
-        public Guid DisciplinaryTypeId { get; set; }
 
         [StringLength(50)]
         public string DisciplinaryTypeName { get; set; }

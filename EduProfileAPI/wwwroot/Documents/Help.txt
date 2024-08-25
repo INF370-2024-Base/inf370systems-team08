@@ -1032,10 +1032,11 @@
     <li>Enter the Grade Details:</li>
     <ul>
         <li>Grade Level (e.g., Grade 1, Grade 2)</li>
-        <li>Student Education Phase (e.g., Foundation Phase, Intermediate Phase)<
+        <li>Student Education Phase (e.g., Foundation Phase, Intermediate Phase)</li>
+    </ul>
+</ol>
 
-
- <h2>Managing Classes</h2>
+<h2>Managing Classes</h2>
 <p>This section provides guidance for admin users on how to manage classes within the EduProfile system.</p>
 
 <h3>Viewing Classes</h3>
