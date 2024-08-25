@@ -125,6 +125,7 @@ namespace EduProfileAPI.Controllers
             return Ok(types);
         }
 
+        [HttpPost("IncidentType")]
         // GET: api/StudentIncidents/5
         [HttpGet]
         [Route("GetStudentIncidentTypeById/{id}")]
@@ -147,6 +148,7 @@ namespace EduProfileAPI.Controllers
         }
 
         [HttpPost("AddIncidentType")]
+
         public async Task<IActionResult> AddIncidentType([FromBody] IncidentType incidentType)
         {
             if (!ModelState.IsValid)
@@ -166,6 +168,9 @@ namespace EduProfileAPI.Controllers
                 Console.WriteLine($"Error adding incident type: {ex.Message}");
                 return StatusCode(500, "Internal server error");
             }
+        }
+
+
 
         }
 
@@ -209,5 +214,6 @@ namespace EduProfileAPI.Controllers
 
             return NoContent();
         }
+
     }
 }
