@@ -1,4 +1,5 @@
 ﻿using EduProfileAPI.Models;
+using EduProfileAPI.ViewModels;
 
 namespace EduProfileAPI.Repositories.Interfaces
 {
@@ -12,5 +13,6 @@ namespace EduProfileAPI.Repositories.Interfaces
         Task<Parent[]> GetAllParentsAsync();
         Task<Parent> GetParentAsync(Guid parentId);
         Task<Student[]> GetStudentsByParentIdAsync(Guid parentId);
+        Task<List<ParentEmailVM>> GetAllParentEmailsAsync();
     }
 }
