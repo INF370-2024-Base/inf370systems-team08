@@ -1,5 +1,6 @@
 ﻿using EduProfileAPI.DataAccessLayer;
 using EduProfileAPI.EmailService;
+using EduProfileAPI.Models;
 using EduProfileAPI.SmsService;
 using EduProfileAPI.ViewModels;
 using Microsoft.AspNetCore.Http;
@@ -300,7 +301,63 @@ namespace EduProfileAPI.Controllers
             }
         }
 
+        [HttpPost("assign-user-to-employee")]
+        public async Task<IActionResult> AssignUserToEmployee([FromBody] AssignUserToEmployeeViewModel model)
+        {
+            try
+            {
+                var employeeUser = await _dbContext.EmployeeUser.FirstOrDefaultAsync(eu => eu.UserId == model.UserId);
+                if (employeeUser != null)
+                {
+                    return BadRequest("User is already assigned to an employee.");
+                }
+                var newEmployeeUser = new EmployeeUser
+                {
+                    UserId = model.UserId,
+                    EmployeeId = model.EmployeeId,
+                    Description = model.Description
+                };
 
+                await _dbContext.EmployeeUser.AddAsync(newEmployeeUser);
+                await _dbContext.SaveChangesAsync();
+
+                return Ok(new { message = "User assigned to employee successfully." });
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred while processing your request. {ex}");
+            }
+        }
+
+        [HttpPost("assign-user-to-student")]
+        public async Task<IActionResult> AssignUserToStudent([FromBody] AssignUserToStudentViewModel model)
+        {
+            try
+            {
+                var studentUser = await _dbContext.StudentUser.FirstOrDefaultAsync(su => su.UserId == model.UserId);
+                if (studentUser != null)
+                {
+                    return BadRequest("User is already assigned to a student.");
+                }
+
+                var newStudentUser = new StudentUser
+                {
+                    UserId = model.UserId,
+                    StudentId = model.StudentId,
+                    Description = model.Description
+                };
+
+                await _dbContext.StudentUser.AddAsync(newStudentUser);
+                await _dbContext.SaveChangesAsync();
+
+                return Ok(new { message = "User assigned to student successfully." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred while processing your request.{ex}");
+            }
+        }
 
     }
 }
