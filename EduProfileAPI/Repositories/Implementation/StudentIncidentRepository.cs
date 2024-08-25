@@ -109,11 +109,23 @@ namespace EduProfileAPI.Repositories.Implementation
                     IncidentSeverity = si.IncidentSeverity
                 })
                 .ToListAsync();
+            
         }
 
         public async Task<bool> SaveChangesAsync()
         {
             return await _context.SaveChangesAsync() > 0;
+        }
+
+        public async Task<IEnumerable<IncidentType>> AddIncidentAsync(IncidentType incidentType)
+        {
+            incidentType.IncidentTypeId = Guid.NewGuid();
+            incidentType.IncidentCategory = incidentType.IncidentCategory;
+            incidentType.IncidentSeverity = incidentType.IncidentSeverity;
+
+            await _context.IncidentType.AddAsync(incidentType);
+            await _context.SaveChangesAsync();
+            return await _context.IncidentType.ToListAsync();
         }
     }
 }

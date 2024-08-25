@@ -12,5 +12,6 @@ namespace EduProfileAPI.Repositories.Interfaces
         Task<bool> ExistsAsync(Guid id);
         Task<IEnumerable<IncidentType>> GetAllTypesAsync();
         Task<bool> SaveChangesAsync();
+        Task<IEnumerable<IncidentType>> AddIncidentAsync(IncidentType incidentType);
     }
 }

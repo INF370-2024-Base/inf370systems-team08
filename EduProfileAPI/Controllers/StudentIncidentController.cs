@@ -125,5 +125,27 @@ namespace EduProfileAPI.Controllers
             return Ok(types);
         }
 
+        [HttpPost("IncidentType")]
+        public async Task<IActionResult> AddIncidentType([FromBody] IncidentType incidentType)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                await _Repository.AddIncidentAsync(incidentType);
+                await _Repository.SaveChangesAsync(); // Ensure changes are saved to the database
+                return Ok(incidentType);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                Console.WriteLine($"Error adding incident type: {ex.Message}");
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
     }
 }
