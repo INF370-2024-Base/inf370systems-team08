@@ -90,6 +90,7 @@ namespace EduProfileAPI.Controllers
         }
 
 
+
         [HttpPost("update-password")]
         public async Task<IActionResult> UpdatePassword([FromBody] UpdatePassword model)
         {
