@@ -106,6 +106,26 @@ namespace EduProfileAPI.DataAccessLayer
                 .WithMany(s => s.StudentSubjects)
                 .HasForeignKey(ss => ss.SubjectId);
 
+            modelBuilder.Entity<StudentIncident>()
+                .HasOne<Student>()
+                .WithMany() // One student many incidents
+                .HasForeignKey(si => si.StudentId);
+
+            modelBuilder.Entity<Merit>()
+                .HasOne<Student>()
+                .WithMany() // One student many Merits
+                .HasForeignKey(m => m.StudentId);
+
+            modelBuilder.Entity<Disciplinary>()
+                .HasOne<Student>()
+                .WithMany() // One Student many Disciplinaries
+                .HasForeignKey(d => d.StudentId);
+
+            modelBuilder.Entity<StudentDoc>()
+                .HasOne<Student>()
+                .WithMany() // One Student many Docs
+                .HasForeignKey(sd => sd.StudentId);
+
 
             base.OnModelCreating(modelBuilder);
         }
