@@ -172,7 +172,7 @@ namespace EduProfileAPI.Controllers
 
 
 
-        }
+        
 
         [HttpPut]
         [Route("UpdateIncidentType/{id}")]

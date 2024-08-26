@@ -19,6 +19,6 @@ namespace EduProfileAPI.Repositories.Interfaces
 
 
         Task<bool> SaveChangesAsync();
-        Task<IEnumerable<IncidentType>> AddIncidentAsync(IncidentType incidentType);
+
     }
 }

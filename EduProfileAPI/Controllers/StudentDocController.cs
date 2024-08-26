@@ -66,6 +66,7 @@ namespace EduProfileAPI.Controllers
 
             var studoc = new StudentDoc
             {
+                StuDocumentId = Guid.NewGuid(),
                 StudentId = cvm.StudentId,
                 DocumentTypeId = cvm.DocumentTypeId,
                 DocumentName = cvm.DocumentName ?? cvm.StudentDocumentAttachment.FileName,  // Use uploaded file name if no name provided
@@ -82,7 +83,7 @@ namespace EduProfileAPI.Controllers
             catch (Exception ex)
             {
                 // Log the exception or handle it accordingly
-                return BadRequest("Invalid transaction");
+                return BadRequest($"Invalid transaction {ex}");
             }
            
         }
