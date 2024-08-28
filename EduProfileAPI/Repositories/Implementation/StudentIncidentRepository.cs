@@ -134,7 +134,6 @@ namespace EduProfileAPI.Repositories.Implementation
                     IncidentSeverity = si.IncidentSeverity
                 })
                 .ToListAsync();
-            
         }
 
   
@@ -153,7 +152,6 @@ namespace EduProfileAPI.Repositories.Implementation
             await _context.SaveChangesAsync();
             return await _context.IncidentType.ToListAsync();
         }
-
 
         public async Task<IncidentType> UpdateIncidentType(IncidentType incidentType)
         {
@@ -179,6 +177,5 @@ namespace EduProfileAPI.Repositories.Implementation
             await _context.SaveChangesAsync();
             return true;
         }
-
     }
 }

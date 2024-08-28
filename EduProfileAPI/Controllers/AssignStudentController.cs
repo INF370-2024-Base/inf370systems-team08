@@ -40,6 +40,7 @@ namespace EduProfileAPI.Controllers
             {
                 return BadRequest($"Internal Server Error: {ex.Message}");
             }
+
         }
 
         [HttpPut("AssignStudentToGrade")]

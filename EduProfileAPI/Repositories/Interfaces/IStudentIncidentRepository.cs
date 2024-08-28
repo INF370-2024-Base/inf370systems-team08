@@ -19,6 +19,5 @@ namespace EduProfileAPI.Repositories.Interfaces
 
 
         Task<bool> SaveChangesAsync();
-
     }
 }
