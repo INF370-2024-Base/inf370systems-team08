@@ -3,16 +3,19 @@ using EduProfileAPI.Repositories.Interfaces;
 using EduProfileAPI.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
+using EduProfileAPI.DataAccessLayer;
 
 [Route("api/[controller]")]
 [ApiController]
 public class ClassController : ControllerBase
 {
     private readonly IClass _ClassRepo;
+    private readonly EduProfileDbContext _context;
 
-    public ClassController(IClass ClassRepo)
+    public ClassController(IClass ClassRepo, EduProfileDbContext context)
     {
         _ClassRepo = ClassRepo;
+        _context = context;
     }
 
     [HttpGet]
@@ -29,6 +32,24 @@ public class ClassController : ControllerBase
             return StatusCode(500, $"Internal Server Error. Please contact support. {ex.Message}");
         }
     }
+
+    [HttpGet("GetClassByEmployeeId/{employeeId}")]
+    public async Task<IActionResult> GetClassByEmployeeId(Guid employeeId)
+    {
+        try
+        {
+            var results = await _context.Class.FindAsync(employeeId);
+
+            if (results == null) return NotFound("Class does not exist");
+
+            return Ok(results);
+        }
+        catch (Exception)
+        {
+            return StatusCode(500, "Internal Server Error. Please contact support");
+        }
+    }
+
 
     [HttpGet]
     [Route("GetClasses/{classId}")]

@@ -27,7 +27,9 @@ namespace EduProfileAPI.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Internal Server Error: {ex.Message}");
+
+                return StatusCode(500, $"Internal Server Error. Please contact support. {ex}");
+
             }
         }
 
