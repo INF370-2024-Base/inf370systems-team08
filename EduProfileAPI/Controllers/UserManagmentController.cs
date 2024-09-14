@@ -116,11 +116,11 @@ namespace EduProfileAPI.Controllers
                 if (result.Succeeded)
                 {
                     var emailSubject = model.IsActive ? "Access Enabled" : "Access Disabled";
-                    var emailBody = model.IsActive
+                    var smsMessage = model.IsActive
                         ? "Your access to EduProfile has been enabled. You can now log in to your account.😀"
                         : "Your access to EduProfile has been disabled. You will not be able to log in until your access is re-enabled. Contact an administrator at the school";
 
-                    await _emailService.SendEmailAsync("no-reply@yourdomain.com", identityUser.Email, emailSubject, emailBody);
+                    await _smsService.SendSmsAsync( identityUser.PhoneNumber, smsMessage);
                     return Ok(new { message = "User IsActive status updated successfully." });
                 }
                 else
