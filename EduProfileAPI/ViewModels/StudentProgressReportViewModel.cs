@@ -13,5 +13,6 @@ namespace EduProfileAPI.ViewModels
             public Assesment Assesment { get; set; }
             public int MarkAchieved { get; set; }
         }
+        public string ParentEmail { get; set; }
     }
 }

@@ -30,7 +30,7 @@ namespace EduProfileAPI.Controllers
             }
 
             var emailBody = GenerateEmailBody(report);
-            await _emailService.SendEmailAsync("smaduna02@gmail.com", request.ParentEmail, "Student Progress Report", emailBody);
+            await _emailService.SendEmailAsync("smaduna02@gmail.com", report.ParentEmail, "Student Progress Report", emailBody);
 
             return Ok(new { Message = "Progress report sent successfully." });
         }
@@ -70,7 +70,7 @@ namespace EduProfileAPI.Controllers
         public class SendProgressReportRequest
         {
             public Guid StudentId { get; set; }
-            public string ParentEmail { get; set; }
+            
         }
     }
 }
