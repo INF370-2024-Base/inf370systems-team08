@@ -22,6 +22,8 @@ namespace EduProfileAPI.Repositories.Implementation
                 return null;
             }
 
+            var parentEmail = await _context.Parent.FirstOrDefaultAsync(pe => pe.ParentId == student.ParentId);
+
             var assessmentMarks = await _context.AssesmentMark
                 .Where(am => am.StudentId == studentId)
                 .ToListAsync();
@@ -47,7 +49,8 @@ namespace EduProfileAPI.Repositories.Implementation
                     MarkAchieved = assessmentMarks.FirstOrDefault(am => am.AssesmentId == a.AssesmentId)?.MarkAchieved ?? 0
                 }).ToList(),
                 Merits = merits,
-                Incidents = incidents
+                Incidents = incidents,
+                ParentEmail = parentEmail.Parent1Email
             };
 
             return report;
