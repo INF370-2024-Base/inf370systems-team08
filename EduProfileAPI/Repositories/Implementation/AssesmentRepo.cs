@@ -2,22 +2,38 @@
 using EduProfileAPI.Models;
 using EduProfileAPI.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.Extensions.Logging;
 namespace EduProfileAPI.Repositories.Implementation
 {
     public class AssesmentRepo: IAssesment
     {
         private readonly EduProfileDbContext _context;
-        public AssesmentRepo(EduProfileDbContext context)
+        private readonly ILogger<AssesmentRepo> _logger;
+        public AssesmentRepo(EduProfileDbContext context, ILogger<AssesmentRepo> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         public async Task<Assesment[]> GetAllAssesmentsAsync()
         {
-            IQueryable<Assesment> query = _context.Assesment;
-            return await query.ToArrayAsync();
+            try
+            {
+                // Fetch assessments, handle null checks safely
+                var assessments = await _context.Assesment
+                                                .ToArrayAsync();
+
+                // Return an empty array if assessments are null
+                return assessments ?? new Assesment[0];
+            }
+            catch (Exception ex)
+            {
+                // Log the error
+                _logger.LogError(ex, "Error retrieving assessments.");
+                throw;
+            }
         }
+
 
         public async Task<Assesment> GetAssesmentAsync(Guid assesmentId)
         {
@@ -39,5 +55,13 @@ namespace EduProfileAPI.Repositories.Implementation
         {
             return await _context.SaveChangesAsync() > 0;
         }
+
+        public async Task<Assesment[]> GetAssessmentsByTermAsync(int term)
+        {
+            return await _context.Assesment
+                                 .Where(a => a.Term == term)
+                                 .ToArrayAsync();
+        }
+
     }
 }

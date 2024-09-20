@@ -3,7 +3,7 @@ using EduProfileAPI.Repositories.Interfaces;
 using EduProfileAPI.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.Extensions.Logging;
 namespace EduProfileAPI.Controllers
 {
     [Route("api/[controller]")]
@@ -11,24 +11,33 @@ namespace EduProfileAPI.Controllers
     public class AssesmentController : ControllerBase
     {
         private readonly IAssesment _assesmentRepository;
-
-        public AssesmentController(IAssesment assesmentRepository)
+        private readonly ILogger<AssesmentController> _logger;
+        public AssesmentController(IAssesment assesmentRepository, ILogger<AssesmentController> logger)
         {
             _assesmentRepository = assesmentRepository;
+            _logger = logger;
         }
 
         [HttpGet]
-        [Route("GetAllAssesments")] 
+        [Route("GetAllAssesments")]
         public async Task<IActionResult> GetAllAssesments()
         {
             try
             {
-                var results = await _assesmentRepository.GetAllAssesmentsAsync();
-                return Ok(results);
+                var assessments = await _assesmentRepository.GetAllAssesmentsAsync();
+
+                if (assessments == null || !assessments.Any())
+                {
+                    return NotFound("No assessments found.");
+                }
+
+                return Ok(assessments);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Internal Server Error: {ex.Message}");
+                // Log the error and return a more user-friendly error message
+                _logger.LogError(ex, "An error occurred while fetching assessments.");
+                return StatusCode(500, "Internal Server Error: Data is null or unavailable.");
             }
         }
 
@@ -121,5 +130,26 @@ namespace EduProfileAPI.Controllers
 
             return BadRequest("Your request is invalid");
         }
+
+        [HttpGet]
+        [Route("GetAssesmentsByTerm/{term}")]
+        public async Task<IActionResult> GetAssesmentsByTerm(int term)
+        {
+            try
+            {
+                var results = await _assesmentRepository.GetAssessmentsByTermAsync(term);
+
+                if (results == null || !results.Any())
+                    return NotFound($"No assessments found for term {term}");
+
+                return Ok(results);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Internal Server Error. Please contact support.");
+            }
+        }
+
+
     }
 }
