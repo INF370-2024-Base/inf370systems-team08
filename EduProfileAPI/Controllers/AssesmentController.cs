@@ -63,7 +63,7 @@ namespace EduProfileAPI.Controllers
         [Route("AddAssesment")]
         public async Task<IActionResult> AddAssesment(AssesmentVM cvm)
         {
-            var assesment = new Assesment { SubjectId = cvm.SubjectId, EmployeeId = cvm.EmployeeId, AssesmentName = cvm.AssesmentName, AchievableMark = cvm.AchievableMark, AssesmentDate = cvm.AssesmentDate, AssesmentType = cvm.AssesmentType, AssesmentWeighting = cvm.AssesmentWeighting };
+            var assesment = new Assesment { SubjectId = cvm.SubjectId, EmployeeId = cvm.EmployeeId, AssesmentName = cvm.AssesmentName, AchievableMark = cvm.AchievableMark, AssesmentDate = cvm.AssesmentDate, AssesmentType = cvm.AssesmentType, AssesmentWeighting = cvm.AssesmentWeighting, Term = cvm.Term };
 
             try
             {
@@ -93,6 +93,7 @@ namespace EduProfileAPI.Controllers
                 existingAssesment.AssesmentType = model.AssesmentType;
                 existingAssesment.AssesmentWeighting = model.AssesmentWeighting;
                 existingAssesment.AchievableMark = model.AchievableMark;
+                existingAssesment.Term = model.Term;
 
                 if (await _assesmentRepository.SaveChangesAsync())
                 {
