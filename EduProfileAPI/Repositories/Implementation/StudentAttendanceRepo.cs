@@ -81,7 +81,6 @@ namespace EduProfileAPI.Repositories.Implementation
                     EmployeeId = model.EmployeeId,
                     AttendanceDate = model.AttendanceDate,
                     AttendanceStatusId = model.AttendanceStatusId,
-                    Remarks = model.Remarks
                 };
 
                 await _context.StudentAttendance.AddAsync(studentAttendance);
@@ -112,7 +111,6 @@ namespace EduProfileAPI.Repositories.Implementation
                                                   .FirstOrDefaultAsync(sa => sa.StudentAttendanceId == model.StudentAttendanceId);
         
             studentAttendance.AttendanceStatusId = model.AttendanceStatusId;
-            studentAttendance.Remarks = model.Remarks;
             studentAttendance.AttendanceDate = model.AttendanceDate;
             studentAttendance.EmployeeId = model.EmployeeId;
             studentAttendance.ClassId = model.ClassId;
@@ -129,7 +127,6 @@ namespace EduProfileAPI.Repositories.Implementation
                 EmployeeId = studentAttendance.EmployeeId,
                 AttendanceDate = studentAttendance.AttendanceDate,
                 AttendanceStatusId = studentAttendance.AttendanceStatusId,
-                Remarks = studentAttendance.Remarks
             };
         }
 
