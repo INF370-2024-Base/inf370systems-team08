@@ -94,10 +94,10 @@ namespace EduProfileAPI.DataAccessLayer
                 .HasForeignKey(s => s.ClassId)
                 .OnDelete(DeleteBehavior.Restrict);  // Prevent class deletion if associated with students
 
+            // Configure the many-to-many relationship between Student and Subject
             modelBuilder.Entity<StudentSubject>()
-                .HasKey(ss => ss.StudentSubjectId);  // Now using a single primary key
+                .HasKey(ss => new { ss.StudentId, ss.SubjectId, ss.GradeId }); // Composite key
 
-            // Keep the foreign keys
             modelBuilder.Entity<StudentSubject>()
                 .HasOne(ss => ss.Student)
                 .WithMany(s => s.StudentSubjects)
@@ -107,6 +107,11 @@ namespace EduProfileAPI.DataAccessLayer
                 .HasOne(ss => ss.Subject)
                 .WithMany(s => s.StudentSubjects)
                 .HasForeignKey(ss => ss.SubjectId);
+
+            modelBuilder.Entity<StudentSubject>()
+                .HasOne<Grade>()
+                .WithMany()
+                .HasForeignKey(ss => ss.GradeId);
 
             modelBuilder.Entity<StudentIncident>()
                 .HasOne<Student>()
