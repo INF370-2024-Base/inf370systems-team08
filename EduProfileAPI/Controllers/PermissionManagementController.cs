@@ -16,34 +16,48 @@ namespace EduProfileAPI.Controllers
             _dbContext = dbContext;
         }
 
-        [HttpPost("assign-permission")]
-        public async Task<IActionResult> AssignPermissionToUser(string userId, int permissionId)
+        [HttpPost("assign-permission/{userId}/{permissionId}")]
+        public async Task<IActionResult> AssignPermissionToUser(Guid userId,int permissionId)
         {
-            var userPermission = new UserPermissions
+            try
             {
-                Id = userId,
-                PermissionId = permissionId
-            };
+                var userPermission = new UserPermissions
+                {
+                    Id = userId,
+                    PermissionId = permissionId
+                };
 
-            _dbContext.UserPermissions.Add(userPermission);
-            await _dbContext.SaveChangesAsync();
+                _dbContext.UserPermissions.Add(userPermission);
+                await _dbContext.SaveChangesAsync();
 
-            return Ok("Permissions assigned");
+                return Ok("Permissions assigned");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal Server Error Contact Support: {ex.Message}");
+            }
         }
 
-        [HttpDelete("revoke-permission")]
-        public async Task<IActionResult> RevokePermissionFromUser(string userId, int permissionId)
+        [HttpDelete("revoke-permission/{userId}/{permissionId}")]
+        public async Task<IActionResult> RevokePermissionFromUser(Guid userId, int permissionId)
         {
-            var userPermission = await _dbContext.UserPermissions
-                .FirstOrDefaultAsync(up => up.Id == userId && up.PermissionId == permissionId);
-
-            if (userPermission != null)
+            try
             {
-                _dbContext.UserPermissions.Remove(userPermission);
-                await _dbContext.SaveChangesAsync();
-            }
+                var userPermission = await _dbContext.UserPermissions
+                    .FirstOrDefaultAsync(up => up.Id == userId && up.PermissionId == permissionId);
 
-            return Ok("Permissions revoked");
+                if (userPermission != null)
+                {
+                    _dbContext.UserPermissions.Remove(userPermission);
+                    await _dbContext.SaveChangesAsync();
+                }
+
+                return Ok("Permissions revoked");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal Server Error Contact Support: {ex.Message}");
+            }
         }
 
         [HttpGet("get-permission")]
@@ -54,7 +68,7 @@ namespace EduProfileAPI.Controllers
         }
 
         [HttpGet("get-userpermission")]
-        public async Task<IActionResult> GetUserPermissionFor(string UserId)
+        public async Task<IActionResult> GetUserPermissionFor(Guid UserId)
         {
             var permissions = await _dbContext.Permissions
                 .Where(p => _dbContext.UserPermissions

@@ -6,7 +6,7 @@ namespace EduProfileAPI.Models.User
     {
         [Key]
         public int UserPermissionId { get; set; }
-        public string Id { get; set; }
+        public Guid Id { get; set; }
         public int PermissionId { get; set; }
 
     }
