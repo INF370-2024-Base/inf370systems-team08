@@ -20,5 +20,16 @@ namespace EduProfileAPI.Repositories.Implementation
             return await query.ToArrayAsync();
         
         }
+
+        public async Task<Student[]> StudentsForTeachersClass(Guid employeeId)
+        {
+            var query = from student in _context.Student
+                        join cls in _context.Class
+                        on student.ClassId equals cls.ClassId
+                        where cls.EmployeeId == employeeId
+                        select student;
+
+            return await query.ToArrayAsync();
+        }
     }
 }

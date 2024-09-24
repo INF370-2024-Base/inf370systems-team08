@@ -80,7 +80,7 @@ namespace EduProfileAPI.Controllers
                 return Ok(new { Token = tokenString, Roles = role });
             }
 
-            var employeeId = _dbContext.EmployeeUser.FirstOrDefault(x => x.UserId == userTabel.UserId);
+            var employeeId = _dbContext.EmployeeUser.FirstOrDefault(x => x.UserId == userTabel.UserId).EmployeeId;
             if (employeeId == null)
             {
                 return Ok(new { Token = tokenString, Roles = role, UserIds = userTabel.UserId });
