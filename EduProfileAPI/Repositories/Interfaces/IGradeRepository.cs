@@ -5,7 +5,8 @@ namespace EduProfileAPI.Repositories.Interfaces
 {
     public interface IGradeRepository
     {
-        Task<Grade[]> GetAllGradesAsync();
+        //Task<Grade[]> GetAllGradesAsync();
+        Task<List<Grade>> GetAllGradesAsync();
         Task<GradeViewModel> CreateGradeAsync(CreateGradeViewModel model);    
         Task<GradeViewModel> GetGradeByIdAsync(Guid id);
         Task<GradeViewModel> UpdateGradeAsync(UpdateGradeViewModel model);
