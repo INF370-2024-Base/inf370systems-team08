@@ -33,5 +33,29 @@ namespace EduProfileAPI.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+
+            [HttpGet("getstudentreleases/{studentId}")]
+            public async Task<IActionResult> GetEarlyReleasesByStudentId(Guid studentId)
+            {
+                if (studentId == Guid.Empty)
+                {
+                    return BadRequest("Invalid Student ID.");
+                }
+
+                try
+                {
+                    var earlyReleases = await _earlyReleasesRepo.GetEarlyReleasesByStudentId(studentId);
+
+                    if (earlyReleases == null || !earlyReleases.Any())
+                    {
+                        return NotFound($"No early release records found for Student ID: {studentId}");
+                    }
+                    return Ok(earlyReleases);
+                }
+                catch (Exception ex)
+                {
+                    return StatusCode(500, ex);
+                }
+            }
+        }
     }
-}
