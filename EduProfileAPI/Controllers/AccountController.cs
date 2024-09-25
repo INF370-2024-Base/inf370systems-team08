@@ -35,7 +35,7 @@ namespace EduProfileAPI.Controllers
             _emailService = emailService;
             _configuration = configuration;
             _roleManager = roleManager;
-            _dbContext = dbContext;
+            _dbContext = dbContext ;
             _smsService = smsService;
         }
 
@@ -80,13 +80,17 @@ namespace EduProfileAPI.Controllers
                 return Ok(new { Token = tokenString, Roles = role });
             }
 
-            var employeeId = _dbContext.EmployeeUser.FirstOrDefault(x => x.UserId == userTabel.UserId).EmployeeId;
+            var employeeRecord = _dbContext.EmployeeUser
+                                           .FirstOrDefault(x => x.UserId == userTabel.UserId);
+
+            var employeeId = employeeRecord?.EmployeeId; // Using the null-conditional operator
+
             if (employeeId == null)
             {
                 return Ok(new { Token = tokenString, Roles = role, UserIds = userTabel.UserId });
             }
 
-            return Ok(new { Token = tokenString, Roles = role, UserIds   = userTabel.UserId, EmployeeId = employeeId });
+            return Ok(new { Token = tokenString, Roles = role, UserIds = userTabel.UserId, EmployeeId = employeeId });
         }
 
 

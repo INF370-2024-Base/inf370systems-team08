@@ -358,5 +358,33 @@ namespace EduProfileAPI.Controllers
             }
         }
 
+        [HttpGet("check-user-assignment/{userId}")]
+        public async Task<IActionResult> CheckUserAssignment(Guid userId)
+        {
+            try 
+            { 
+                var employeeUser = await _dbContext.EmployeeUser.FirstOrDefaultAsync(eu => eu.UserId == userId);
+                var studentUser = await _dbContext.StudentUser.FirstOrDefaultAsync(su => su.UserId == userId);
+
+                if (employeeUser != null)
+                {
+                    return Ok("true");
+                }
+                else if (studentUser != null)
+                {
+                    return Ok("true");
+                }
+                else
+                {
+                    return Ok("false");
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred while processing your request. {ex}");
+            }
+        
+        }
+
     }
 }
