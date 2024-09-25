@@ -22,15 +22,8 @@ public class ClassController : ControllerBase
     [Route("GetAllClasses")]
     public async Task<IActionResult> GetAllClasses()
     {
-        try
-        {
-            var result = await _ClassRepo.GetAllClassesAsync();
-            return Ok(result);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, $"Internal Server Error. Please contact support. {ex.Message}");
-        }
+        var classes = await _ClassRepo.GetAllClassesAsync();
+        return Ok(classes);
     }
 
     [HttpGet("GetClassByEmployeeId/{employeeId}")]

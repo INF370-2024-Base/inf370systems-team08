@@ -16,10 +16,12 @@ namespace EduProfileAPI.Repositories.Implementation
             _context = context;
         }
 
-        public async Task<RemedialActivity[]> GetAllRemedialActivitiesAsync()
+        // Call the stored procedure to retrieve all remedial activities
+        public async Task<List<RemedialActivity>> GetAllRemedialActivitiesAsync()
         {
-            IQueryable<RemedialActivity> query = _context.RemedialActivity;
-            return await query.ToArrayAsync();
+            return await _context.RemedialActivity
+                .FromSqlRaw("EXEC GetAllRemedialActivities")
+                .ToListAsync();
         }
 
         public async Task<RemedialActivity> GetRemedialActivityAsync(Guid remedialActivityId)

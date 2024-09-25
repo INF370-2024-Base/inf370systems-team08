@@ -5,7 +5,7 @@ namespace EduProfileAPI.Repositories.Interfaces
 {
     public interface ISubjectRepository
     {
-        Task<Subject[]> GetAllSubjectAsync();
+        Task<List<Subject>> GetAllSubjectsAsync();
         Task<SubjectViewModel> CreateSubjectAsync(CreateSubjectViewModel model); 
         Task<SubjectViewModel> GetSubjectByIdAsync(Guid id);
         Task<SubjectViewModel> UpdateSubjectAsync(UpdateSubjectViewModel model);

@@ -23,7 +23,7 @@ namespace EduProfileAPI.Controllers
         [Route("GetIncidents")]
         public async Task<IActionResult> GetStudentIncidentsAsync()
         {
-            var incidents = await _Repository.GetAllAsync();
+            var incidents = await _Repository.GetIncidentsAsync();
             return Ok(incidents);
         }
 

@@ -16,10 +16,9 @@ namespace EduProfileAPI.Repositories.Implementation
             _context = context;
         }
 
-        public async Task<IEnumerable<StudentIncident>> GetAllAsync()
+        public async Task<List<StudentIncident>> GetIncidentsAsync()
         {
-            var incidents = await _context.studentIncident.ToListAsync();
-            return incidents;
+            return await _context.StudentIncident.FromSqlRaw("EXEC GetIncidents").ToListAsync();
         }
 
         public async Task<StudentIncident> GetByIdAsync(Guid? id)

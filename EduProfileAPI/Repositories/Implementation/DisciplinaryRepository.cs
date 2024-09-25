@@ -13,10 +13,11 @@ namespace EduProfileAPI.Repositories.Implementation
             _context = context;
         }
 
-        public async Task<Disciplinary[]> GetAllDisciplinariesAsync()
+        public async Task<List<Disciplinary>> GetAllDisciplinariesAsync()
         {
-            IQueryable<Disciplinary> query = _context.Disciplinary;
-            return await query.ToArrayAsync();
+            return await _context.Disciplinary
+                .FromSqlRaw("EXEC GetAllDisciplinaries")
+                .ToListAsync();
         }
 
         public async Task<Disciplinary> GetDisciplinaryAsync(Guid disciplinaryId)

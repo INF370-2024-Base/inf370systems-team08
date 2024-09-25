@@ -46,10 +46,9 @@ namespace EduProfileAPI.Repositories.Implementation
 
         }
 
-
-        public async Task<SchoolEvent[]> GetAllSchoolEvents()
+        public async Task<List<SchoolEvent>> GetAllSchoolEvents()
         {
-            return await _context.SchoolEvent.ToArrayAsync();
+            return await _context.SchoolEvent.FromSqlRaw("EXEC GetAllSchoolEvents").ToListAsync();
         }
 
         public async Task<SchoolEvent> GetSchoolEventAsync(Guid eventId)

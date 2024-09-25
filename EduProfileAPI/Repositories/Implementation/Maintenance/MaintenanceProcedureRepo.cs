@@ -13,10 +13,12 @@ namespace EduProfileAPI.Repositories.Implementation.Maintenance
             _context = context;
         }
 
-        public async Task<MaintenanceProcedure[]> GetAllProceduresAsync()
+        // Call the stored procedure to retrieve all maintenance procedures
+        public async Task<List<MaintenanceProcedure>> GetAllProceduresAsync()
         {
-            IQueryable<MaintenanceProcedure> query = _context.MaintenanceProcedure;
-            return await query.ToArrayAsync();
+            return await _context.MaintenanceProcedure
+                .FromSqlRaw("EXEC GetAllProcedures")
+                .ToListAsync();
         }
 
         public async Task<MaintenanceProcedure> GetProcedureAsync(Guid maintenanceProId)

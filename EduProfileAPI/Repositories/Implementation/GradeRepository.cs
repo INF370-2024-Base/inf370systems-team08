@@ -17,10 +17,13 @@ namespace EduProfileAPI.Repositories.Implementation
 
         }
 
-        public async Task<Grade[]> GetAllGradesAsync()
+
+        // Call the stored procedure to retrieve all grades
+        public async Task<List<Grade>> GetAllGradesAsync()
         {
-            IQueryable<Grade> query = _context.Grade;
-            return await query.ToArrayAsync();
+            return await _context.Grade
+                .FromSqlRaw("EXEC GetAllGrades")
+                .ToListAsync();
         }
 
         public async Task<GradeViewModel> CreateGradeAsync(CreateGradeViewModel model)
