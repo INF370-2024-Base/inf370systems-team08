@@ -1,6 +1,7 @@
 ﻿using EduProfileAPI.DataAccessLayer;
 using EduProfileAPI.EmailService;
 using EduProfileAPI.Models;
+using EduProfileAPI.Models.User;
 using EduProfileAPI.SmsService;
 using EduProfileAPI.ViewModels;
 using Microsoft.AspNetCore.Http;
@@ -112,15 +113,16 @@ namespace EduProfileAPI.Controllers
                 // Add the new IsActive claim
                 var newClaim = new Claim("IsActive", model.IsActive.ToString().ToLower());
                 var result = await _userManager.AddClaimAsync(identityUser, newClaim);
+                var phoneNumber = "27" + identityUser.PhoneNumber.Substring(1);
 
                 if (result.Succeeded)
                 {
                     var emailSubject = model.IsActive ? "Access Enabled" : "Access Disabled";
-                    var emailBody = model.IsActive
-                        ? "Your access to EduProfile has been enabled. You can now log in to your account.😀"
-                        : "Your access to EduProfile has been disabled. You will not be able to log in until your access is re-enabled. Contact an administrator at the school";
+                    var smsMessage = model.IsActive
+                        ? "EduProfile Account Access Granted 😀"
+                        : "EduProfile Account Access Revoked. Contact Admin";
 
-                    await _emailService.SendEmailAsync("no-reply@yourdomain.com", identityUser.Email, emailSubject, emailBody);
+                    await _smsService.SendSmsAsync(phoneNumber, smsMessage);
                     return Ok(new { message = "User IsActive status updated successfully." });
                 }
                 else
