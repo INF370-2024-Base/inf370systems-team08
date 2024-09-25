@@ -46,5 +46,15 @@ namespace EduProfileAPI.Repositories.Implementation
             return earlyRelease;
 
         }
+
+        public async Task<List<EarlyReleases>> GetEarlyReleasesByStudentId(Guid studentId)
+        {
+            var earlyReleases = await _context.EarlyReleases
+                .Where(er => er.StudentId == studentId)
+                .ToListAsync();
+
+            return earlyReleases;
+        }
+
     }
 }

@@ -38,7 +38,7 @@ namespace EduProfileAPI.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest($"Internal Server Error: {ex.Message}");
+                return BadRequest(ex.InnerException?.Message);
             }
         }
 
