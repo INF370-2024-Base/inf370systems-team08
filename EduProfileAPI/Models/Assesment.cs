@@ -13,5 +13,6 @@ namespace EduProfileAPI.Models
         public string AssesmentType { get; set; }
         public int AchievableMark { get; set; }
         public int AssesmentWeighting { get; set; }
+        public int Term { get; set; }
     }
 }

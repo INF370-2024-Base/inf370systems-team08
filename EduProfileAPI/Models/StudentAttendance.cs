@@ -11,7 +11,6 @@ namespace EduProfileAPI.Models
         public Guid EmployeeId { get; set; }
         public DateTime AttendanceDate { get; set; }
         public Guid AttendanceStatusId { get; set; }
-        public string Remarks { get; set; }
 
     }
 }
