@@ -19,7 +19,7 @@ namespace EduProfileAPI.ViewModels
         [StringLength(10)]
         public string PhoneNumber { get; set; }
 
-        [StringLength(20)]
+        [StringLength(50)]
         public string Address { get; set; }
 
         [StringLength(20)]
