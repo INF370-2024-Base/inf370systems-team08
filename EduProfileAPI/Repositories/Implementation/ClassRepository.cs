@@ -18,16 +18,6 @@ namespace EduProfileAPI.Repositories.Implementation
             _context = context;
         }
 
-        //public async Task<Class[]> GetAllClassesAsync()
-        //{
-
-        //    // IQueryable<Class> query = _context.Class;
-        //    var query = _context.Class;
-
-        //    return await query.ToArrayAsync();
-        //}
-
-        // Call the stored procedure to retrieve all classes
         public async Task<List<Class>> GetAllClassesAsync()
         {
             return await _context.Class

@@ -24,32 +24,20 @@ namespace EduProfileAPI.Controllers
             _gradeRepo = gradeRepo;
         }
 
-        //[HttpGet]
-        //[Route("GetAllGrades")]
-        //public async Task<IActionResult> GetAllGradesAsync()
-        //{
-        //    try
-        //    {
-        //        var results = await _gradeRepo.GetAllGradesAsync();
-        //        return Ok(results);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(StatusCodes.Status500InternalServerError, $"Database Failure: {ex.Message}");
-        //    }
-        //}
-
-
-        // GET: api/Grade
         [HttpGet]
         [Route("GetAllGrades")]
-        public async Task<IActionResult> GetAllGrades()
+        public async Task<IActionResult> GetAllGradesAsync()
         {
-            var grades = await _gradeRepo.GetAllGradesAsync();
-            return Ok(grades);
+            try
+            {
+                var results = await _gradeRepo.GetAllGradesAsync();
+                return Ok(results);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Database Failure: {ex.Message}");
+            }
         }
-
-        // Create Grade
 
         [HttpPost]
         [Route("CreateGrade")]

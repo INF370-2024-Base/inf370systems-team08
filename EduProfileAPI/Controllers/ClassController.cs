@@ -18,21 +18,6 @@ public class ClassController : ControllerBase
         _context = context;
     }
 
-    //[HttpGet]
-    //[Route("GetAllClasses")]
-    //public async Task<IActionResult> GetAllClasses()
-    //{
-    //    try
-    //    {
-    //        var result = await _ClassRepo.GetAllClassesAsync();
-    //        return Ok(result);
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        return StatusCode(500, $"Internal Server Error. Please contact support. {ex.Message}");
-    //    }
-    //}
-
     [HttpGet]
     [Route("GetAllClasses")]
     public async Task<IActionResult> GetAllClasses()

@@ -13,13 +13,6 @@ namespace EduProfileAPI.Repositories.Implementation
             _context = context;
         }
 
-        //public async Task<Disciplinary[]> GetAllDisciplinariesAsync()
-        //{
-        //    IQueryable<Disciplinary> query = _context.Disciplinary;
-        //    return await query.ToArrayAsync();
-        //}
-
-        // Call the stored procedure to retrieve all disciplinaries
         public async Task<List<Disciplinary>> GetAllDisciplinariesAsync()
         {
             return await _context.Disciplinary
