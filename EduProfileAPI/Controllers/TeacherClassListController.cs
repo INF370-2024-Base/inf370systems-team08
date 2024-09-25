@@ -29,5 +29,19 @@ namespace EduProfileAPI.Controllers
             }
         }
 
+        [HttpGet("GetStudentsForTeachersClass/{employeeId}")]
+        public async Task<IActionResult> GetAllStudentsInClassAsync(Guid employeeId)
+        {
+            try
+            {
+                var results = await _teacherClassListRepo.StudentsForTeachersClass(employeeId);
+                return Ok(results);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal Server Error. Please contact support. Error details: {ex.Message}");
+            }
+        }
+
     }
 }

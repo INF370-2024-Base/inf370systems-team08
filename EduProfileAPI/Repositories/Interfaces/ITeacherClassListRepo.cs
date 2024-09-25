@@ -6,5 +6,6 @@ namespace EduProfileAPI.Repositories.Interfaces
     public interface ITeacherClassListRepo
     {
         Task<Student[]> StudentsInClass(Guid classId);
+        Task<Student[]> StudentsForTeachersClass(Guid employeeId);
     }
 }

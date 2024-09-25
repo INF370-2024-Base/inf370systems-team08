@@ -43,7 +43,6 @@ namespace EduProfileAPI.Controllers
                 var users = await _dbContext.User
                     .ToListAsync();
 
-                users.Reverse();
 
                 var userManagementList = new List<UserManagementViewModel>();
 
