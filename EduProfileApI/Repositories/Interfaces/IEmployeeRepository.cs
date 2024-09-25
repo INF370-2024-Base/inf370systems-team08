@@ -6,8 +6,10 @@ namespace EduProfileAPI.Repositories.Interfaces
 {
     public interface IEmployeeRepository
     {
-        Task<Employee[]> GetAllEmployeesAsync();
-       // Task<Employee> GetEmployeeAsync(int employeeId);
+        //Task<Employee[]> GetAllEmployeesAsync();
+        // Task<Employee> GetEmployeeAsync(int employeeId);
+
+        Task<List<Employee>> GetAllEmployeesAsync();
         Task<Employee> GetEmployeeAsync(Guid employeeId); // Corrected the return type
         void Add<T>(T entity) where T : class;
         void Delete<T>(T entity) where T : class;

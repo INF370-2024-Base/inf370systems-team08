@@ -16,21 +16,29 @@ namespace EduProfileAPI.Controllers
             _employeeRepository = employeeRepository;
         }
 
+        //[HttpGet]
+        //[Route("GetAllEmployees")] //returns a list of employees
+        //public async Task<IActionResult> GetAllEmployees()
+        //{
+        //    try
+        //    {
+        //        var results = await _employeeRepository.GetAllEmployeesAsync();
+        //        return Ok(results);
+        //    }
+        //    catch (Exception ex)
+        //    {
+
+        //        return StatusCode(500, $"Internal Server Error. Please contact support. {ex}");
+
+        //    }
+        //}
+
         [HttpGet]
-        [Route("GetAllEmployees")] //returns a list of employees
+        [Route("GetAllEmployees")]
         public async Task<IActionResult> GetAllEmployees()
         {
-            try
-            {
-                var results = await _employeeRepository.GetAllEmployeesAsync();
-                return Ok(results);
-            }
-            catch (Exception ex)
-            {
-
-                return StatusCode(500, $"Internal Server Error. Please contact support. {ex}");
-
-            }
+            var employees = await _employeeRepository.GetAllEmployeesAsync();
+            return Ok(employees);
         }
 
 
