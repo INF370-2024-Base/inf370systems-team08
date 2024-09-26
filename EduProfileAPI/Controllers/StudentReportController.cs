@@ -39,15 +39,15 @@ namespace EduProfileAPI.Controllers
         {
             var builder = new StringBuilder();
             builder.AppendLine($"<h1>Progress Report for {report.StudentName}</h1>");
-            if (report.Assessments != null && report.Assessments.Any())
-            {
-                builder.AppendLine("<h2>Assessments</h2>");
-                foreach (var assessmentReport in report.Assessments)
-                {
-                    var assessment = assessmentReport.Assesment;
-                    builder.AppendLine($"<p>{assessment.AssesmentName} - {assessment.AssesmentType} on {assessment.AssesmentDate.ToShortDateString()}: {assessmentReport.MarkAchieved}/{assessment.AchievableMark}</p>");
-                }
-            }
+            //if (report.Assessments != null && report.Assessments.Any())
+            //{
+            //    builder.AppendLine("<h2>Assessments</h2>");
+            //    foreach (var assessmentReport in report.Assessments)
+            //    {
+            //        var assessment = assessmentReport.Assesment;
+            //        builder.AppendLine($"<p>{assessment.AssesmentName} - {assessment.AssesmentType} on {assessment.AssesmentDate.ToShortDateString()}: {assessmentReport.MarkAchieved}/{assessment.AchievableMark}</p>");
+            //    }
+            //}
             if (report.Merits != null && report.Merits.Any())
             {
                 builder.AppendLine("<h2>Merits</h2>");
