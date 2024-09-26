@@ -8,53 +8,45 @@ namespace EduProfileAPI.Repositories.Implementation
     public class AssesmentRepo: IAssesment
     {
         private readonly EduProfileDbContext _context;
-        private readonly ILogger<AssesmentRepo> _logger;
-        public AssesmentRepo(EduProfileDbContext context, ILogger<AssesmentRepo> logger)
+
+        public AssesmentRepo(EduProfileDbContext context)
         {
             _context = context;
-            _logger = logger;
         }
 
-        public async Task<Assesment[]> GetAllAssesmentsAsync()
+        public async Task<IEnumerable<Assesment>> GetAllAssessmentsAsync()
         {
-            try
+            return await _context.Assesment.ToListAsync();
+        }
+
+        public async Task<Assesment> GetAssessmentByIdAsync(Guid assessmentId)
+        {
+            return await _context.Assesment.FindAsync(assessmentId);
+        }
+
+        public async Task AddAssessmentAsync(Assesment assessment)
+        {
+            await _context.Assesment.AddAsync(assessment);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateAssessmentAsync(Assesment assessment)
+        {
+            _context.Assesment.Update(assessment);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteAssessmentAsync(Guid assessmentId)
+        {
+            var assessment = await _context.Assesment.FindAsync(assessmentId);
+            if (assessment != null)
             {
-                // Fetch assessments, handle null checks safely
-                var assessments = await _context.Assesment
-                                                .ToArrayAsync();
-
-                // Return an empty array if assessments are null
-                return assessments ?? new Assesment[0];
-            }
-            catch (Exception ex)
-            {
-                // Log the error
-                _logger.LogError(ex, "Error retrieving assessments.");
-                throw;
+                _context.Assesment.Remove(assessment);
+                await _context.SaveChangesAsync();
             }
         }
 
 
-        public async Task<Assesment> GetAssesmentAsync(Guid assesmentId)
-        {
-            IQueryable<Assesment> query = _context.Assesment.Where(c => c.AssesmentId == assesmentId);
-            return await query.FirstOrDefaultAsync();
-        }
-
-        public void Add<T>(T entity) where T : class
-        {
-            _context.Add(entity);
-        }
-
-        public void Delete<T>(T entity) where T : class
-        {
-            _context.Remove(entity);
-        }
-
-        public async Task<bool> SaveChangesAsync()
-        {
-            return await _context.SaveChangesAsync() > 0;
-        }
 
     }
 }

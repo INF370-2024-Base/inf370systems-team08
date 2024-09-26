@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EduProfileAPI.Models
 {
@@ -13,8 +14,9 @@ namespace EduProfileAPI.Models
         public string AssesmentType { get; set; }
         public int AchievableMark { get; set; }
         public int AssesmentWeighting { get; set; }
-        public Guid TermId { get; set; }
 
-        //public int Term { get; set; }
+        [ForeignKey("Term")]
+        public Guid TermId { get; set; }
+        public AssesmentTerm Term { get; set; }
     }
 }
