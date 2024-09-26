@@ -39,8 +39,6 @@ namespace EduProfileAPI.Controllers
             }
         }
 
-        // Create Grade
-
         [HttpPost]
         [Route("CreateGrade")]
         public async Task<IActionResult> CreateGradeAsync([FromBody] CreateGradeViewModel model)

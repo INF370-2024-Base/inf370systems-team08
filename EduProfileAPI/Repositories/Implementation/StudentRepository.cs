@@ -14,10 +14,9 @@ namespace EduProfileAPI.Repositories.Implementation
             _context = context;
         }
 
-        public async Task<Student[]> GetAllStudentsAsync()
+        public async Task<List<Student>> GetAllStudentsAsync()
         {
-            IQueryable<Student> query = _context.Student;
-            return await query.ToArrayAsync();
+            return await _context.Student.FromSqlRaw("EXEC GetAllStudents").ToListAsync();
         }
 
         public async Task<Student> GetStudentAsync(Guid studentId)

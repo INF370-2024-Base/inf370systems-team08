@@ -33,7 +33,6 @@ namespace EduProfileAPI.Controllers
             }
         }
 
-
         [HttpGet]
         [Route("GetEmployee/{employeeId}")] //returns a specific course 
         public async Task<IActionResult> GetEmployeeAsync(Guid employeeId)

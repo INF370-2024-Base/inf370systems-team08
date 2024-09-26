@@ -13,10 +13,12 @@ namespace EduProfileAPI.Repositories.Implementation
             _context = context;
         }
 
-        public async Task<Merit[]> GetAllMeritsAsync()
+        // Call the stored procedure to retrieve all merits
+        public async Task<List<Merit>> GetAllMeritsAsync()
         {
-            IQueryable<Merit> query = _context.Merit;
-            return await query.ToArrayAsync();
+            return await _context.Merit
+                .FromSqlRaw("EXEC GetAllMerits")
+                .ToListAsync();
         }
 
         public async Task<Merit> GetMeritAsync(Guid meritId)

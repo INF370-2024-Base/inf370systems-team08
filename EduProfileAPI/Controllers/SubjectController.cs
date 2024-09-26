@@ -22,7 +22,7 @@ namespace EduProfileAPI.Controllers
         {
             try
             {
-                var results = await _subjectRepository.GetAllSubjectAsync();
+                var results = await _subjectRepository.GetAllSubjectsAsync();
                 return Ok(results);
             }
             catch (Exception ex)

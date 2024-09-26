@@ -17,13 +17,14 @@ namespace EduProfileAPI.Repositories.Implementation
 
         }
 
-        public async Task<Employee[]> GetAllEmployeesAsync()
+        // Call the stored procedure to retrieve all employees
+        public async Task<List<Employee>> GetAllEmployeesAsync()
         {
-            IQueryable<Employee> query = _context.Employee;
-            return await query.ToArrayAsync();
+            return await _context.Employee
+                .FromSqlRaw("EXEC GetAllEmployees")
+                .ToListAsync();
         }
 
-        
         public async Task<Employee> GetEmployeeAsync(Guid employeeId)
         {
             IQueryable<Employee> query = _context.Employee.Where(e => e.EmployeeId == employeeId);
