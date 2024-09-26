@@ -25,12 +25,6 @@ namespace EduProfileAPI.Controllers
             try
             {
                 var assessments = await _assesmentRepository.GetAllAssesmentsAsync();
-
-                if (assessments == null || !assessments.Any())
-                {
-                    return NotFound("No assessments found.");
-                }
-
                 return Ok(assessments);
             }
             catch (Exception ex)
