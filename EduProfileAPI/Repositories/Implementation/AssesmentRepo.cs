@@ -56,12 +56,5 @@ namespace EduProfileAPI.Repositories.Implementation
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<Assesment[]> GetAssessmentsByTermAsync(int term)
-        {
-            return await _context.Assesment
-                                 .Where(a => a.Term == term)
-                                 .ToArrayAsync();
-        }
-
     }
 }

@@ -9,6 +9,5 @@ namespace EduProfileAPI.Repositories.Interfaces
         void Add<T>(T entity) where T : class;
         void Delete<T>(T entity) where T : class;
         Task<Assesment> GetAssesmentAsync(Guid assesmentId);
-        Task<Assesment[]> GetAssessmentsByTermAsync(int term);
     }
 }

@@ -63,7 +63,7 @@ namespace EduProfileAPI.Controllers
         [Route("AddAssesment")]
         public async Task<IActionResult> AddAssesment(AssesmentVM cvm)
         {
-            var assesment = new Assesment { SubjectId = cvm.SubjectId, EmployeeId = cvm.EmployeeId, AssesmentName = cvm.AssesmentName, AchievableMark = cvm.AchievableMark, AssesmentDate = cvm.AssesmentDate, AssesmentType = cvm.AssesmentType, AssesmentWeighting = cvm.AssesmentWeighting, Term = cvm.Term };
+            var assesment = new Assesment { SubjectId = cvm.SubjectId, EmployeeId = cvm.EmployeeId, AssesmentName = cvm.AssesmentName, AchievableMark = cvm.AchievableMark, AssesmentDate = cvm.AssesmentDate, AssesmentType = cvm.AssesmentType, AssesmentWeighting = cvm.AssesmentWeighting, TermId = cvm.TermId };
 
             try
             {
@@ -93,7 +93,7 @@ namespace EduProfileAPI.Controllers
                 existingAssesment.AssesmentType = model.AssesmentType;
                 existingAssesment.AssesmentWeighting = model.AssesmentWeighting;
                 existingAssesment.AchievableMark = model.AchievableMark;
-                existingAssesment.Term = model.Term;
+                existingAssesment.TermId = model.TermId;
 
                 if (await _assesmentRepository.SaveChangesAsync())
                 {
@@ -130,25 +130,6 @@ namespace EduProfileAPI.Controllers
             }
 
             return BadRequest("Your request is invalid");
-        }
-
-        [HttpGet]
-        [Route("GetAssesmentsByTerm/{term}")]
-        public async Task<IActionResult> GetAssesmentsByTerm(int term)
-        {
-            try
-            {
-                var results = await _assesmentRepository.GetAssessmentsByTermAsync(term);
-
-                if (results == null || !results.Any())
-                    return NotFound($"No assessments found for term {term}");
-
-                return Ok(results);
-            }
-            catch (Exception)
-            {
-                return StatusCode(500, "Internal Server Error. Please contact support.");
-            }
         }
 
 
