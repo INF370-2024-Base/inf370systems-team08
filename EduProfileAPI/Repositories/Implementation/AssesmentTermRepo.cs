@@ -45,6 +45,7 @@ namespace EduProfileAPI.Repositories.Implementation
                 existingTerm.AssesmentId = term.AssesmentId;
                 existingTerm.Term = term.Term;
                 existingTerm.Weighting = term.Weighting;
+                existingTerm.SubjectId = term.SubjectId;
 
                 _context.AssesmentTerm.Update(existingTerm);
                 return await SaveChangesAsync();

@@ -17,5 +17,7 @@ namespace EduProfileAPI.Models
         [Range(0, 100, ErrorMessage = "Weighting must be between 0 and 100")]
         public decimal Weighting { get; set; }
         public ICollection<Assesment> Assesments { get; set; }
+        [Required]
+        public Guid SubjectId { get; set; }
     }
 }

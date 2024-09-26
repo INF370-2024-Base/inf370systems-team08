@@ -36,7 +36,8 @@ namespace EduProfileAPI.Controllers
                 TermId = Guid.NewGuid(), // Generate a new GUID for TermId
                 AssesmentId = cvm.AssesmentId,
                 Term = cvm.Term,
-                Weighting = cvm.Weighting
+                Weighting = cvm.Weighting,
+                SubjectId = cvm.SubjectId
             };
 
             try
@@ -106,6 +107,7 @@ namespace EduProfileAPI.Controllers
                 existingTerm.AssesmentId = model.AssesmentId;
                 existingTerm.Term = model.Term;
                 existingTerm.Weighting = model.Weighting;
+                existingTerm.SubjectId = model.SubjectId;
 
                 var success = await _termRepository.UpdateAssesmentTermAsync(existingTerm);
                 if (success)

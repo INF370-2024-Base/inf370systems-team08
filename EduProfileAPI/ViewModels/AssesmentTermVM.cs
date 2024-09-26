@@ -8,5 +8,6 @@ namespace EduProfileAPI.ViewModels
         public Guid AssesmentId { get; set; }
         public int Term { get; set; }
         public decimal Weighting { get; set; }
+        public Guid SubjectId { get; set; }
     }
 }
