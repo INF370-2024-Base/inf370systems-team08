@@ -4,6 +4,7 @@ using EduProfileAPI.Repositories.Interfaces;
 using EduProfileAPI.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Newtonsoft.Json;
 using System.Runtime.InteropServices;
 
 
@@ -51,27 +52,18 @@ namespace EduProfileAPI.Repositories.Implementation
 
         }
 
-        public async Task<StudentAttendance> RecordStudentAttendanceAsync(StudentAttendanceViewModel model)
+        public async Task<StudentAttendance> RecordStudentAttendanceAsync(StudentAttendanceViewModel model, Guid userId)
         {
             try
             {
                 var student = await _context.Student.FirstOrDefaultAsync(s => s.StudentId == model.StudentId);
-                if (student == null)
-                {
-                    throw new Exception("Student not found.");
-                }
+                if (student == null) throw new Exception("Student not found.");
 
                 var classs = await _context.Class.FirstOrDefaultAsync(c => c.ClassId == model.ClassId);
-                if (classs == null)
-                {
-                    throw new Exception("Class not found.");
-                }
+                if (classs == null) throw new Exception("Class not found.");
 
                 var employee = await _context.Employee.FirstOrDefaultAsync(e => e.EmployeeId == model.EmployeeId);
-                if (employee == null)
-                {
-                    throw new Exception("Employee not found.");
-                }
+                if (employee == null) throw new Exception("Employee not found.");
 
                 var studentAttendance = new StudentAttendance
                 {
@@ -86,30 +78,39 @@ namespace EduProfileAPI.Repositories.Implementation
                 await _context.StudentAttendance.AddAsync(studentAttendance);
                 await _context.SaveChangesAsync();
 
+                // Log creation to audit trail
+                var auditTrail = new AuditTrail
+                {
+                    UserId = userId,
+                    Action = "CREATE",
+                    EntityName = "StudentAttendance",
+                    AffectedEntityID = studentAttendance.StudentAttendanceId,
+                    NewValue = JsonConvert.SerializeObject(studentAttendance),
+                    TimeStamp = DateTime.UtcNow
+                };
+                _context.AuditTrail.Add(auditTrail);
+                await _context.SaveChangesAsync();
+
                 return studentAttendance;
             }
             catch (Exception ex)
             {
-                // Log detailed error message
-                Console.WriteLine($"Error in RecordStudentAttedance: {ex.Message}");
-                Console.WriteLine($"Stack Trace: {ex.StackTrace}");
+                Console.WriteLine($"Error in RecordStudentAttendance: {ex.Message}");
                 throw;
             }
         }
 
-
-
-        public async Task<StudentAttendance> UpdateStudentAttendance(Guid studentId, UpdateStudentAttendanceVM model)
-        { 
+        public async Task<StudentAttendance> UpdateStudentAttendance(Guid studentId, UpdateStudentAttendanceVM model, Guid userId)
+        {
             var student = await _context.Student.FirstOrDefaultAsync(s => s.StudentId == studentId);
-            if (student == null)
-            {
-                return null;
-            }
+            if (student == null) return null;
 
-            var studentAttendance = await _context.StudentAttendance
-                                                  .FirstOrDefaultAsync(sa => sa.StudentAttendanceId == model.StudentAttendanceId);
-        
+            var studentAttendance = await _context.StudentAttendance.FirstOrDefaultAsync(sa => sa.StudentAttendanceId == model.StudentAttendanceId);
+            if (studentAttendance == null) return null;
+
+            // Capture old value for audit trail
+            var oldAttendance = JsonConvert.SerializeObject(studentAttendance);
+
             studentAttendance.AttendanceStatusId = model.AttendanceStatusId;
             studentAttendance.AttendanceDate = model.AttendanceDate;
             studentAttendance.EmployeeId = model.EmployeeId;
@@ -119,15 +120,21 @@ namespace EduProfileAPI.Repositories.Implementation
             _context.StudentAttendance.Update(studentAttendance);
             await _context.SaveChangesAsync();
 
-            return new StudentAttendance
+            // Log update to audit trail
+            var auditTrail = new AuditTrail
             {
-                StudentAttendanceId = studentAttendance.StudentAttendanceId,
-                StudentId = studentAttendance.StudentId,
-                ClassId = studentAttendance.ClassId,
-                EmployeeId = studentAttendance.EmployeeId,
-                AttendanceDate = studentAttendance.AttendanceDate,
-                AttendanceStatusId = studentAttendance.AttendanceStatusId,
+                UserId = userId,
+                Action = "UPDATE",
+                EntityName = "StudentAttendance",
+                AffectedEntityID = studentAttendance.StudentAttendanceId,
+                OldValue = oldAttendance,
+                NewValue = JsonConvert.SerializeObject(studentAttendance),
+                TimeStamp = DateTime.UtcNow
             };
+            _context.AuditTrail.Add(auditTrail);
+            await _context.SaveChangesAsync();
+
+            return studentAttendance;
         }
 
         public async Task<List<StudentAttendance>> GetStudentAttendanceByClassId(Guid classId)

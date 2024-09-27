@@ -10,8 +10,8 @@ namespace EduProfileAPI.Repositories.Interfaces
         Task<IEnumerable<StudentAttendance>> GetStudentAttendanceByClassAndDate(Guid classId, DateTime date);
         Task<StudentClassListAttendanceVM[]> GetStudentClassListByClass(Guid classId);
         Task<AttendanceStatusViewModel[]> GetAllAttendanceStatus();
-        Task<StudentAttendance> RecordStudentAttendanceAsync(StudentAttendanceViewModel model);
-        Task<StudentAttendance> UpdateStudentAttendance(Guid studentId, UpdateStudentAttendanceVM model);
+        Task<StudentAttendance> RecordStudentAttendanceAsync(StudentAttendanceViewModel model, Guid userId);
+        Task<StudentAttendance> UpdateStudentAttendance(Guid studentId, UpdateStudentAttendanceVM model, Guid userId);
         Task<List<StudentAttendance>> GetStudentAttendanceByClassId(Guid classId);
     }
 }
