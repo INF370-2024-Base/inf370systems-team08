@@ -8,8 +8,8 @@ namespace EduProfileAPI.Repositories.Interfaces
         Task<bool> SaveChangesAsync();
         Task AddAssessmentAsync(Assesment assesment, Guid userId);
         Task UpdateAssessmentAsync(Assesment updatedAssesment, Assesment oldAssesment, Guid userId);
-        Task DeleteAssessmentAsync(Assesment assesment, Guid userId);
-        Task<Assesment> GetAssesmentAsync(Guid assesmentId);
-        Task<Assesment[]> GetAssessmentsByTermAsync(int term);
+        Task DeleteAssessmentAsync(Assesment assesment, Guid userId);       
+        Task<Assesment> GetAssessmentByIdAsync(Guid assessmentId);
+
     }
 }

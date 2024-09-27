@@ -17,32 +17,16 @@ namespace EduProfileAPI.Repositories.Implementation
             _context = context;
             _logger = logger;
             _auditTrailRepository = auditTrailRepository;
+
+   
+        public async Task<IEnumerable<Assesment>> GetAllAssessmentsAsync()
+        {
+            return await _context.Assesment.ToListAsync();
         }
 
-        public async Task<Assesment[]> GetAllAssesmentsAsync()
+        public async Task<Assesment> GetAssessmentByIdAsync(Guid assessmentId)
         {
-            try
-            {
-                // Fetch assessments, handle null checks safely
-                var assessments = await _context.Assesment
-                                                .ToArrayAsync();
-
-                // Return an empty array if assessments are null
-                return assessments ?? new Assesment[0];
-            }
-            catch (Exception ex)
-            {
-                // Log the error
-                _logger.LogError(ex, "Error retrieving assessments.");
-                throw;
-            }
-        }
-
-
-        public async Task<Assesment> GetAssesmentAsync(Guid assesmentId)
-        {
-            IQueryable<Assesment> query = _context.Assesment.Where(c => c.AssesmentId == assesmentId);
-            return await query.FirstOrDefaultAsync();
+            return await _context.Assesment.FindAsync(assessmentId);
         }
 
         // Add a new assessment and log the action
@@ -100,17 +84,10 @@ namespace EduProfileAPI.Repositories.Implementation
             await _auditTrailRepository.AddAuditTrailAsync(auditTrail);
         }
 
-        public async Task<bool> SaveChangesAsync()
-        {
-            return await _context.SaveChangesAsync() > 0;
-        }
-
-        public async Task<Assesment[]> GetAssessmentsByTermAsync(int term)
-        {
-            return await _context.Assesment
-                                 .Where(a => a.Term == term)
-                                 .ToArrayAsync();
-        }
+       public async Task<bool> SaveChangesAsync()
+       {
+           return await _context.SaveChangesAsync() > 0;
+       }
 
     }
 }

@@ -10,55 +10,36 @@ namespace EduProfileAPI.Controllers
     [ApiController]
     public class AssesmentController : ControllerBase
     {
-        private readonly IAssesment _assesmentRepository;
-        private readonly ILogger<AssesmentController> _logger;
-        public AssesmentController(IAssesment assesmentRepository, ILogger<AssesmentController> logger)
+        private readonly IAssesment _assessmentRepository;
+
+        public AssesmentController(IAssesment assessmentRepository)
         {
-            _assesmentRepository = assesmentRepository;
-            _logger = logger;
+            _assessmentRepository = assessmentRepository;
         }
 
+        // GET: api/Assessment
         [HttpGet]
         [Route("GetAllAssesments")]
-        public async Task<IActionResult> GetAllAssesments()
+        public async Task<IActionResult> GetAllAssessments()
         {
-            try
-            {
-                var assessments = await _assesmentRepository.GetAllAssesmentsAsync();
-
-                if (assessments == null || !assessments.Any())
-                {
-                    return NotFound("No assessments found.");
-                }
-
-                return Ok(assessments);
-            }
-            catch (Exception ex)
-            {
-                // Log the error and return a more user-friendly error message
-                _logger.LogError(ex, "An error occurred while fetching assessments.");
-                return StatusCode(500, "Internal Server Error: Data is null or unavailable.");
-            }
+            var assessments = await _assessmentRepository.GetAllAssessmentsAsync();
+            return Ok(assessments);
         }
 
+        // GET: api/Assessment/{id}
         [HttpGet]
-        [Route("GetAssesment/{assesmentId}")] 
-        public async Task<IActionResult> GetAssesment(Guid assesmentId)
+        [Route("GetAssesment/{assesmentId}")]
+        public async Task<IActionResult> GetAssessmentById(Guid id)
         {
-            try
+            var assessment = await _assessmentRepository.GetAssessmentByIdAsync(id);
+            if (assessment == null)
             {
-                var results = await _assesmentRepository.GetAssesmentAsync(assesmentId);
-
-                if (results == null) return NotFound("Assesment does not exist");
-
-                return Ok(results);
+                return NotFound();
             }
-            catch (Exception)
-            {
-                return StatusCode(500, "Internal Server Error. Please contact support.");
-            }
+            return Ok(assessment);
         }
 
+        // POST: api/Assessment
         [HttpPost]
         [Route("AddAssesment")]
         public async Task<IActionResult> AddAssesment([FromBody] AssesmentVM cvm, [FromQuery] Guid userId)
@@ -72,7 +53,7 @@ namespace EduProfileAPI.Controllers
                 AssesmentDate = cvm.AssesmentDate,
                 AssesmentType = cvm.AssesmentType,
                 AssesmentWeighting = cvm.AssesmentWeighting,
-                Term = cvm.Term
+                TermId = cvm.TermId
             };
 
             try
@@ -86,14 +67,16 @@ namespace EduProfileAPI.Controllers
                 return BadRequest($"Internal Server Error: {ex.Message}");
             }
         }
-
+        
+      
+        // PUT: api/Assessment/{id}
         [HttpPut]
         [Route("EditAssesment/{assesmentId}")]
         public async Task<ActionResult<AssesmentVM>> EditAssesment(Guid assesmentId, [FromBody] AssesmentVM model, [FromQuery] Guid userId)
         {
             try
             {
-                var existingAssesment = await _assesmentRepository.GetAssesmentAsync(assesmentId);
+                var existingAssesment = await _assesmentRepository.GetAssessmentByIdAsync(assesmentId);
                 if (existingAssesment == null) return NotFound("The assesment does not exist");
 
                 var updatedAssesment = new Assesment
@@ -106,7 +89,7 @@ namespace EduProfileAPI.Controllers
                     AssesmentType = model.AssesmentType,
                     AssesmentWeighting = model.AssesmentWeighting,
                     AchievableMark = model.AchievableMark,
-                    Term = model.Term
+                    TermId = model.TermId
                 };
 
                 await _assesmentRepository.UpdateAssessmentAsync(updatedAssesment, existingAssesment, userId); // Log the update action
@@ -127,33 +110,13 @@ namespace EduProfileAPI.Controllers
         {
             try
             {
-                var existingAssesment = await _assesmentRepository.GetAssesmentAsync(assesmentId);
+                var existingAssesment = await _assesmentRepository.GetAssessmentByIdAsync(assesmentId);
                 if (existingAssesment == null) return NotFound("The assesment does not exist");
 
                 await _assesmentRepository.DeleteAssessmentAsync(existingAssesment, userId); // Log the delete action
                 await _assesmentRepository.SaveChangesAsync();
 
                 return Ok(existingAssesment);
-            }
-            catch (Exception)
-            {
-                return StatusCode(500, "Internal Server Error. Please contact support.");
-            }
-        }
-
-
-        [HttpGet]
-        [Route("GetAssesmentsByTerm/{term}")]
-        public async Task<IActionResult> GetAssesmentsByTerm(int term)
-        {
-            try
-            {
-                var results = await _assesmentRepository.GetAssessmentsByTermAsync(term);
-
-                if (results == null || !results.Any())
-                    return NotFound($"No assessments found for term {term}");
-
-                return Ok(results);
             }
             catch (Exception)
             {

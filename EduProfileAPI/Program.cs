@@ -128,7 +128,7 @@ builder.Services.AddScoped<IRemedialActivityRepository, RemedialActivityReposito
 builder.Services.AddScoped<IAssessmentsReportsRepo, AssessmentsReportsRepo>();
 builder.Services.AddScoped<IMeritType, MeritTypeRepo>();
 builder.Services.AddScoped<IAuditTrail, AuditTrailRepo>();
-
+builder.Services.AddScoped<IAssesmentTerm, AssesmentTermRepo>();
 
 
 //WhatsApp
