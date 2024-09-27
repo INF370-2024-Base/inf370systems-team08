@@ -7,8 +7,10 @@ namespace EduProfileAPI.Repositories.Interfaces.Maintenance
     {
         Task<List<MaintenanceRequest>> GetAllRequestsAsync();
         Task<bool> SaveChangesAsync();
-        void Add<T>(T entity) where T : class;
-        void Delete<T>(T entity) where T : class;
+        Task AddRequestAsync(MaintenanceRequest request, Guid userId);
+        Task UpdateRequestAsync(MaintenanceRequest updatedRequest, MaintenanceRequest oldRequest, Guid userId);
+
+        Task DeleteRequestAsync(MaintenanceRequest request, Guid userId);
         Task<MaintenanceRequest> GetRequestAsync(Guid maintenanceReqId);
     }
 }
