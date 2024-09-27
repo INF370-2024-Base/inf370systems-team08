@@ -58,8 +58,8 @@ namespace EduProfileAPI.Controllers
 
             try
             {
-                await _assesmentRepository.AddAssessmentAsync(assesment, userId); // Log the create action
-                await _assesmentRepository.SaveChangesAsync();
+                await _assessmentRepository.AddAssessmentAsync(assesment, userId); // Log the create action
+                await _assessmentRepository.SaveChangesAsync();
                 return Ok(assesment);
             }
             catch (Exception ex)
@@ -76,7 +76,7 @@ namespace EduProfileAPI.Controllers
         {
             try
             {
-                var existingAssesment = await _assesmentRepository.GetAssessmentByIdAsync(assesmentId);
+                var existingAssesment = await _assessmentRepository.GetAssessmentByIdAsync(assesmentId);
                 if (existingAssesment == null) return NotFound("The assesment does not exist");
 
                 var updatedAssesment = new Assesment
@@ -92,8 +92,8 @@ namespace EduProfileAPI.Controllers
                     TermId = model.TermId
                 };
 
-                await _assesmentRepository.UpdateAssessmentAsync(updatedAssesment, existingAssesment, userId); // Log the update action
-                await _assesmentRepository.SaveChangesAsync();
+                await _assessmentRepository.UpdateAssessmentAsync(updatedAssesment, existingAssesment, userId); // Log the update action
+                await _assessmentRepository.SaveChangesAsync();
 
                 return Ok(updatedAssesment);
             }
@@ -110,11 +110,11 @@ namespace EduProfileAPI.Controllers
         {
             try
             {
-                var existingAssesment = await _assesmentRepository.GetAssessmentByIdAsync(assesmentId);
+                var existingAssesment = await _assessmentRepository.GetAssessmentByIdAsync(assesmentId);
                 if (existingAssesment == null) return NotFound("The assesment does not exist");
 
-                await _assesmentRepository.DeleteAssessmentAsync(existingAssesment, userId); // Log the delete action
-                await _assesmentRepository.SaveChangesAsync();
+                await _assessmentRepository.DeleteAssessmentAsync(existingAssesment, userId); // Log the delete action
+                await _assessmentRepository.SaveChangesAsync();
 
                 return Ok(existingAssesment);
             }

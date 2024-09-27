@@ -4,7 +4,7 @@ namespace EduProfileAPI.Repositories.Interfaces
 {
     public interface IAssesment
     {
-        Task<Assesment[]> GetAllAssesmentsAsync();
+        Task<IEnumerable<Assesment>> GetAllAssessmentsAsync();
         Task<bool> SaveChangesAsync();
         Task AddAssessmentAsync(Assesment assesment, Guid userId);
         Task UpdateAssessmentAsync(Assesment updatedAssesment, Assesment oldAssesment, Guid userId);

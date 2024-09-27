@@ -17,7 +17,7 @@ namespace EduProfileAPI.Repositories.Implementation
             _context = context;
             _logger = logger;
             _auditTrailRepository = auditTrailRepository;
-
+        }
    
         public async Task<IEnumerable<Assesment>> GetAllAssessmentsAsync()
         {
