@@ -11,9 +11,12 @@ namespace EduProfileAPI.Controllers
     public class EmployeeController : ControllerBase
     {
         private readonly IEmployeeRepository _employeeRepository;
-        public EmployeeController(IEmployeeRepository employeeRepository)
+        private readonly IAuditTrail _auditTrailRepository;  // Add audit trail repository
+
+        public EmployeeController(IEmployeeRepository employeeRepository, IAuditTrail auditTrailRepository)
         {
             _employeeRepository = employeeRepository;
+            _auditTrailRepository = auditTrailRepository;
         }
 
         [HttpGet]
@@ -53,8 +56,13 @@ namespace EduProfileAPI.Controllers
 
         [HttpPost]
         [Route("AddEmployee")]
-        public async Task<IActionResult> AddEmployee(CreateEmployeeVM cvm)
+        public async Task<IActionResult> AddEmployee([FromBody] CreateEmployeeVM cvm, [FromQuery] Guid userId)
         {
+            if (userId == Guid.Empty)
+            {
+                return BadRequest("User ID is required.");
+            }
+
             var employee = new Employee
             {
                 EmployeeStatusId = cvm.EmployeeStatusId,
@@ -70,71 +78,80 @@ namespace EduProfileAPI.Controllers
 
             try
             {
-                _employeeRepository.Add(employee);
+                await _employeeRepository.AddEmployeeAsync(employee, userId);  // Log the create action
                 await _employeeRepository.SaveChangesAsync();
-            }
-            catch (Exception)
-            {
-                return BadRequest("Invalid transaction");
-            }
 
-            return Ok(employee);
+                return Ok(employee);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal Server Error: {ex.Message}");
+            }
         }
 
         [HttpPut]
         [Route("EditEmployee/{employeeId}")]
-        public async Task<ActionResult<Employee>> EditEmployee(Guid employeeId, CreateEmployeeVM employeeModel)
+        public async Task<IActionResult> EditEmployee(Guid employeeId, [FromBody] CreateEmployeeVM employeeModel, [FromQuery] Guid userId)
         {
+            if (userId == Guid.Empty)
+            {
+                return BadRequest("User ID is required.");
+            }
+
             try
             {
                 var existingEmployee = await _employeeRepository.GetEmployeeAsync(employeeId);
                 if (existingEmployee == null)
-                    return NotFound($"The employee does not exist");
+                    return NotFound("The employee does not exist");
 
-                existingEmployee.EmployeeStatusId = employeeModel.EmployeeStatusId;
-                existingEmployee.FirstName = employeeModel.FirstName;
-                existingEmployee.LastName = employeeModel.LastName;
-                existingEmployee.DateOfBirth = employeeModel.DateOfBirth;
-                existingEmployee.Gender = employeeModel.Gender;
-                existingEmployee.PhoneNumber = employeeModel.PhoneNumber;
-                existingEmployee.Address = employeeModel.Address;
-                existingEmployee.Salary = employeeModel.Salary;
-                existingEmployee.IdentityNumber = employeeModel.IdentityNumber;
+                var updatedEmployee = new Employee
+                {
+                    EmployeeId = employeeId,
+                    EmployeeStatusId = employeeModel.EmployeeStatusId,
+                    FirstName = employeeModel.FirstName,
+                    LastName = employeeModel.LastName,
+                    DateOfBirth = employeeModel.DateOfBirth,
+                    Gender = employeeModel.Gender,
+                    PhoneNumber = employeeModel.PhoneNumber,
+                    Address = employeeModel.Address,
+                    Salary = employeeModel.Salary,
+                    IdentityNumber = employeeModel.IdentityNumber
+                };
 
-                if (await _employeeRepository.SaveChangesAsync())
-                {
-                    return Ok(existingEmployee);
-                }
-                else
-                {
-                    return StatusCode(500, "An error occurred while saving the employee.");
-                }
+                await _employeeRepository.UpdateEmployeeAsync(updatedEmployee, existingEmployee, userId);  // Log the update action
+                await _employeeRepository.SaveChangesAsync();
+
+                return Ok(updatedEmployee);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(500, "Internal Server Error. Please contact support.");
+                return StatusCode(500, $"Internal Server Error: {ex.Message}");
             }
         }
 
         [HttpDelete]
         [Route("DeleteEmployee/{employeeId}")]
-        public async Task<IActionResult> DeleteEmployee(Guid employeeId)
+        public async Task<IActionResult> DeleteEmployee(Guid employeeId, [FromQuery] Guid userId)
         {
+            if (userId == Guid.Empty)
+            {
+                return BadRequest("User ID is required.");
+            }
+
             try
             {
                 var existingEmployee = await _employeeRepository.GetEmployeeAsync(employeeId);
-                if (existingEmployee == null) return NotFound($"The employee does not exist");
-                _employeeRepository.Delete(existingEmployee);
+                if (existingEmployee == null) return NotFound("The employee does not exist");
 
-                if (await _employeeRepository.SaveChangesAsync()) return Ok(existingEmployee);
+                await _employeeRepository.DeleteEmployeeAsync(existingEmployee, userId);  // Log the delete action
+                await _employeeRepository.SaveChangesAsync();
+
+                return Ok(existingEmployee);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                return StatusCode(500, "Internal Server Error. Please contact support.");
+                return StatusCode(500, $"Internal Server Error: {ex.Message}");
             }
-
-            return BadRequest("Your request is invalid");
         }
 
     }

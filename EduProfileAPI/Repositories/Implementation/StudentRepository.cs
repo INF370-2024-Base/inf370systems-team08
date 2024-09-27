@@ -3,15 +3,19 @@ using EduProfileAPI.Models;
 using EduProfileAPI.Repositories.Interfaces;
 using EduProfileAPI.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace EduProfileAPI.Repositories.Implementation
 {
     public class StudentRepository : IStudentRepository
     {
         private readonly EduProfileDbContext _context;
-        public StudentRepository(EduProfileDbContext context)
+        private readonly IAuditTrail _auditTrailRepository;
+
+        public StudentRepository(EduProfileDbContext context, IAuditTrail auditTrailRepository)
         {
             _context = context;
+            _auditTrailRepository = auditTrailRepository;
         }
 
         public async Task<List<Student>> GetAllStudentsAsync()
@@ -25,6 +29,60 @@ namespace EduProfileAPI.Repositories.Implementation
             return await query.FirstOrDefaultAsync();
         }
 
+        public async Task AddStudentAsync(Student student, Guid userId)
+        {
+            _context.Student.Add(student);
+
+            var auditTrail = new AuditTrail
+            {
+                UserId = userId,
+                Action = "CREATE",
+                EntityName = "Student",
+                AffectedEntityID = student.StudentId,
+                NewValue = JsonConvert.SerializeObject(student),
+                TimeStamp = DateTime.UtcNow
+            };
+
+            _context.AuditTrail.Add(auditTrail);
+        }
+
+        // Update existing student with audit trail logging
+        public async Task UpdateStudentAsync(Student updatedStudent, Student oldStudent, Guid userId)
+        {
+            _context.Entry(oldStudent).CurrentValues.SetValues(updatedStudent);
+
+            var auditTrail = new AuditTrail
+            {
+                UserId = userId,
+                Action = "UPDATE",
+                EntityName = "Student",
+                AffectedEntityID = updatedStudent.StudentId,
+                OldValue = JsonConvert.SerializeObject(oldStudent),
+                NewValue = JsonConvert.SerializeObject(updatedStudent),
+                TimeStamp = DateTime.UtcNow
+            };
+
+            _context.AuditTrail.Add(auditTrail);
+        }
+
+        // Delete student with audit trail logging
+        public async Task DeleteStudentAsync(Student student, Guid userId)
+        {
+            _context.Student.Remove(student);
+
+            var auditTrail = new AuditTrail
+            {
+                UserId = userId,
+                Action = "DELETE",
+                EntityName = "Student",
+                AffectedEntityID = student.StudentId,
+                OldValue = JsonConvert.SerializeObject(student),
+                TimeStamp = DateTime.UtcNow
+            };
+
+            _context.AuditTrail.Add(auditTrail);
+        }
+
         public void Add<T>(T entity) where T : class
         {
             _context.Add(entity);
@@ -34,7 +92,6 @@ namespace EduProfileAPI.Repositories.Implementation
         {
             _context.Remove(entity);
         }
-
         public async Task<bool> SaveChangesAsync()
         {
             return await _context.SaveChangesAsync() > 0;

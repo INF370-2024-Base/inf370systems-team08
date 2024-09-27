@@ -6,7 +6,8 @@ namespace EduProfileAPI.Repositories.Interfaces
     {
         Task<AssesmentMark[]> GetAllAssesmentMarksAsync();
         Task<bool> SaveChangesAsync();
-        void Add<T>(T entity) where T : class;
+        Task AddAssesmentMarkAsync(AssesmentMark assesmentMark, Guid userId);
+        Task UpdateAssesmentMarkAsync(AssesmentMark updatedMark, AssesmentMark oldMark, Guid userId);
         Task<AssesmentMark> GetAssesmentMarkAsync(Guid studentId, Guid assesmentId);
     }
 }

@@ -8,8 +8,9 @@ namespace EduProfileAPI.Repositories.Interfaces
     {
         Task<List<Employee>> GetAllEmployeesAsync();
         Task<Employee> GetEmployeeAsync(Guid employeeId); // Corrected the return type
-        void Add<T>(T entity) where T : class;
-        void Delete<T>(T entity) where T : class;
+        Task AddEmployeeAsync(Employee employee, Guid userId);
+        Task UpdateEmployeeAsync(Employee updatedEmployee, Employee oldEmployee, Guid userId);
+        Task DeleteEmployeeAsync(Employee employee, Guid userId);
         Task<bool> SaveChangesAsync();
     }
 }
