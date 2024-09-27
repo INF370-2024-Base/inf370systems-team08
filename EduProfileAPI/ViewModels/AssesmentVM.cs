@@ -9,6 +9,7 @@
         public string AssesmentType { get; set; }
         public int AchievableMark { get; set; }
         public int AssesmentWeighting { get; set; }
-        public int Term { get; set; }
+        //public int Term { get; set; }
+        public Guid TermId { get; set; }
     }
 }
