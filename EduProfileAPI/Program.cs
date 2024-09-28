@@ -15,6 +15,11 @@ using EduProfileAPI.WhatsApp;
 using Microsoft.Data.SqlClient;
 using EduProfileAPI.SmsService;
 using EduProfileAPI.Models;
+using Quartz;
+using Quartz.Impl;
+using Quartz.Spi;
+using EduProfileAPI.AutoBackup;
+
 
 
 
@@ -28,6 +33,8 @@ builder.Services.AddCors(options =>
                                       .AllowAnyHeader()
                                       .AllowAnyMethod());
 });
+
+
 
 //email config
 builder.Services.Configure<EmailConfiguration>(builder.Configuration.GetSection("EmailConfiguration"));
@@ -75,8 +82,25 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequiredUniqueChars = 1;
 });
 
+// Add Quartz.NET services
+builder.Services.AddQuartz(q =>
+{
+    q.UseMicrosoftDependencyInjectionJobFactory();
+
+    var jobKey = new JobKey("DatabaseBackupJob");
+
+    q.AddJob<DatabaseBackupJob>(opts => opts.WithIdentity(jobKey));
+
+    q.AddTrigger(opts => opts
+        .ForJob(jobKey)
+        .WithIdentity("DatabaseBackupTrigger")
+        .WithCronSchedule("0 0 2  ? * * *"));  // Default schedule for daily at 2 AM
+});
 
 
+
+// Add Quartz Hosted Service
+builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -90,6 +114,7 @@ builder.Services.AddSwaggerGen();
 // Database connection
 builder.Services.AddDbContext<EduProfileDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 
 // Register the repositories
 builder.Services.AddScoped<IGradeRepository, GradeRepository>(); // add this for all the repositories created.
