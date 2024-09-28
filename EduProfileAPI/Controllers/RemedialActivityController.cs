@@ -56,7 +56,7 @@ namespace EduProfileAPI.Controllers
         [HttpPost]
         [Route("AddRemedialActivity")]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> AddRemedialActivity([FromForm] RemedialActivityVM model)
+        public async Task<IActionResult> AddRemedialActivity([FromForm] RemedialActivityVM model, [FromQuery] Guid userId)
         {
             if (model.Attachment == null || model.Attachment.Length == 0)
                 return BadRequest("No file uploaded");
@@ -71,7 +71,7 @@ namespace EduProfileAPI.Controllers
             var remAct = new RemedialActivity
             {
                 RemFileId = model.RemFileId,
-                Title = model.Title ?? model.Attachment.FileName,  // Use uploaded file name if no name provided
+                Title = model.Title ?? model.Attachment.FileName,
                 Description = model.Description,
                 Date = model.Date,
                 Attachment = fileContent,
@@ -81,20 +81,19 @@ namespace EduProfileAPI.Controllers
 
             try
             {
-                _remedialActivityRepository.Add(remAct);
+                await _remedialActivityRepository.AddRemedialActivityAsync(remAct, userId); // Log creation in audit trail
                 await _remedialActivityRepository.SaveChangesAsync();
                 return Ok(remAct);
             }
             catch (Exception ex)
             {
-                // Log the exception or handle it accordingly
-                return BadRequest("Invalid transaction");
+                return BadRequest($"Invalid transaction: {ex.Message}");
             }
         }
 
         [HttpPut]
         [Route("EditRemedialActivity/{remedialActivityId}")]
-        public async Task<IActionResult> EditRemedialActivity(Guid remedialActivityId, [FromForm] RemedialActivityVM model)
+        public async Task<IActionResult> EditRemedialActivity(Guid remedialActivityId, [FromForm] RemedialActivityVM model, [FromQuery] Guid userId)
         {
             try
             {
@@ -117,36 +116,31 @@ namespace EduProfileAPI.Controllers
                     }
                 }
 
-                if (await _remedialActivityRepository.SaveChangesAsync())
-                {
-                    return Ok(existingRemAct);
-                }
+                await _remedialActivityRepository.UpdateRemedialActivityAsync(existingRemAct, userId); // Log update
+                return Ok(existingRemAct);
             }
             catch (Exception ex)
             {
                 return StatusCode(500, $"Internal Server Error. Please contact support.{ex}");
             }
-            return BadRequest("Your request is invalid.");
         }
 
         [HttpDelete]
         [Route("DeleteRemedialActivity/{remedialActivityId}")]
-        public async Task<IActionResult> DeleteRemedialActivity(Guid remedialActivityId)
+        public async Task<IActionResult> DeleteRemedialActivity(Guid remedialActivityId, [FromQuery] Guid userId)
         {
             try
             {
                 var existingRemAct = await _remedialActivityRepository.GetRemedialActivityAsync(remedialActivityId);
                 if (existingRemAct == null) return NotFound($"The remedial activity does not exist");
-                _remedialActivityRepository.Delete(existingRemAct);
 
-                if (await _remedialActivityRepository.SaveChangesAsync()) return Ok(existingRemAct);
+                await _remedialActivityRepository.DeleteRemedialActivityAsync(existingRemAct, userId); // Log delete action
+                return Ok(existingRemAct);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(500, "Internal Server Error. Please contact support.");
+                return StatusCode(500, $"Internal Server Error. Please contact support. {ex.Message}");
             }
-
-            return BadRequest("Your request is invalid");
         }
 
         [HttpGet]

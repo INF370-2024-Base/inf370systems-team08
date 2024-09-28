@@ -55,7 +55,7 @@ namespace EduProfileAPI.Controllers
 
         [HttpPost]
         [Route("RecordStudentAttendance")]
-        public async Task<IActionResult> RecordStudentAttendance([FromBody] StudentAttendanceViewModel model)
+        public async Task<IActionResult> RecordStudentAttendance([FromBody] StudentAttendanceViewModel model, [FromQuery] Guid userId)
         {
             try
             {
@@ -64,7 +64,7 @@ namespace EduProfileAPI.Controllers
                     return BadRequest("Invalid Input");
                 }
 
-                var result = await _studentAttendanceRepo.RecordStudentAttendanceAsync(model);
+                var result = await _studentAttendanceRepo.RecordStudentAttendanceAsync(model, userId);
                 if (result == null)
                 {
                     return NotFound("Class, Student, or Teacher not found in the database");
@@ -73,25 +73,14 @@ namespace EduProfileAPI.Controllers
             }
             catch (DbUpdateException dbEx)
             {
-                // Handle database update specific errors
                 return StatusCode(500, new
                 {
                     Message = "Database Failure: " + dbEx.Message,
-                    Details = dbEx.InnerException != null ? dbEx.InnerException.Message : dbEx.StackTrace
-                });
-            }
-            catch (InvalidCastException castEx)
-            {
-                // Handle invalid cast specific errors
-                return StatusCode(500, new
-                {
-                    Message = "Data Conversion Failure: " + castEx.Message,
-                    Details = castEx.StackTrace
+                    Details = dbEx.InnerException?.Message ?? dbEx.StackTrace
                 });
             }
             catch (Exception ex)
             {
-                // Handle general errors
                 return StatusCode(500, new
                 {
                     Message = "An unexpected error occurred: " + ex.Message,
@@ -100,9 +89,10 @@ namespace EduProfileAPI.Controllers
             }
         }
 
+        // PUT: Update student attendance with Audit Trail
         [HttpPut]
         [Route("UpdateStudentAttendance/{studentId}")]
-        public async Task<IActionResult> UpdateStudentAttendance(Guid studentId, [FromBody] UpdateStudentAttendanceVM model)
+        public async Task<IActionResult> UpdateStudentAttendance(Guid studentId, [FromBody] UpdateStudentAttendanceVM model, [FromQuery] Guid userId)
         {
             try
             {
@@ -111,7 +101,7 @@ namespace EduProfileAPI.Controllers
                     return BadRequest("Invalid Input");
                 }
 
-                var result = await _studentAttendanceRepo.UpdateStudentAttendance(studentId, model);
+                var result = await _studentAttendanceRepo.UpdateStudentAttendance(studentId, model, userId);
                 if (result == null)
                 {
                     return NotFound("Student not found in the database");

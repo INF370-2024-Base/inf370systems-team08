@@ -17,11 +17,11 @@ namespace EduProfileAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateEarlyRelease([FromBody] CreateEarlyReleaseVM model)
+        public async Task<IActionResult> CreateEarlyRelease([FromBody] CreateEarlyReleaseVM model, [FromQuery] Guid userId)
         {
             try
             {
-                var earlyRelease = await _earlyReleasesRepo.CreateEarlyRelease(model);
+                var earlyRelease = await _earlyReleasesRepo.CreateEarlyRelease(model, userId);
 
                 if (earlyRelease == null)
                     return NotFound("Student or Parent not found.");
@@ -34,7 +34,8 @@ namespace EduProfileAPI.Controllers
             }
         }
 
-            [HttpGet("getstudentreleases/{studentId}")]
+
+        [HttpGet("getstudentreleases/{studentId}")]
             public async Task<IActionResult> GetEarlyReleasesByStudentId(Guid studentId)
             {
                 if (studentId == Guid.Empty)

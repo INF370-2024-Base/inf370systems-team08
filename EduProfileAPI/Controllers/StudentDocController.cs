@@ -52,7 +52,7 @@ namespace EduProfileAPI.Controllers
 
         [HttpPost]
         [Route("AddStudentDoc")]
-        public async Task<IActionResult> AddStudentDoc([FromForm] StudentDocVM cvm)
+        public async Task<IActionResult> AddStudentDoc([FromForm] StudentDocVM cvm, [FromQuery] Guid userId)
         {
             if (cvm.StudentDocumentAttachment == null || cvm.StudentDocumentAttachment.Length == 0)
                 return BadRequest("No file uploaded");
@@ -69,59 +69,32 @@ namespace EduProfileAPI.Controllers
                 StuDocumentId = Guid.NewGuid(),
                 StudentId = cvm.StudentId,
                 DocumentTypeId = cvm.DocumentTypeId,
-                DocumentName = cvm.DocumentName ?? cvm.StudentDocumentAttachment.FileName,  // Use uploaded file name if no name provided
+                DocumentName = cvm.DocumentName ?? cvm.StudentDocumentAttachment.FileName,
                 StudentDocumentAttachment = fileContent,
                 AttachmentType = cvm.StudentDocumentAttachment.ContentType
-    };
+            };
 
             try
             {
-                _studentDocRepository.Add(studoc);
+                await _studentDocRepository.AddStudentDocAsync(studoc, userId);
                 await _studentDocRepository.SaveChangesAsync();
                 return Ok(studoc);
             }
             catch (Exception ex)
             {
-                // Log the exception or handle it accordingly
                 return BadRequest($"Invalid transaction {ex}");
             }
-           
         }
 
         [HttpPut]
         [Route("EditStudentDoc/{studentDocId}")]
-        public async Task<ActionResult<StudentDocVM>> EditStudentDoc(Guid studentDocId, [FromForm] StudentDocVM studentDocModel)
+        public async Task<ActionResult<StudentDocVM>> EditStudentDoc(Guid studentDocId, [FromForm] StudentDocVM studentDocModel, [FromQuery] Guid userId)
         {
             try
             {
-                // Check if the document exists
                 var existingstudoc = await _studentDocRepository.GetStudentDocAsync(studentDocId);
                 if (existingstudoc == null)
                     return NotFound($"The student document with ID {studentDocId} does not exist.");
-
-                // Validate the required fields
-                if (studentDocModel.StudentId == Guid.Empty)
-                    return BadRequest("Student ID is required.");
-
-                if (studentDocModel.DocumentTypeId == Guid.Empty)
-                    return BadRequest("Document Type ID is required.");
-
-                if (string.IsNullOrWhiteSpace(studentDocModel.DocumentName) && studentDocModel.StudentDocumentAttachment == null)
-                    return BadRequest("Either Document Name or an attachment must be provided.");
-
-                // Validate the file type and size if an attachment is provided
-                if (studentDocModel.StudentDocumentAttachment != null)
-                {
-                    var allowedFileTypes = new[] { "application/pdf", "image/jpeg", "image/png" };
-                    if (!allowedFileTypes.Contains(studentDocModel.StudentDocumentAttachment.ContentType))
-                        return BadRequest($"Unsupported file type. Allowed types are: {string.Join(", ", allowedFileTypes)}");
-
-                    if (studentDocModel.StudentDocumentAttachment.Length > 10 * 1024 * 1024) // 10MB limit
-                        return BadRequest("File size must be less than 10MB.");
-                }
-
-                //var existingstudoc = await _studentDocRepository.GetStudentDocAsync(studentDocId);
-                //if (existingstudoc == null) return NotFound($"The student document does not exist");
 
                 existingstudoc.StudentId = studentDocModel.StudentId;
                 existingstudoc.DocumentTypeId = studentDocModel.DocumentTypeId;
@@ -137,6 +110,7 @@ namespace EduProfileAPI.Controllers
                     }
                 }
 
+                await _studentDocRepository.UpdateStudentDocAsync(existingstudoc, existingstudoc, userId);
                 if (await _studentDocRepository.SaveChangesAsync())
                 {
                     return Ok(existingstudoc);
@@ -147,26 +121,22 @@ namespace EduProfileAPI.Controllers
                 return StatusCode(500, $"Internal Server Error. Please contact support. {ex}");
             }
             return BadRequest("Your request is invalid.");
-        
-
-
-    }
+        }
 
         [HttpDelete]
         [Route("DeleteStudentDoc/{studentDocId}")]
-        public async Task<IActionResult> DeleteStudentDoc(Guid studentDocId)
+        public async Task<IActionResult> DeleteStudentDoc(Guid studentDocId, [FromQuery] Guid userId)
         {
             try
             {
                 var existingstudoc = await _studentDocRepository.GetStudentDocAsync(studentDocId);
                 if (existingstudoc == null) return NotFound($"The Student document does not exist");
-                _studentDocRepository.Delete(existingstudoc);
 
+                await _studentDocRepository.DeleteStudentDocAsync(existingstudoc, userId);
                 if (await _studentDocRepository.SaveChangesAsync()) return Ok(existingstudoc);
             }
             catch (Exception)
             {
-
                 return StatusCode(500, "Internal Server Error. Please contact support.");
             }
 

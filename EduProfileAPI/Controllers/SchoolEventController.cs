@@ -18,11 +18,12 @@ namespace EduProfileAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateSchoolEvent([FromBody] CreateSchoolEventViewModel model)
+        [Route("CreateSchoolEvent")]
+        public async Task<IActionResult> CreateSchoolEvent([FromBody] CreateSchoolEventViewModel model, [FromQuery] Guid userId)
         {
             try
             {
-                var schoolEvent = await _schoolEventRepo.CreateSchoolEvent(model);
+                var schoolEvent = await _schoolEventRepo.CreateSchoolEventAsync(model, userId);  // Include userId for audit
 
                 if (schoolEvent == null)
                     return NotFound("School Event not created. Not Permitted");
@@ -73,12 +74,14 @@ namespace EduProfileAPI.Controllers
 
         [HttpPut]
         [Route("EditSchoolEvent/{eventId}")]
-        public async Task<ActionResult<CreateSchoolEventViewModel>> EditSchoolEvent(Guid eventId, CreateSchoolEventViewModel model)
+        public async Task<ActionResult<CreateSchoolEventViewModel>> EditSchoolEvent(Guid eventId, [FromBody] CreateSchoolEventViewModel model, [FromQuery] Guid userId)
         {
             try
             {
                 var existingEvent = await _schoolEventRepo.GetSchoolEventAsync(eventId);
                 if (existingEvent == null) return NotFound($"The event does not exist");
+
+                // Update event
                 existingEvent.EmployeeId = model.EmployeeId;
                 existingEvent.EventName = model.EventName;
                 existingEvent.EventType = model.EventType;
@@ -90,39 +93,35 @@ namespace EduProfileAPI.Controllers
                 existingEvent.ContactEmail = model.ContactEmail;
                 existingEvent.ContactPhoneNumber = model.ContactPhoneNumber;
 
-                if (await _schoolEventRepo.SaveChangesAsync())
-                {
-                    return Ok(existingEvent);
-                }
+                await _schoolEventRepo.UpdateSchoolEventAsync(existingEvent, userId);  // Include userId for audit
+                await _schoolEventRepo.SaveChangesAsync();
 
+                return Ok(existingEvent);
             }
             catch (Exception ex)
             {
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
-            return BadRequest("Your request is invalid.");
-
-
         }
 
         [HttpDelete]
         [Route("DeleteSchoolEvent/{eventId}")]
-        public async Task<IActionResult> DeleteSchoolEvent(Guid eventId)
+        public async Task<IActionResult> DeleteSchoolEvent(Guid eventId, [FromQuery] Guid userId)
         {
             try
             {
                 var existingEvent = await _schoolEventRepo.GetSchoolEventAsync(eventId);
                 if (existingEvent == null) return NotFound($"The event does not exist");
-                _schoolEventRepo.Delete(existingEvent);
 
-                if (await _schoolEventRepo.SaveChangesAsync()) return Ok(existingEvent);
+                await _schoolEventRepo.DeleteSchoolEventAsync(existingEvent, userId);  // Include userId for audit
+                await _schoolEventRepo.SaveChangesAsync();
+
+                return Ok(existingEvent);
             }
             catch (Exception ex)
             {
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
-
-            return BadRequest("Your request is invalid");
         }
     }
 }

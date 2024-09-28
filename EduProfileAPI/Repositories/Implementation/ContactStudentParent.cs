@@ -3,6 +3,8 @@ using EduProfileAPI.DataAccessLayer;
 using EduProfileAPI.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using EduProfileAPI.WhatsApp;
+using EduProfileAPI.Models;
+using Newtonsoft.Json;
 
 namespace EduProfileAPI.Repositories.Implementation
 {
@@ -38,7 +40,7 @@ namespace EduProfileAPI.Repositories.Implementation
             };
         }
 
-        public async Task<(bool, string)> SendMessageToParent(ContactStudentParentViewModel model)
+        public async Task<(bool, string)> SendMessageToParent(ContactStudentParentViewModel model, Guid userId)
         {
             var student = await _context.Student.FirstOrDefaultAsync(s => s.StudentId == model.StudentId);
             if (student == null)
@@ -48,20 +50,10 @@ namespace EduProfileAPI.Repositories.Implementation
             if (parent == null)
                 return (false, "Parent not found.");
 
-            var phoneNumber = parent.Parent1CellPhone; // Get phone number from the database
-
-            // Ensure the phone number is formatted with the country code
+            var phoneNumber = parent.Parent1CellPhone;
             if (!phoneNumber.StartsWith("+"))
             {
-                // Assuming South Africa country code (+27)
-                if (phoneNumber.StartsWith("0"))
-                {
-                    phoneNumber = "+27" + phoneNumber.Substring(1);
-                }
-                else
-                {
-                    phoneNumber = "+27" + phoneNumber;
-                }
+                phoneNumber = phoneNumber.StartsWith("0") ? "+27" + phoneNumber.Substring(1) : "+27" + phoneNumber;
             }
 
             if (string.IsNullOrEmpty(phoneNumber))
@@ -69,11 +61,27 @@ namespace EduProfileAPI.Repositories.Implementation
                 return (false, "Parent phone number is null or empty.");
             }
 
-            var parentName = parent.Parent1Name; // Assuming you have a ParentName field in your Parent entity
-            var studentName = student.FirstName + " " + student.LastName; // Assuming you have FirstName and LastName fields in your Student entity
+            var parentName = parent.Parent1Name;
+            var studentName = student.FirstName + " " + student.LastName;
             var messageContent = model.Message;
 
-            return await _whatsAppHelper.SendTemplateMessage(phoneNumber, parentName, studentName, messageContent);
+            var (success, messageResponse) = await _whatsAppHelper.SendTemplateMessage(phoneNumber, parentName, studentName, messageContent);
+
+            // Log action in audit trail
+            var auditTrail = new AuditTrail
+            {
+                UserId = userId,
+                Action = "SEND_MESSAGE",
+                EntityName = "Parent",
+                AffectedEntityID = parent.ParentId,
+                OldValue = null, // No old value since it's a send action
+                NewValue = JsonConvert.SerializeObject(new { student.StudentId, parent.ParentId, Message = messageContent }),
+                TimeStamp = DateTime.UtcNow
+            };
+            await _context.AuditTrail.AddAsync(auditTrail);
+            await _context.SaveChangesAsync();
+
+            return (success, messageResponse);
         }
 
     }

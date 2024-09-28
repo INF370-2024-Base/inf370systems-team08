@@ -6,9 +6,10 @@ namespace EduProfileAPI.Repositories.Interfaces
     {
         Task<List<RemedialActivity>> GetAllRemedialActivitiesAsync();
         Task<bool> SaveChangesAsync();
-        void Add<T>(T entity) where T : class;
-        void Delete<T>(T entity) where T : class;
+        Task AddRemedialActivityAsync(RemedialActivity activity, Guid userId);
+        Task UpdateRemedialActivityAsync(RemedialActivity activity, Guid userId);
         Task<RemedialActivity> GetRemedialActivityAsync(Guid remedialActivityId);
+        Task DeleteRemedialActivityAsync(RemedialActivity activity, Guid userId);
 
         Task<List<RemedialActivity>> GetActivitiesByFileId(Guid remFileId);
     }

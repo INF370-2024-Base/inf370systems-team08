@@ -17,11 +17,13 @@ namespace EduProfileAPI.Controllers
     public class GradeController : ControllerBase
     {
         private readonly IGradeRepository _gradeRepo;
-       
+        private readonly IAuditTrail _auditTrailRepo; // Add AuditTrailRepository
 
-        public GradeController(IGradeRepository gradeRepo)
+
+        public GradeController(IGradeRepository gradeRepo, IAuditTrail auditTrailRepo)
         {
             _gradeRepo = gradeRepo;
+            _auditTrailRepo = auditTrailRepo;
         }
 
         [HttpGet]
@@ -41,24 +43,22 @@ namespace EduProfileAPI.Controllers
 
         [HttpPost]
         [Route("CreateGrade")]
-        public async Task<IActionResult> CreateGradeAsync([FromBody] CreateGradeViewModel model)
+        public async Task<IActionResult> CreateGradeAsync([FromBody] CreateGradeViewModel model, [FromQuery] Guid userId)
         {
+            if (model == null || userId == Guid.Empty)
+            {
+                return BadRequest("Invalid grade data or missing user ID.");
+            }
+
             try
             {
-                if (model == null)
-                {
-                    return BadRequest("Invalid grade data.");
-                }
-
-                // Find the StudentEducationPhase
-                var createdGrade = await _gradeRepo.CreateGradeAsync(model);
+                var createdGrade = await _gradeRepo.CreateGradeAsync(model, userId);
                 if (createdGrade == null)
                 {
                     return NotFound("Education phase not found.");
                 }
-                // return CreatedAtAction(nameof(GetAllGradesAsync), new { id = createdGrade.GradeId }, createdGrade);
-                return Ok(createdGrade);
 
+                return Ok(createdGrade);
             }
             catch (Exception ex)
             {
@@ -66,19 +66,18 @@ namespace EduProfileAPI.Controllers
             }
         }
 
-        // Update Grade
         [HttpPut]
         [Route("UpdateGrade")]
-        public async Task<IActionResult> UpdateGradeAsync([FromBody] UpdateGradeViewModel model)
+        public async Task<IActionResult> UpdateGradeAsync([FromBody] UpdateGradeViewModel model, [FromQuery] Guid userId)
         {
+            if (model == null || userId == Guid.Empty)
+            {
+                return BadRequest("Invalid grade data or missing user ID.");
+            }
+
             try
             {
-                if (model == null)
-                {
-                    return BadRequest("Invalid grade data.");
-                }
-
-                var updatedGrade = await _gradeRepo.UpdateGradeAsync(model);
+                var updatedGrade = await _gradeRepo.UpdateGradeAsync(model, userId);
                 if (updatedGrade == null)
                 {
                     return NotFound("Grade or education phase not found.");
@@ -92,20 +91,23 @@ namespace EduProfileAPI.Controllers
             }
         }
 
-
-        // Delete Grade
-
         [HttpDelete]
         [Route("DeleteGrade/{id}")]
-        public async Task<IActionResult> DeleteGradeAsync(Guid id)
+        public async Task<IActionResult> DeleteGradeAsync(Guid id, [FromQuery] Guid userId)
         {
+            if (userId == Guid.Empty)
+            {
+                return BadRequest("Missing user ID.");
+            }
+
             try
             {
-                var result = await _gradeRepo.DeleteGradeAsync(id);
+                var result = await _gradeRepo.DeleteGradeAsync(id, userId);
                 if (!result)
                 {
                     return NotFound("Grade not found.");
                 }
+
                 return Ok("Grade deleted successfully.");
             }
             catch (Exception ex)

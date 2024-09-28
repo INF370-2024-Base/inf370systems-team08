@@ -6,8 +6,9 @@ namespace EduProfileAPI.Repositories.Interfaces
     {
         Task<StudentDoc[]> GetAllStudentDocsAsync();
         Task<bool> SaveChangesAsync();
-        void Add<T>(T entity) where T : class;
-        void Delete<T>(T entity) where T : class;
+        Task AddStudentDocAsync(StudentDoc studentDoc, Guid userId);
+        Task UpdateStudentDocAsync(StudentDoc updatedDoc, StudentDoc oldDoc, Guid userId);
+        Task DeleteStudentDocAsync(StudentDoc studentDoc, Guid userId);
         Task<StudentDoc> GetStudentDocAsync(Guid studentDocId);
     }
 }

@@ -52,73 +52,71 @@ namespace EduProfileAPI.Controllers.Maintenance
 
         [HttpPost]
         [Route("AddProcedure")]
-        public async Task<IActionResult> AddProcedure(MaintenanceProcedureVM cvm)
+        public async Task<IActionResult> AddProcedure([FromBody] MaintenanceProcedureVM cvm, [FromQuery] Guid userId)
         {
-            var procedure = new MaintenanceProcedure { EmployeeId = cvm.EmployeeId, CompletionDate = cvm.CompletionDate, Description = cvm.Description, Comments = cvm.Comments, Costs = cvm.Costs };
+            var procedure = new MaintenanceProcedure
+            {
+                EmployeeId = cvm.EmployeeId,
+                CompletionDate = cvm.CompletionDate,
+                Description = cvm.Description,
+                Comments = cvm.Comments,
+                Costs = cvm.Costs
+            };
 
             try
             {
-                _proRepository.Add(procedure);
-                await _proRepository.SaveChangesAsync();
+                await _proRepository.AddProcedureAsync(procedure, userId);
+                return Ok(procedure);
             }
             catch (Exception ex)
             {
                 return BadRequest($"Internal Server Error: {ex.Message}");
             }
-
-            return Ok(procedure);
         }
 
         [HttpPut]
         [Route("EditProcedure/{maintenanceProId}")]
-        public async Task<ActionResult<MaintenanceProcedureVM>> EditProcedure(Guid maintenanceProId, MaintenanceProcedureVM mvm)
+        public async Task<ActionResult<MaintenanceProcedureVM>> EditProcedure(Guid maintenanceProId, [FromBody] MaintenanceProcedureVM mvm, [FromQuery] Guid userId)
         {
             try
             {
                 var existingPro = await _proRepository.GetProcedureAsync(maintenanceProId);
                 if (existingPro == null) return NotFound($"The procedure does not exist");
+
+                // Create a backup of the old values for audit trail logging
+                var oldProcedure = existingPro;
+
                 existingPro.EmployeeId = mvm.EmployeeId;
                 existingPro.Description = mvm.Description;
                 existingPro.CompletionDate = mvm.CompletionDate;
                 existingPro.Comments = mvm.Comments;
                 existingPro.Costs = mvm.Costs;
 
-
-                if (await _proRepository.SaveChangesAsync())
-                {
-                    return Ok(existingPro);
-                }
-
+                await _proRepository.UpdateProcedureAsync(existingPro, oldProcedure, userId);
+                return Ok(existingPro);
             }
             catch (Exception)
             {
                 return StatusCode(500, "Internal Server Error. Please contact support.");
-
             }
-            return BadRequest("Your request is invalid.");
-
-
         }
 
         [HttpDelete]
         [Route("DeleteProcedure/{maintenanceProId}")]
-        public async Task<IActionResult> DeleteProcedure(Guid maintenanceProId)
+        public async Task<IActionResult> DeleteProcedure(Guid maintenanceProId, [FromQuery] Guid userId)
         {
             try
             {
                 var existingPro = await _proRepository.GetProcedureAsync(maintenanceProId);
                 if (existingPro == null) return NotFound($"The request does not exist");
-                _proRepository.Delete(existingPro);
 
-                if (await _proRepository.SaveChangesAsync()) return Ok(existingPro);
+                await _proRepository.DeleteProcedureAsync(existingPro, userId);
+                return Ok(existingPro);
             }
             catch (Exception)
             {
-
                 return StatusCode(500, "Internal Server Error. Please contact support.");
             }
-
-            return BadRequest("Your request is invalid");
         }
     }
 }

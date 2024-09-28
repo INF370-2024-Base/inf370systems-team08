@@ -3,29 +3,32 @@ using EduProfileAPI.Models;
 using EduProfileAPI.Repositories.Interfaces;
 using EduProfileAPI.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace EduProfileAPI.Repositories.Implementation
 {
     public class EarlyReleasesRepo : IEarlyReleasesRepo
     {
         private readonly EduProfileDbContext _context;
+        private readonly IAuditTrail _auditTrailRepo; // Inject the audit trail repository
 
-        public EarlyReleasesRepo( EduProfileDbContext context)
+        public EarlyReleasesRepo( EduProfileDbContext context, IAuditTrail auditTrailRepo)
         {
             _context = context;
+            _auditTrailRepo = auditTrailRepo;
         }
 
-        public async Task<EarlyReleases> CreateEarlyRelease(CreateEarlyReleaseVM model)
+        public async Task<EarlyReleases> CreateEarlyRelease(CreateEarlyReleaseVM model, Guid userId)
         {
             var student = await _context.Student.FirstOrDefaultAsync(s => s.StudentId == model.StudentId);
 
             if (student == null)
-                return null; 
+                return null;
 
             var parent = await _context.Parent.FirstOrDefaultAsync(p => p.ParentId == student.ParentId);
 
             if (parent == null)
-                return null; 
+                return null;
 
             var earlyRelease = new EarlyReleases
             {
@@ -43,9 +46,22 @@ namespace EduProfileAPI.Repositories.Implementation
             _context.EarlyReleases.Add(earlyRelease);
             await _context.SaveChangesAsync();
 
-            return earlyRelease;
+            // Log the creation in the audit trail
+            var auditTrail = new AuditTrail
+            {
+                UserId = userId,  // The user who performed the action
+                Action = "CREATE",
+                EntityName = "EarlyReleases",
+                AffectedEntityID = earlyRelease.EarlyRelId,
+                NewValue = JsonConvert.SerializeObject(earlyRelease),
+                TimeStamp = DateTime.UtcNow
+            };
 
+            await _auditTrailRepo.AddAuditTrailAsync(auditTrail);
+
+            return earlyRelease;
         }
+
 
         public async Task<List<EarlyReleases>> GetEarlyReleasesByStudentId(Guid studentId)
         {
