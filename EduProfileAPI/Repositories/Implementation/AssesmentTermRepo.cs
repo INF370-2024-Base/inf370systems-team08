@@ -42,7 +42,6 @@ namespace EduProfileAPI.Repositories.Implementation
         {
                 var existingTerm = await GetTermByIdAsync(term.TermId);
 
-                existingTerm.AssesmentId = term.AssesmentId;
                 existingTerm.Term = term.Term;
                 existingTerm.Weighting = term.Weighting;
                 existingTerm.SubjectId = term.SubjectId;
