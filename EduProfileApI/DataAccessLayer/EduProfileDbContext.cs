@@ -58,6 +58,8 @@ namespace EduProfileAPI.DataAccessLayer
         public DbSet<StudentUser> StudentUser { get; set; }
         public DbSet<Permissions> Permissions { get; set; }
         public DbSet<UserPermissions> UserPermissions { get; set; }
+        public DbSet<AuditTrail> AuditTrail { get; set; }
+        public DbSet<AssesmentTerm> AssesmentTerm { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
