@@ -55,7 +55,7 @@ namespace EduProfileAPI.Controllers
 
         [HttpPost]
         [Route("AddDisciplinary")]
-        public async Task<IActionResult> AddDisciplinary(CreateDisciplinaryVM cvm)
+        public async Task<IActionResult> AddDisciplinary([FromBody] CreateDisciplinaryVM cvm, [FromQuery] Guid userId)
         {
             var disciplinary = new Disciplinary
             {
@@ -70,7 +70,7 @@ namespace EduProfileAPI.Controllers
 
             try
             {
-                _disciplinaryRepository.Add(disciplinary);
+                await _disciplinaryRepository.AddDisciplinaryAsync(disciplinary, userId);  // Include userId for audit
                 await _disciplinaryRepository.SaveChangesAsync();
                 return Ok(disciplinary);
             }
@@ -79,28 +79,32 @@ namespace EduProfileAPI.Controllers
                 return BadRequest("Invalid transaction");
             }
         }
+
         [HttpPut]
         [Route("EditDisciplinary/{disciplinaryId}")]
-        public async Task<IActionResult> EditDisciplinary(Guid disciplinaryId, CreateDisciplinaryVM disciplinaryModel)
+        public async Task<IActionResult> EditDisciplinary(Guid disciplinaryId, [FromBody] CreateDisciplinaryVM disciplinaryModel, [FromQuery] Guid userId)
         {
             try
             {
                 var existingDisciplinary = await _disciplinaryRepository.GetDisciplinaryAsync(disciplinaryId);
                 if (existingDisciplinary == null)
                     return NotFound("The disciplinary does not exist");
+                var updateDisciplinary = new Disciplinary
+                {
+                    DisciplinaryId = disciplinaryId,
+                    EmployeeId = disciplinaryModel.EmployeeId,
+                    DisciplinaryTypeId = disciplinaryModel.DisciplinaryTypeId,
+                    StudentId = disciplinaryModel.StudentId,
+                    Reason = disciplinaryModel.Reason,
+                    ParentContacted = disciplinaryModel.ParentContacted,
+                    DisciplinaryDuration = disciplinaryModel.DisciplinaryDuration,
+                    IssueDate = disciplinaryModel.IssueDate
+                };
 
-                existingDisciplinary.EmployeeId = disciplinaryModel.EmployeeId;
-                existingDisciplinary.DisciplinaryTypeId = disciplinaryModel.DisciplinaryTypeId;
-                existingDisciplinary.StudentId = disciplinaryModel.StudentId;
-                existingDisciplinary.Reason = disciplinaryModel.Reason;
-                existingDisciplinary.ParentContacted = disciplinaryModel.ParentContacted;
-                existingDisciplinary.DisciplinaryDuration = disciplinaryModel.DisciplinaryDuration;
-                existingDisciplinary.IssueDate = disciplinaryModel.IssueDate;
 
-                if (await _disciplinaryRepository.SaveChangesAsync())
-                    return Ok(existingDisciplinary);
-                else
-                    return StatusCode(500, "Unable to save changes to the database.");
+                await _disciplinaryRepository.UpdateDisciplinaryAsync(updateDisciplinary, existingDisciplinary, userId);  // Include userId for audit
+                await _disciplinaryRepository.SaveChangesAsync();
+                return Ok(existingDisciplinary);
             }
             catch (Exception ex)
             {
@@ -111,7 +115,7 @@ namespace EduProfileAPI.Controllers
 
         [HttpDelete]
         [Route("DeleteDisciplinary/{disciplinaryId}")]
-        public async Task<IActionResult> DeleteDisciplinary(Guid disciplinaryId)
+        public async Task<IActionResult> DeleteDisciplinary(Guid disciplinaryId, [FromQuery] Guid userId)
         {
             try
             {
@@ -119,17 +123,14 @@ namespace EduProfileAPI.Controllers
                 if (existingDisciplinary == null)
                     return NotFound("The disciplinary does not exist");
 
-                _disciplinaryRepository.Delete(existingDisciplinary);
-
-                if (await _disciplinaryRepository.SaveChangesAsync())
-                    return Ok(existingDisciplinary);
+                await _disciplinaryRepository.DeleteDisciplinaryAsync(existingDisciplinary, userId);  // Include userId for audit
+                await _disciplinaryRepository.SaveChangesAsync();
+                return Ok(existingDisciplinary);
             }
             catch (Exception)
             {
                 return StatusCode(500, "Internal Server Error. Please contact support.");
             }
-
-            return BadRequest("Your request is invalid.");
         }
     }
 }

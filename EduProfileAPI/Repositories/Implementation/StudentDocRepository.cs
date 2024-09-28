@@ -2,15 +2,19 @@
 using EduProfileAPI.Models;
 using EduProfileAPI.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace EduProfileAPI.Repositories.Implementation
 {
     public class StudentDocRepository : IStudentDocRepository
     {
         private readonly EduProfileDbContext _context;
-        public StudentDocRepository(EduProfileDbContext context)
+        private readonly IAuditTrail _auditTrailRepository;
+
+        public StudentDocRepository(EduProfileDbContext context, IAuditTrail auditTrailRepository)
         {
             _context = context;
+            _auditTrailRepository = auditTrailRepository;
         }
 
         public async Task<StudentDoc[]> GetAllStudentDocsAsync()
@@ -25,16 +29,57 @@ namespace EduProfileAPI.Repositories.Implementation
             return await query.FirstOrDefaultAsync();
         }
 
-        public void Add<T>(T entity) where T : class
+        public async Task AddStudentDocAsync(StudentDoc studentDoc, Guid userId)
         {
-            _context.Add(entity);
+            _context.Add(studentDoc);
+
+            var auditTrail = new AuditTrail
+            {
+                UserId = userId,
+                Action = "CREATE",
+                EntityName = "StudentDoc",
+                AffectedEntityID = studentDoc.StuDocumentId,
+                NewValue = JsonConvert.SerializeObject(studentDoc),
+                TimeStamp = DateTime.UtcNow
+            };
+
+            await _auditTrailRepository.AddAuditTrailAsync(auditTrail);
         }
 
-        public void Delete<T>(T entity) where T : class
+        public async Task UpdateStudentDocAsync(StudentDoc updatedDoc, StudentDoc oldDoc, Guid userId)
         {
-            _context.Remove(entity);
+            _context.Entry(oldDoc).CurrentValues.SetValues(updatedDoc);
+
+            var auditTrail = new AuditTrail
+            {
+                UserId = userId,
+                Action = "UPDATE",
+                EntityName = "StudentDoc",
+                AffectedEntityID = updatedDoc.StuDocumentId,
+                OldValue = JsonConvert.SerializeObject(oldDoc),
+                NewValue = JsonConvert.SerializeObject(updatedDoc),
+                TimeStamp = DateTime.UtcNow
+            };
+
+            await _auditTrailRepository.AddAuditTrailAsync(auditTrail);
         }
 
+        public async Task DeleteStudentDocAsync(StudentDoc studentDoc, Guid userId)
+        {
+            _context.StudentDocument.Remove(studentDoc);
+
+            var auditTrail = new AuditTrail
+            {
+                UserId = userId,
+                Action = "DELETE",
+                EntityName = "StudentDoc",
+                AffectedEntityID = studentDoc.StuDocumentId,
+                OldValue = JsonConvert.SerializeObject(studentDoc),
+                TimeStamp = DateTime.UtcNow
+            };
+
+            await _auditTrailRepository.AddAuditTrailAsync(auditTrail);
+        }
         public async Task<bool> SaveChangesAsync()
         {
             return await _context.SaveChangesAsync() > 0;

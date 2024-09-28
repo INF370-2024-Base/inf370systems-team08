@@ -6,8 +6,10 @@ namespace EduProfileAPI.Repositories.Interfaces
     {
         Task<List<Disciplinary>> GetAllDisciplinariesAsync();
         Task<bool> SaveChangesAsync();
-        void Add<T>(T entity) where T : class;
-        void Delete<T>(T entity) where T : class;
+        Task AddDisciplinaryAsync(Disciplinary disciplinary, Guid userId);
+        Task UpdateDisciplinaryAsync(Disciplinary updatedDisciplinary, Disciplinary oldDisciplinary, Guid userId);
+
+        Task DeleteDisciplinaryAsync(Disciplinary disciplinary, Guid userId);
 
         // Course
         Task<Disciplinary> GetDisciplinaryAsync(Guid disciplinaryId);

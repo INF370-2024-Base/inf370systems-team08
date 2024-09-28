@@ -27,9 +27,9 @@ namespace EduProfileAPI.Controllers
             return Ok(result);
         }
 
-        // Endpoint to send a message to the parent
+        // Endpoint to send a message to the parent with Audit Trail
         [HttpPost("send-message")]
-        public async Task<IActionResult> SendMessage([FromBody] ContactStudentParentViewModel model)
+        public async Task<IActionResult> SendMessage([FromBody] ContactStudentParentViewModel model, [FromQuery] Guid userId)
         {
             if (model == null || model.StudentId == Guid.Empty || model.ParentId == Guid.Empty || string.IsNullOrEmpty(model.Message))
             {
@@ -38,10 +38,9 @@ namespace EduProfileAPI.Controllers
 
             try
             {
-                var (success, responseDetails) = await _contactStudentParentRepository.SendMessageToParent(model);
+                var (success, responseDetails) = await _contactStudentParentRepository.SendMessageToParent(model, userId);
                 if (!success)
                 {
-                    // Return the detailed response from the external service
                     return StatusCode(500, $"Failed to send message. External service response: {responseDetails}");
                 }
 
@@ -49,7 +48,6 @@ namespace EduProfileAPI.Controllers
             }
             catch (Exception ex)
             {
-                // Return the detailed error message in the response
                 return StatusCode(500, $"Internal server error: {ex.Message}\n{ex.StackTrace}");
             }
         }
