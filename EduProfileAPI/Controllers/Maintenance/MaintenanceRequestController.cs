@@ -55,79 +55,92 @@ namespace EduProfileAPI.Controllers.Maintenance
 
         [HttpPost]
         [Route("AddRequest")]
-        public async Task<IActionResult> AddRequest(MaintenanceRequestVM cvm)
+        public async Task<IActionResult> AddRequest([FromBody] MaintenanceRequestVM cvm, [FromQuery] Guid userId)
         {
-            var request = new MaintenanceRequest { MaintenanceProId = cvm.MaintenanceProId, MaintenanceStatusId = cvm.MaintenanceStatusId, MaintenanceTypeId = cvm.MaintenanceTypeId, EmployeeId = cvm.EmployeeId, RequestDate = cvm.RequestDate, Description = cvm.Description, Location = cvm.Location, AssignedTo = cvm.AssignedTo, ScheduleDate = cvm.ScheduleDate, PriorityId = cvm.PriorityId, Verified = cvm.Verified };
+            var request = new MaintenanceRequest
+            {
+                MaintenanceProId = cvm.MaintenanceProId,
+                MaintenanceStatusId = cvm.MaintenanceStatusId,
+                MaintenanceTypeId = cvm.MaintenanceTypeId,
+                EmployeeId = cvm.EmployeeId,
+                RequestDate = cvm.RequestDate,
+                Description = cvm.Description,
+                Location = cvm.Location,
+                AssignedTo = cvm.AssignedTo,
+                ScheduleDate = cvm.ScheduleDate,
+                PriorityId = cvm.PriorityId,
+                Verified = cvm.Verified
+            };
 
             try
             {
-                _reqRepository.Add(request);
+                await _reqRepository.AddRequestAsync(request, userId); // Log the create action
                 await _reqRepository.SaveChangesAsync();
+                return Ok(request);
             }
             catch (Exception ex)
             {
                 return BadRequest($"Internal Server Error: {ex.Message}");
             }
-
-            return Ok(request);
         }
+
 
         [HttpPut]
         [Route("EditRequest/{maintenanceReqId}")]
-        public async Task<ActionResult<MaintenanceRequestVM>> EditRequest(Guid maintenanceReqId, MaintenanceRequestVM mvm)
+        public async Task<ActionResult<MaintenanceRequestVM>> EditRequest(Guid maintenanceReqId, [FromBody] MaintenanceRequestVM mvm, [FromQuery] Guid userId)
         {
             try
             {
                 var existingReq = await _reqRepository.GetRequestAsync(maintenanceReqId);
-                if (existingReq == null) return NotFound($"The merit does not exist");
-                existingReq.EmployeeId = mvm.EmployeeId;
-                existingReq.MaintenanceProId = mvm.MaintenanceProId;
-                existingReq.MaintenanceStatusId = mvm.MaintenanceStatusId;
-                existingReq.MaintenanceTypeId = mvm.MaintenanceTypeId;
-                existingReq.PriorityId = mvm.PriorityId;
-                existingReq.RequestDate = mvm.RequestDate;
-                existingReq.Description = mvm.Description;
-                existingReq.Location = mvm.Location;
-                existingReq.AssignedTo = mvm.AssignedTo;
-                existingReq.ScheduleDate = mvm.ScheduleDate;
-                existingReq.Verified = mvm.Verified;
+                if (existingReq == null) return NotFound($"The maintenance request does not exist");
 
-
-                if (await _reqRepository.SaveChangesAsync())
+                var updatedReq = new MaintenanceRequest
                 {
-                    return Ok(existingReq);
-                }
+                    MaintenanceReqId = maintenanceReqId,
+                    EmployeeId = mvm.EmployeeId,
+                    MaintenanceProId = mvm.MaintenanceProId,
+                    MaintenanceStatusId = mvm.MaintenanceStatusId,
+                    MaintenanceTypeId = mvm.MaintenanceTypeId,
+                    PriorityId = mvm.PriorityId,
+                    RequestDate = mvm.RequestDate,
+                    Description = mvm.Description,
+                    Location = mvm.Location,
+                    AssignedTo = mvm.AssignedTo,
+                    ScheduleDate = mvm.ScheduleDate,
+                    Verified = mvm.Verified
+                };
 
+                await _reqRepository.UpdateRequestAsync(updatedReq, existingReq, userId); // Log the update action
+                await _reqRepository.SaveChangesAsync();
+
+                return Ok(updatedReq);
             }
             catch (Exception)
             {
                 return StatusCode(500, "Internal Server Error. Please contact support.");
-
             }
-            return BadRequest("Your request is invalid.");
-
-
         }
+
 
         [HttpDelete]
         [Route("DeleteRequest/{maintenanceReqId}")]
-        public async Task<IActionResult> DeleteRequest(Guid maintenanceReqId)
+        public async Task<IActionResult> DeleteRequest(Guid maintenanceReqId, [FromQuery] Guid userId)
         {
             try
             {
                 var existingReq = await _reqRepository.GetRequestAsync(maintenanceReqId);
                 if (existingReq == null) return NotFound($"The request does not exist");
-                _reqRepository.Delete(existingReq);
 
-                if (await _reqRepository.SaveChangesAsync()) return Ok(existingReq);
+                await _reqRepository.DeleteRequestAsync(existingReq, userId); // Log the delete action
+                await _reqRepository.SaveChangesAsync();
+
+                return Ok(existingReq);
             }
             catch (Exception)
             {
-
                 return StatusCode(500, "Internal Server Error. Please contact support.");
             }
-
-            return BadRequest("Your request is invalid");
         }
+
     }
 }

@@ -12,10 +12,13 @@ namespace EduProfileAPI.Controllers
     public class AssesmentMarkController : ControllerBase
     {
         private readonly IAssesmentMark _assesmentMarkRepository;
+        private readonly IAuditTrail _auditTrailRepository;
 
-        public AssesmentMarkController(IAssesmentMark assesmentMarkRepository)
+
+        public AssesmentMarkController(IAssesmentMark assesmentMarkRepository, IAuditTrail auditTrailRepository)
         {
             _assesmentMarkRepository = assesmentMarkRepository;
+            _auditTrailRepository = auditTrailRepository;
         }
 
         [HttpGet]
@@ -53,14 +56,26 @@ namespace EduProfileAPI.Controllers
 
         [HttpPost]
         [Route("AddAssesmentMark")]
-        public async Task<IActionResult> AddAssesmentMark(AssesmentMarkVM cvm)
+        public async Task<IActionResult> AddAssesmentMark([FromBody] AssesmentMarkVM cvm, [FromQuery] Guid userId)
         {
-            var assesmentMark = new AssesmentMark { StudentId = cvm.StudentId, AssesmentId = cvm.AssesmentId, MarkAchieved = cvm.MarkAchieved };
+            if (userId == Guid.Empty)
+            {
+                return BadRequest("User ID is required.");
+            }
+
+            var assesmentMark = new AssesmentMark
+            {
+                StudentId = cvm.StudentId,
+                AssesmentId = cvm.AssesmentId,
+                MarkAchieved = cvm.MarkAchieved
+            };
 
             try
             {
-                _assesmentMarkRepository.Add(assesmentMark);
+                await _assesmentMarkRepository.AddAssesmentMarkAsync(assesmentMark, userId); // Log create action
                 await _assesmentMarkRepository.SaveChangesAsync();
+
+                return Ok(assesmentMark);
             }
             catch (DbUpdateException dbEx)
             {
@@ -71,17 +86,21 @@ namespace EduProfileAPI.Controllers
             {
                 return StatusCode(500, $"Internal Server Error: {ex.Message}");
             }
-
-            return Ok(assesmentMark);
         }
 
+        // Edit an assessment mark with audit trail
         [HttpPut]
         [Route("EditAssesmentMark/{studentId}/{assesmentId}")]
-        public async Task<ActionResult<AssesmentMarkVM>> EditAssesmentMark(Guid studentId, Guid assesmentId, [FromBody] AssesmentMarkVM model)
+        public async Task<ActionResult<AssesmentMarkVM>> EditAssesmentMark(Guid studentId, Guid assesmentId, [FromBody] AssesmentMarkVM model, [FromQuery] Guid userId)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
+            }
+
+            if (userId == Guid.Empty)
+            {
+                return BadRequest("User ID is required.");
             }
 
             try
@@ -89,24 +108,25 @@ namespace EduProfileAPI.Controllers
                 var existingAssesmentMark = await _assesmentMarkRepository.GetAssesmentMarkAsync(studentId, assesmentId);
                 if (existingAssesmentMark == null)
                 {
-                    return NotFound($"The assesment mark does not exist");
+                    return NotFound("The assesment mark does not exist");
                 }
 
-                existingAssesmentMark.StudentId = model.StudentId;
-                existingAssesmentMark.AssesmentId = model.AssesmentId;
-                existingAssesmentMark.MarkAchieved = model.MarkAchieved;
-
-                if (await _assesmentMarkRepository.SaveChangesAsync())
+                var updatedAssesmentMark = new AssesmentMark
                 {
-                    return Ok(existingAssesmentMark);
-                }
+                    StudentId = model.StudentId,
+                    AssesmentId = model.AssesmentId,
+                    MarkAchieved = model.MarkAchieved
+                };
+
+                await _assesmentMarkRepository.UpdateAssesmentMarkAsync(updatedAssesmentMark, existingAssesmentMark, userId); // Log update action
+                await _assesmentMarkRepository.SaveChangesAsync();
+
+                return Ok(updatedAssesmentMark);
             }
             catch (Exception ex)
             {
                 return StatusCode(500, $"Internal Server Error: {ex.Message}");
             }
-
-            return BadRequest("Your request is invalid.");
         }
 
 

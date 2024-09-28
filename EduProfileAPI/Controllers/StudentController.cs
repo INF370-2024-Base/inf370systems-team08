@@ -12,10 +12,13 @@ namespace EduProfileAPI.Controllers
     public class StudentController : ControllerBase
     {
         private readonly IStudentRepository _studentRepository;
+        private readonly IAuditTrail _auditTrailRepository;  // Add audit trail repository
 
-        public StudentController(IStudentRepository studentRepository)
+
+        public StudentController(IStudentRepository studentRepository, IAuditTrail auditTrailRepository)
         {
             _studentRepository = studentRepository;
+            _auditTrailRepository = auditTrailRepository;
         }
 
         [HttpGet]
@@ -53,80 +56,107 @@ namespace EduProfileAPI.Controllers
 
         [HttpPost]
         [Route("AddStudent")]
-        public async Task<IActionResult> AddStudent(StudentVM cvm)
+        public async Task<IActionResult> AddStudent([FromBody] StudentVM cvm, [FromQuery] Guid userId)
         {
-            var student = new Student { GradeId = cvm.GradeId, ClassId = cvm.ClassId, ParentId = cvm.ParentId, FirstName = cvm.FirstName, LastName = cvm.LastName, DateOfBirth = cvm.DateOfBirth, Gender = cvm.Gender, Address = cvm.Address, AdmissionNo = cvm.AdmissionNo, EmergencyContactName = cvm.EmergencyContactName, EmergencyContactRelationship = cvm.EmergencyContactRelationship, EmergencyContactPhoneNum = cvm.EmergencyContactPhoneNum };
+            if (userId == Guid.Empty)
+            {
+                return BadRequest("User ID is required.");
+            }
+
+            var student = new Student
+            {
+                GradeId = cvm.GradeId,
+                ClassId = cvm.ClassId,
+                ParentId = cvm.ParentId,
+                FirstName = cvm.FirstName,
+                LastName = cvm.LastName,
+                DateOfBirth = cvm.DateOfBirth,
+                Gender = cvm.Gender,
+                Address = cvm.Address,
+                AdmissionNo = cvm.AdmissionNo,
+                EmergencyContactName = cvm.EmergencyContactName,
+                EmergencyContactRelationship = cvm.EmergencyContactRelationship,
+                EmergencyContactPhoneNum = cvm.EmergencyContactPhoneNum
+            };
 
             try
             {
-                _studentRepository.Add(student);
+                await _studentRepository.AddStudentAsync(student, userId); // Log the creation in audit trail
                 await _studentRepository.SaveChangesAsync();
+
+                return Ok(student);
             }
             catch (Exception)
             {
                 return BadRequest("Invalid transaction");
             }
-
-            return Ok(student);
         }
 
         [HttpPut]
         [Route("EditStudent/{studentId}")]
-        public async Task<ActionResult<StudentVM>> EditStudent(Guid studentId, StudentVM studentModel)
+        public async Task<ActionResult<StudentVM>> EditStudent(Guid studentId, [FromBody] StudentVM studentModel, [FromQuery] Guid userId)
         {
+            if (userId == Guid.Empty)
+            {
+                return BadRequest("User ID is required.");
+            }
+
             try
             {
                 var existingStudent = await _studentRepository.GetStudentAsync(studentId);
-                if (existingStudent == null) return NotFound($"The Student does not exist");
-                existingStudent.GradeId = studentModel.GradeId;
-                existingStudent.ClassId = studentModel.ClassId;
-                existingStudent.ParentId = studentModel.ParentId;
-                existingStudent.FirstName = studentModel.FirstName;
-                existingStudent.LastName = studentModel.LastName;
-                existingStudent.DateOfBirth = studentModel.DateOfBirth;
-                existingStudent.Gender = studentModel.Gender;
-                existingStudent.Address = studentModel.Address;
-                existingStudent.AdmissionNo = studentModel.AdmissionNo;
-                existingStudent.EmergencyContactName = studentModel.EmergencyContactName;
-                existingStudent.EmergencyContactRelationship = studentModel.EmergencyContactRelationship;
-                existingStudent.EmergencyContactPhoneNum = studentModel.EmergencyContactPhoneNum;
-          
+                if (existingStudent == null) return NotFound("The student does not exist");
 
-                if (await _studentRepository.SaveChangesAsync())
+                var updatedStudent = new Student
                 {
-                    return Ok(existingStudent);
-                }
+                    StudentId = studentId,
+                    GradeId = studentModel.GradeId,
+                    ClassId = studentModel.ClassId,
+                    ParentId = studentModel.ParentId,
+                    FirstName = studentModel.FirstName,
+                    LastName = studentModel.LastName,
+                    DateOfBirth = studentModel.DateOfBirth,
+                    Gender = studentModel.Gender,
+                    Address = studentModel.Address,
+                    AdmissionNo = studentModel.AdmissionNo,
+                    EmergencyContactName = studentModel.EmergencyContactName,
+                    EmergencyContactRelationship = studentModel.EmergencyContactRelationship,
+                    EmergencyContactPhoneNum = studentModel.EmergencyContactPhoneNum
+                };
 
+                await _studentRepository.UpdateStudentAsync(updatedStudent, existingStudent, userId); // Log the update in audit trail
+                await _studentRepository.SaveChangesAsync();
+
+                return Ok(updatedStudent);
             }
             catch (Exception)
             {
                 return StatusCode(500, "Internal Server Error. Please contact support.");
-
             }
-            return BadRequest("Your request is invalid.");
-
-
         }
 
         [HttpDelete]
         [Route("DeleteStudent/{studentId}")]
-        public async Task<IActionResult> DeleteStudent(Guid studentId)
+        public async Task<IActionResult> DeleteStudent(Guid studentId, [FromQuery] Guid userId)
         {
+            if (userId == Guid.Empty)
+            {
+                return BadRequest("User ID is required.");
+            }
+
             try
             {
                 var existingStudent = await _studentRepository.GetStudentAsync(studentId);
-                if (existingStudent == null) return NotFound($"The student does not exist");
-                _studentRepository.Delete(existingStudent);
+                if (existingStudent == null) return NotFound("The student does not exist");
 
-                if (await _studentRepository.SaveChangesAsync()) return Ok(existingStudent);
+                await _studentRepository.DeleteStudentAsync(existingStudent, userId); // Log the delete action
+                await _studentRepository.SaveChangesAsync();
+
+                return Ok(existingStudent);
             }
             catch (Exception)
             {
-
                 return StatusCode(500, "Internal Server Error. Please contact support.");
             }
-
-            return BadRequest("Your request is invalid");
         }
 
         [HttpGet]

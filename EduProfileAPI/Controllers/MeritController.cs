@@ -49,76 +49,87 @@ namespace EduProfileAPI.Controllers
                 return StatusCode(500, "Internal Server Error. Please contact support.");
             }
         }
-
         [HttpPost]
         [Route("AddMerit")]
-        public async Task<IActionResult> AddMerit(CreateMeritVM cvm)
+        public async Task<IActionResult> AddMerit([FromBody] CreateMeritVM cvm, [FromQuery] Guid userId)
         {
-            var merit = new Merit { MeritTypeId = cvm.MeritTypeId,EmployeeId = cvm.EmployeeId, StudentId = cvm.StudentId, MeritName = cvm.MeritName, MeritDescription = cvm.MeritDescription };
+            var merit = new Merit
+            {
+                MeritTypeId = cvm.MeritTypeId,
+                EmployeeId = cvm.EmployeeId,
+                StudentId = cvm.StudentId,
+                MeritName = cvm.MeritName,
+                MeritDescription = cvm.MeritDescription
+            };
 
             try
             {
-                _meritRepository.Add(merit);
+                await _meritRepository.AddMeritAsync(merit, userId);  // Ensure AddMeritAsync accepts userId
                 await _meritRepository.SaveChangesAsync();
+                return Ok(merit);
             }
             catch (Exception)
             {
                 return BadRequest("Invalid transaction");
             }
-
-            return Ok(merit);
         }
 
-      [HttpPut]
+
+
+        [HttpPut]
         [Route("EditMerit/{meritId}")]
-        public async Task<ActionResult<CreateMeritVM>> EditMerit(Guid meritId, CreateMeritVM meritModel)
+        public async Task<ActionResult<CreateMeritVM>> EditMerit(Guid meritId, [FromBody] CreateMeritVM meritModel, [FromQuery] Guid userId)
         {
             try
             {
                 var existingMerit = await _meritRepository.GetMeritAsync(meritId);
                 if (existingMerit == null) return NotFound($"The merit does not exist");
-                existingMerit.EmployeeId = meritModel.EmployeeId;
-                existingMerit.MeritTypeId = meritModel.MeritTypeId;
-                existingMerit.StudentId = meritModel.StudentId;
-                existingMerit.MeritName = meritModel.MeritName;
-                existingMerit.MeritDescription = meritModel.MeritDescription;
 
-                if (await _meritRepository.SaveChangesAsync())
+                // Create an updated merit object
+                var updatedMerit = new Merit
                 {
-                    return Ok(existingMerit);
-                }
+                    MeritId = meritId,
+                    EmployeeId = meritModel.EmployeeId,
+                    MeritTypeId = meritModel.MeritTypeId,
+                    StudentId = meritModel.StudentId,
+                    MeritName = meritModel.MeritName,
+                    MeritDescription = meritModel.MeritDescription
+                };
 
+                // Log the audit trail and perform the update in the repository
+                await _meritRepository.UpdateMeritAsync(updatedMerit, existingMerit, userId);  // Log changes
+                await _meritRepository.SaveChangesAsync();
+
+                return Ok(updatedMerit);
             }
             catch (Exception)
             {
                 return StatusCode(500, "Internal Server Error. Please contact support.");
-
             }
-            return BadRequest("Your request is invalid.");
-
-
         }
 
-      [HttpDelete]
+
+        [HttpDelete]
         [Route("DeleteMerit/{meritId}")]
-        public async Task<IActionResult> MeritCourse(Guid meritId)
+        public async Task<IActionResult> DeleteMerit(Guid meritId, [FromQuery] Guid userId)
         {
             try
             {
                 var existingMerit = await _meritRepository.GetMeritAsync(meritId);
                 if (existingMerit == null) return NotFound($"The merit does not exist");
-                _meritRepository.Delete(existingMerit);
 
-                if (await _meritRepository.SaveChangesAsync()) return Ok(existingMerit);
+                // Perform the delete in the repository
+                await _meritRepository.DeleteMeritAsync(existingMerit, userId);  // Log deletion
+                await _meritRepository.SaveChangesAsync();
+
+                return Ok(existingMerit);
             }
             catch (Exception)
             {
-
                 return StatusCode(500, "Internal Server Error. Please contact support.");
             }
-
-            return BadRequest("Your request is invalid");
         }
+
     }
 
 }
