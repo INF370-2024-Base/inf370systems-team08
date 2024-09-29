@@ -34,7 +34,6 @@ namespace EduProfileAPI.Controllers
             var assesmentTerm = new AssesmentTerm
             {
                 TermId = Guid.NewGuid(), // Generate a new GUID for TermId
-                AssesmentId = cvm.AssesmentId,
                 Term = cvm.Term,
                 Weighting = cvm.Weighting,
                 SubjectId = cvm.SubjectId
@@ -104,7 +103,6 @@ namespace EduProfileAPI.Controllers
                 var existingTerm = await _termRepository.GetTermByIdAsync(termId);
                 if (existingTerm == null) return NotFound("The assesment term does not exist");
 
-                existingTerm.AssesmentId = model.AssesmentId;
                 existingTerm.Term = model.Term;
                 existingTerm.Weighting = model.Weighting;
                 existingTerm.SubjectId = model.SubjectId;
