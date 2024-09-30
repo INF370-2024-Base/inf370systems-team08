@@ -137,6 +137,7 @@ namespace EduProfileAPI.Repositories.Implementation
             return studentAttendance;
         }
 
+
         public async Task<List<StudentAttendance>> GetStudentAttendanceByClassId(Guid classId)
         {
             return await _context.StudentAttendance
